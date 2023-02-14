@@ -1,0 +1,57 @@
+{
+  "name": "B2B-ERP-MERN-App",
+  "version": "1.0.0",
+  "description": "Projet PFE Ahmed Dhia Eddine Maiez 2023",
+  "main": "app.js",
+  "engines": {
+    "node": "14.17.6"
+  },
+  "dependencies": {
+    "axios": "^1.3.3",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.2",
+    "config": "^3.3.7",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.6",
+    "express": "^4.18.2",
+    "express-flash": "^0.0.2",
+    "express-ntlm": "^2.6.2",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.14.0",
+    "gravatar": "^1.8.2",
+    "http-errors": "~1.6.3",
+    "http-server": "^14.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "mongodb": "^5.0.1",
+    "mongoose": "^6.5.0",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.3",
+    "nodemon": "^2.0.15",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.5.1",
+    "stripe": "^8.220.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "back": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AhmedMaiez-am/B2B-ERP-MERN-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AhmedMaiez-am/B2B-ERP-MERN-App/issues"
+  },
+  "homepage": "https://github.com/AhmedMaiez-am/B2B-ERP-MERN-App#readme"
+}
