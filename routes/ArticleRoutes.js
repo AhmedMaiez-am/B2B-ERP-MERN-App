@@ -6,22 +6,40 @@ const ntlm = require("express-ntlm");
 
 // Define auth function
 const auth = ntlm({
-  debug: function () {
-    const args = Array.prototype.slice.apply(arguments);
-    console.log.apply(null, args);
+  debug: console.log,
+  domain: process.env.DOMAIN,
+  username: process.env.USERNAME,
+  password: process.env.PASSWORD,
+  ntlm_version: 2,
+  reconnect: true,
+  send_401: function (res) {
+    res.sendStatus(401);
   },
-  domain: "DESKTOP-1EF91E4",
-  username: "ahmed",
-  password: "ahmed2022",
+  badrequest: function (res) {
+    res.sendStatus(400);
+  },
 });
 
-// Get customer data from Business Central
+// Get article data from Business Central
 async function getArticlesFromBC() {
-  const companyId = "CRONUS France S.A.";
-  const encodedCompanyId = encodeURIComponent(companyId);
-  const url = `http://desktop-1ef91e4:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ItemListec`;
-  const response = await axios.get(url);
-  return response.data;
+  try {
+    const options = {
+      auth: {
+        username: process.env.USERNAME,
+        password: process.env.PASSWORD,
+        workstation: process.env.WORKSTATION,
+        domain: process.env.DOMAIN
+      },
+    };
+    const companyId = "CRONUS France S.A.";
+    const encodedCompanyId = encodeURIComponent(companyId);
+    const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ItemListec`;
+    const response = await axios.get(url, options);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error retrieving articles data from Business Central");
+  }
 }
 
 // Route to get article data

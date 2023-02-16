@@ -8,4 +8,4 @@ const ArticleSchema = new mongoose.Schema({
   numFrounisseur: Number
 });
 
-module.exports = User = mongoose.model("article", ArticleSchema);
+module.exports = mongoose.model("article", ArticleSchema);
