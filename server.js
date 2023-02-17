@@ -3,7 +3,6 @@ const express = require("express");
 // express app
 const app = express();
 const cors = require("cors");
-
 var articleRouter = require("./routes/ArticleRoutes");
 var usersRouter = require("./routes/users");
 var auth = require("./routes/auth");
@@ -25,6 +24,7 @@ require("dotenv").config();
 const connectDB = require("./db/conn.js");
 
 connectDB();
+
 
 //routes
 app.use("/articles", articleRouter);

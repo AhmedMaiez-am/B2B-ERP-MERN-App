@@ -1,15 +1,15 @@
 const express = require("express");
-const axios = require("axios");
 const router = express.Router();
 const ntlm = require("express-ntlm");
+const axios = require("axios");
 //const Article = require("../models/Articles.js");
 
 // Define auth function
 const auth = ntlm({
   debug: console.log,
-  domain: process.env.DOMAIN,
-  username: process.env.USERNAME,
-  password: process.env.PASSWORD,
+  Username: process.env.USERNAME,
+  Password: process.env.PASSWORD,
+  Domain: process.env.DOMAIN,
   ntlm_version: 2,
   reconnect: true,
   send_401: function (res) {
@@ -25,22 +25,26 @@ async function getArticlesFromBC() {
   try {
     const options = {
       auth: {
-        username: process.env.USERNAME,
-        password: process.env.PASSWORD,
-        workstation: process.env.WORKSTATION,
-        domain: process.env.DOMAIN
-      },
+        Username: process.env.USERNAME,
+        Password: process.env.PASSWORD,
+        Domain: process.env.DOMAIN,
+        Workstation: process.env.WORKSTATION
+      }
     };
+    console.log(options);
     const companyId = "CRONUS France S.A.";
     const encodedCompanyId = encodeURIComponent(companyId);
     const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ItemListec`;
+    console.log("Requesting articles from:", url);
     const response = await axios.get(url, options);
+    console.log("Response:", response.data);
     return response.data;
   } catch (error) {
     console.error(error);
     throw new Error("Error retrieving articles data from Business Central");
   }
 }
+
 
 // Route to get article data
 router.get("/", auth, async (req, res) => {
@@ -50,7 +54,7 @@ router.get("/", auth, async (req, res) => {
     let articles = await getArticlesFromBC();
     res.json(articles);
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     res
       .status(500)
       .send("Error retrieving articles data from Business Central");
@@ -58,3 +62,4 @@ router.get("/", auth, async (req, res) => {
 });
 
 module.exports = router;
+

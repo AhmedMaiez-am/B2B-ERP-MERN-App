@@ -4,7 +4,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-
 var articlesRouter = require("./routes/ArticleRoutes");
 var config = require("./db/config.json");
 
@@ -29,6 +28,9 @@ const connect = mongoose.connect(
     }
   }
 );
+
+
+
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
