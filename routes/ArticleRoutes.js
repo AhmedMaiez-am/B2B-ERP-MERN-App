@@ -1,65 +1,45 @@
 const express = require("express");
 const router = express.Router();
-const ntlm = require("express-ntlm");
-const axios = require("axios");
-//const Article = require("../models/Articles.js");
-
-// Define auth function
-const auth = ntlm({
-  debug: console.log,
-  Username: process.env.USERNAME,
-  Password: process.env.PASSWORD,
-  Domain: process.env.DOMAIN,
-  ntlm_version: 2,
-  reconnect: true,
-  send_401: function (res) {
-    res.sendStatus(401);
-  },
-  badrequest: function (res) {
-    res.sendStatus(400);
-  },
-});
+const httpntlm = require("httpntlm");
 
 // Get article data from Business Central
 async function getArticlesFromBC() {
-  try {
-    const options = {
-      auth: {
-        Username: process.env.USERNAME,
-        Password: process.env.PASSWORD,
-        Domain: process.env.DOMAIN,
-        Workstation: process.env.WORKSTATION
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
+  const domain = process.env.DOMAIN;
+  const workstation = process.env.WORKSTATION;
+  const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
+  const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ItemListec`;
+
+  const options = {
+    url: url,
+    username: username,
+    password: password,
+    workstation: workstation,
+    domain: domain
+  };
+
+  return new Promise((resolve, reject) => {
+    httpntlm.get(options, (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        resolve(res.body);
       }
-    };
-    console.log(options);
-    const companyId = "CRONUS France S.A.";
-    const encodedCompanyId = encodeURIComponent(companyId);
-    const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ItemListec`;
-    console.log("Requesting articles from:", url);
-    const response = await axios.get(url, options);
-    console.log("Response:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error retrieving articles data from Business Central");
-  }
+    });
+  });
 }
 
-
 // Route to get article data
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const user = req.ntlm;
-    console.log(user);
-    let articles = await getArticlesFromBC();
+    const articles = await getArticlesFromBC();
     res.json(articles);
   } catch (error) {
-    //console.error(error);
-    res
-      .status(500)
-      .send("Error retrieving articles data from Business Central");
+    console.error("Error retrieving articles data from Business Central:", error.message);
+    res.status(500).send("Error retrieving articles data from Business Central");
   }
 });
 
 module.exports = router;
-
