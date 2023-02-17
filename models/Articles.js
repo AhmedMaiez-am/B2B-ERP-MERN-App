@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const ArticleSchema = new mongoose.Schema({
-  num: Number,
+  num: String,
   description: String,
   stocks: Number,
-  numGamme: Number,
+  numGamme: String,
   prixUni: Number,
-  numFrounisseur: Number
+  numFrounisseur: String
 });
 
 module.exports = mongoose.model("article", ArticleSchema);

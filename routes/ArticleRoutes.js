@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const httpntlm = require("httpntlm");
+const Article = require('../models/Articles');
 
 // Get article data from Business Central
 async function getArticlesFromBC() {
@@ -34,7 +35,8 @@ async function getArticlesFromBC() {
 // Route to get article data
 router.get("/", async (req, res) => {
   try {
-    const articles = await getArticlesFromBC();
+    const articlesString = await getArticlesFromBC();
+    const articles = JSON.parse(articlesString);
     res.json(articles);
   } catch (error) {
     console.error("Error retrieving articles data from Business Central:", error.message);
@@ -42,4 +44,27 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
+//add the consumer data to mongodb schema
+router.get('/insert', async (req, res) => {
+  try {
+    const articlesString = await getArticlesFromBC();
+    const parsedJson = JSON.parse(articlesString);
+    const articles = parsedJson.value; // Extract the array of articles from the 'value' property
+    const articleDocs = articles.map((article) => ({
+      num: article.NO,
+      description: article.Description,
+      stocks: article.Stocks,
+      numGamme: article.N_x00B0__gamme,
+      prixUni: article.Prix_Unitaire,
+      numFrounisseur: article.N_x00B0__Fournisseur,
+    }));
+    const createdArticles = await Article.create(articleDocs);
+    res.json(createdArticles);
+  } catch (error) {
+    console.error('Error retrieving articles data from Business Central:', error.message);
+    res.status(500).send('Error retrieving articles data from Business Central');
+  }
+});
 module.exports = router;
