@@ -31,7 +31,7 @@ app.use("/articles", articleRouter);
 app.use("/users", usersRouter);
 app.use("/auth", auth);
 
-//app.use(express.static(path.join(__dirname, "frontend", "build")));
+app.use(express.static(path.join(__dirname, "frontend", "build")));
 app.use(express.json());
 const PORT = process.env.PORT;
 
@@ -42,9 +42,9 @@ app.use((req, res, next) => {
 });
 
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+});
 
 // Start server
 // PORT

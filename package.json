@@ -40,10 +40,14 @@
     "socket.io": "^4.5.1",
     "stripe": "^8.220.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "concurrently": "^7.1.0"
+  },
   "scripts": {
     "start": "node server.js",
-    "back": "nodemon server"
+    "back": "nodemon server",
+    "front": "cd frontend && npm start",
+    "dev": " concurrently \"set PORT=3006 && npm run front\" \"npm run back\""
   },
   "repository": {
     "type": "git",
