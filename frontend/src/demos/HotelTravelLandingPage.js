@@ -9,7 +9,7 @@ import Blog from "components/blogs/PopularAndRecentBlogPosts.js";
 import Testimonial from "components/testimonials/TwoColumnWithImageAndProfilePictureReview.js";
 import FAQ from "components/faqs/SimpleWithSideImage.js";
 import SubscribeNewsLetterForm from "components/forms/SimpleSubscribeNewsletter.js";
-import Footer from "components/footers/MiniCenteredFooter.js";
+import Footer from "components/footers/LandingPageFooter.js";
 
 export default () => (
   <AnimationRevealPage>

@@ -58,32 +58,35 @@ const DecoratorBlob = styled(SvgDecoratorBlob3)`
   ${tw`pointer-events-none absolute right-0 bottom-0 w-64 opacity-25 transform translate-x-32 translate-y-48 `}
 `;
 
-export default ({ cards = null, heading = "Amazing Features", subheading = "Features", description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }) => {
-  /*
-   * This componets has an array of object denoting the cards defined below. Each object in the cards array can have the key (Change it according to your need, you can also add more objects to have more cards in this feature component) or you can directly pass this using the cards prop:
-   *  1) imageSrc - the image shown at the top of the card
-   *  2) title - the title of the card
-   *  3) description - the description of the card
-   *  If a key for a particular card is not provided, a default value is used
-   */
+export default ({ cards = null, heading = "Services Professionnels", subheading = "Services", description = "Notre portail est toujours sur votre disposition avec ces diffrents services pour vous faciliter la gestion des stocks et d'autres diffèrentes opérations." }) => {
 
   const defaultCards = [
     {
       imageSrc: ShieldIconImage,
-      title: "Secure",
-      description: "We strictly only deal with vendors that provide top notch security."
+      title: "Sécurisé",
+      description: "On garantie la sécurité de tous transactions faites dans notre portail."
     },
-    { imageSrc: SupportIconImage, title: "24/7 Support" },
-    { imageSrc: CustomizeIconImage, title: "Customizable" },
-    { imageSrc: ReliableIconImage, title: "Reliable" },
-    { imageSrc: FastIconImage, title: "Fast" },
-    { imageSrc: SimpleIconImage, title: "Easy" }
+    { imageSrc: SupportIconImage, 
+      title: "Support 24/7",
+    description: "Notre service de support est toujours à votre disposition pour vous aider en cas de problème." },
+    { imageSrc: CustomizeIconImage, 
+      title: "Commandes",
+    description: "Passer des commandes de grande tailles et suivre leurs états. " },
+    { imageSrc: ReliableIconImage, 
+      title: "Retour et Avoirs",
+    description: "Sauvegarder vos opérations de retour et générer vos avoirs chaque fin de mois." },
+    { imageSrc: FastIconImage, 
+      title: "Factures et Bandes de livraison",
+    description: "Gérer vos bandes de livraison pour vos commandes et générer leurs factures chaque fin de mois." },
+    { imageSrc: SimpleIconImage, 
+      title: "Droits d'accés",
+    description: "Gérer les droits d'accés pour vos personnels utilisants le portail. " }
   ];
 
   if (!cards) cards = defaultCards;
 
   return (
-    <Container>
+    <Container id="services">
       <ThreeColumnContainer>
         {subheading && <Subheading>{subheading}</Subheading>}
         <Heading>{heading}</Heading>

@@ -37,7 +37,7 @@ import BlogIndexPageImageSrc from "images/demo/BlogIndexPage.jpeg";
 import TermsOfServicePageImageSrc from "images/demo/TermsOfServicePage.jpeg";
 import PrivacyPolicyPageImageSrc from "images/demo/PrivacyPolicyPage.jpeg";
 
-import BackgroundAsImageHero from "components/hero/BackgroundAsImage.js";
+import ListeArticles from "components/hero/ListeArticles.js";
 import IllustrationAndVideoHero from "components/hero/TwoColumnWithVideo.js";
 import IllustrationAndInputHero from "components/hero/TwoColumnWithInput.js";
 import FeaturesAndTestimonialHero from "components/hero/TwoColumnWithFeaturesAndTestimonial.js";
@@ -49,7 +49,7 @@ import TwoPlansWithDurationSwitcherPricing from "components/pricing/TwoPlansWith
 import ThreePlansWithHalfPrimaryBackgroundPricing from "components/pricing/ThreePlansWithHalfPrimaryBackground.js";
 import ThreePlansPricing from "components/pricing/ThreePlans.js";
 
-import ThreeColWithSideImageFeatures from "components/features/ThreeColWithSideImage.js";
+import LandingPageFeatures from "components/features/LandingPageFeatures.js";
 import TwoColWithButtonFeatures from "components/features/TwoColWithButton.js";
 import ThreeColSimpleFeatures from "components/features/ThreeColSimple.js";
 import ThreeColWithSideImageWithPrimaryBackgroundFeatures from "components/features/ThreeColWithSideImageWithPrimaryBackground.js";
@@ -97,8 +97,9 @@ import SimpleFiveColumnFooter from "components/footers/SimpleFiveColumn.js";
 import FiveColumnWithInputFormFooter from "components/footers/FiveColumnWithInputForm.js";
 import FiveColumnWithBackgroundFooter from "components/footers/FiveColumnWithBackground.js";
 import FiveColumnDarkFooter from "components/footers/FiveColumnDark.js";
-import MiniCenteredFooter from "components/footers/MiniCenteredFooter.js";
+import LandingPageFooter from "components/footers/LandingPageFooter.js";
 
+import ArticlesTable from "components/tables/Articles.js";
 
 export const components = {
  landingPages : {
@@ -183,15 +184,21 @@ export const components = {
       imageSrc: PrivacyPolicyPageImageSrc,
     }
   },
-
+ tables: {
+    ArticlesTable: {
+      name: "ArticlesTable",
+      component: ArticlesTable,
+      url:"/components/tables/ArticlesTable",
+    }
+ },
   blocks: {
     Hero: {
       type: "Hero Section",
       elements: {
-        BackgroundAsImage: {
-          name: "With Background Image",
-          component: BackgroundAsImageHero,
-          url: "/components/blocks/Hero/BackgroundAsImage",
+        ListeArticles: {
+          name: "ListeArticles",
+          component: ListeArticles,
+          url: "/components/blocks/Hero/ListeArticles",
         },
         IllustrationAndInput: {
           name: "With Image Illustration and Input",
@@ -249,9 +256,9 @@ export const components = {
       type: "Features Section",
       elements: {
         ThreeColWithSideImage: {
-          name: "Three Column With Side Image",
-          component: ThreeColWithSideImageFeatures,
-          url: "/components/blocks/Features/ThreeColWithSideImage",
+          name: "Features for Landing Page",
+          component: LandingPageFeatures,
+          url: "/components/blocks/Features/LandingPageFeatures",
         },
          TwoColWithButton: {
           name: "Two Column With Image and Action Button",
@@ -495,10 +502,10 @@ export const components = {
           component: FiveColumnDarkFooter,
           url: "/components/blocks/Footer/FiveColumnDark",
         },
-        MiniCentered: {
-          name: "Mini Centered Dark",
-          component: MiniCenteredFooter,
-          url: "/components/blocks/Footer/MiniCentered",
+        LandingPageFooter: {
+          name: "LandingPageFooter",
+          component: LandingPageFooter,
+          url: "/components/blocks/Footer/LandingPageFooter",
         },
       }
     }
