@@ -25,14 +25,7 @@ const connectDB = require("./db/conn.js");
 
 connectDB();
 
-
-//routes
-app.use("/articles", articleRouter);
-app.use("/users", usersRouter);
-app.use("/auth", auth);
-
 app.use(express.static(path.join(__dirname, "frontend", "build")));
-app.use(express.json());
 const PORT = process.env.PORT;
 
 //middleware
@@ -41,6 +34,11 @@ app.use((req, res, next) => {
   next();
 });
 
+
+//routes
+app.use("/articles", articleRouter);
+app.use("/users", usersRouter);
+app.use("/auth", auth);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));

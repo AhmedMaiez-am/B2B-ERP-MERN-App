@@ -51,13 +51,9 @@ router.get("/", async (req, res) => {
 
 // Route to get article data from MongoDB
 router.get("/get", async (req, res) => {
-  try {
-    const articles = await Article.find();
-    res.json(articles);
-  } catch (error) {
-    console.error("Error retrieving articles data from MongoDB:", error.message);
-    res.status(500).send("Error retrieving articles data from MongoDB");
-  }
+  Article.find( function(err, article) {
+    res.json(article);
+  });
 });
 
 

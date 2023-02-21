@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import Axios from "axios";
 
-
-import { motion } from "framer-motion";
 import ArticlesTable from "components/tables/Articles"
 import Header, {
   NavLink,
@@ -59,15 +56,11 @@ const PrimaryAction = tw.button`px-8 py-3 mt-10 text-sm sm:text-base sm:mt-16 sm
 const StyledResponsiveVideoEmbed = styled(ResponsiveVideoEmbed)`
   padding-bottom: 56.25% !important;
   padding-top: 0px !important;
-  ${tw`rounded`}
+  ${tw`rounded-lg`}
   iframe {
-    ${tw`rounded bg-black shadow-xl`}
+    ${tw`rounded-lg bg-black shadow-xl`}
   }
 `;
-
-const TabContent = tw(
-  motion.div
-)`mt-6 flex flex-wrap sm:-mr-10 md:-mr-6 lg:-mr-12`;
 
 export default () => {
   const navLinks = [
@@ -81,20 +74,6 @@ export default () => {
       <PrimaryLink href="/#">Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
-
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () =>{
-      try {
-        const {data: response} = await  Axios.get(`/articles/get`)
-        setData(response);
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
-    fetchData();
-  }, []);
 
   return (
     <div>
@@ -115,7 +94,7 @@ export default () => {
               </LeftColumn>
               <RightColumn>
                 <StyledResponsiveVideoEmbed
-                  url="//player.vimeo.com/video/374265101?title=0&portrait=0&byline=0&autoplay=0&responsive=1"
+                  url="https://smartbs.webmedia-dev.ovh/wp-content/uploads/2022/04/smart-sbs.mp4?title=0&portrait=0&byline=0&autoplay=1&responsive=1"
                   background="transparent"
                 />
               </RightColumn>
