@@ -5,7 +5,8 @@ const ArticleSchema = new mongoose.Schema({
   stocks: Number,
   numGamme: String,
   prixUni: Number,
-  numFrounisseur: String
+  numFrounisseur: String,
+  isAvailable: String
 });
 
 module.exports = mongoose.model("article", ArticleSchema);

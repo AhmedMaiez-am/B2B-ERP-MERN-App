@@ -2,7 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-
+import Footer from "components/footers/LandingPageFooter";
 import ArticlesTable from "components/tables/Articles"
 import Header, {
   NavLink,
@@ -102,6 +102,7 @@ export default () => {
           </HeroContainer>
         </Container>
         <ArticlesTable/>
+        <Footer/>
       </>
     </div>
   );

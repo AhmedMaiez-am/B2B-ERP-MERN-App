@@ -64,14 +64,18 @@ router.get("/insert", async (req, res) => {
     const articlesString = await getArticlesFromBC();
     const parsedJson = JSON.parse(articlesString);
     const articles = parsedJson.value; // Extract the array of articles from the 'value' property
-    const articleDocs = articles.map((article) => ({
-      num: article.NO,
-      description: article.Description,
-      stocks: article.Stocks,
-      numGamme: article.N_x00B0__gamme,
-      prixUni: article.Prix_Unitaire,
-      numFrounisseur: article.N_x00B0__Fournisseur,
-    }));
+    const articleDocs = articles.map((article) => {
+      const isAvailable = article.Stocks > 0 ? "Disponible" : "Epuisé";
+      return {
+        num: article.NO,
+        description: article.Description,
+        stocks: article.Stocks,
+        numGamme: article.N_x00B0__gamme,
+        prixUni: article.Prix_Unitaire,
+        numFrounisseur: article.N_x00B0__Fournisseur,
+        isAvailable: isAvailable
+      };
+    });
 
     // Loop through each article document and update or insert it into the MongoDB collection
     articleDocs.forEach(async (articleDoc) => {
@@ -93,5 +97,6 @@ router.get("/insert", async (req, res) => {
       .send("Error retrieving articles data from Business Central");
   }
 });
+
 
 module.exports = router;
