@@ -23,7 +23,7 @@ export const NavLinks = tw.div`inline-block`;
 export const NavLink = tw.a`
   text-lg my-2 lg:text-sm lg:mx-6 lg:my-0
   font-semibold tracking-wide transition duration-300
-  pb-1 border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
+  pb-1 border-b-2 border-transparent hover:border-blue-500 hocus:text-blue-500
 `;
 
 export const PrimaryLink = tw(NavLink)`
@@ -72,14 +72,14 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
    */
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="/#">About</NavLink>
-      <NavLink href="/#">Blog</NavLink>
-      <NavLink href="/#">Pricing</NavLink>
-      <NavLink href="/#">Contact Us</NavLink>
+      <NavLink href="/#">Commandes</NavLink>
+      <NavLink href="/#">Factures et Bandes de livraison</NavLink>
+      <NavLink href="/#">Retours et Avoirs</NavLink>
+      <NavLink href="/#">Administration</NavLink>
       <NavLink href="/#" tw="lg:ml-12!">
-        Login
+        Articles
       </NavLink>
-      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`}href="/#">Sign Up</PrimaryLink>
+      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`}href="/#">Se Déconnecter</PrimaryLink>
     </NavLinks>
   ];
 

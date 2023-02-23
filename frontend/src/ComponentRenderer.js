@@ -38,7 +38,7 @@ import TermsOfServicePageImageSrc from "images/demo/TermsOfServicePage.jpeg";
 import PrivacyPolicyPageImageSrc from "images/demo/PrivacyPolicyPage.jpeg";
 
 import ListeArticles from "components/hero/ListeArticles.js";
-import IllustrationAndVideoHero from "components/hero/TwoColumnWithVideo.js";
+import Panier from "components/hero/Panier.js";
 import IllustrationAndInputHero from "components/hero/TwoColumnWithInput.js";
 import FeaturesAndTestimonialHero from "components/hero/TwoColumnWithFeaturesAndTestimonial.js";
 import FullWidthWithImageHero from "components/hero/FullWidthWithImage.js";
@@ -81,7 +81,7 @@ import ThreeColumnWithProfileImageTestimonial from "components/testimonials/Thre
 import SimplePrimaryBackgroundTestimonial from "components/testimonials/SimplePrimaryBackground.js";
 
 import SimpleWithSideImageFAQS from "components/faqs/SimpleWithSideImage.js";
-import SingleColFAQS from "components/faqs/SingleCol.js";
+import PanierCols from "components/faqs/PanierCols.js";
 import TwoColumnPrimaryBackgroundFAQS from "components/faqs/TwoColumnPrimaryBackground.js";
 
 import SimpleContactUsForm from "components/forms/SimpleContactUs.js";
@@ -98,8 +98,6 @@ import FiveColumnWithInputFormFooter from "components/footers/FiveColumnWithInpu
 import FiveColumnWithBackgroundFooter from "components/footers/FiveColumnWithBackground.js";
 import FiveColumnDarkFooter from "components/footers/FiveColumnDark.js";
 import LandingPageFooter from "components/footers/LandingPageFooter.js";
-
-import ArticlesTable from "components/tables/Articles.js";
 
 export const components = {
  landingPages : {
@@ -184,13 +182,6 @@ export const components = {
       imageSrc: PrivacyPolicyPageImageSrc,
     }
   },
- tables: {
-    ArticlesTable: {
-      name: "ArticlesTable",
-      component: ArticlesTable,
-      url:"/components/tables/ArticlesTable",
-    }
- },
   blocks: {
     Hero: {
       type: "Hero Section",
@@ -205,10 +196,10 @@ export const components = {
           component: IllustrationAndInputHero,
           url: "/components/blocks/Hero/IllustrationAndInput",
         },
-        IllustrationAndVideo: {
-          name: "With Image Illustration and Video",
-          component: IllustrationAndVideoHero,
-          url: "/components/blocks/Hero/IllustrationAndVideo",
+        Panier: {
+          name: "Panier",
+          component: Panier,
+          url: "/components/blocks/Hero/Panier",
         },
         FeaturesAndTestimonial: {
           name: "With Features And Customer Testimonial",
@@ -419,10 +410,10 @@ export const components = {
           component: SimpleWithSideImageFAQS,
           url: "/components/blocks/FAQS/SimpleWithSideImage",
         },
-        SingleCol: {
-          name: "Single Column",
-          component: SingleColFAQS,
-          url: "/components/blocks/FAQS/SingleCol",
+        PanierCols: {
+          name: "PanierCols",
+          component: PanierCols,
+          url: "/components/blocks/FAQS/PanierCols",
         },
         TwoColumnPrimaryBackground: {
           name: "Two Column With Primary Background",

@@ -3,7 +3,8 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import Footer from "components/footers/LandingPageFooter";
-import ArticlesTable from "components/tables/Articles"
+import ArticlesTable from "components/tables/Articles";
+import { useHistory } from 'react-router-dom';
 import Header, {
   NavLink,
   NavLinks,
@@ -74,7 +75,10 @@ export default () => {
       <PrimaryLink href="/#">Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
-
+  const history = useHistory();
+  const handleButtonClick = () => {
+    history.push('/components/blocks/Hero/Panier');
+  };
   return (
     <div>
       <>
@@ -90,7 +94,7 @@ export default () => {
                   <br />
                   <SlantedBackground>articles.</SlantedBackground>
                 </Heading>
-                <PrimaryAction>Accéder au panier</PrimaryAction>
+                <PrimaryAction onClick={handleButtonClick}>Accéder au panier</PrimaryAction>
               </LeftColumn>
               <RightColumn>
                 <StyledResponsiveVideoEmbed

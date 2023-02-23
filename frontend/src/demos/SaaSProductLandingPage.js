@@ -9,7 +9,7 @@ import MainFeature2 from "components/features/TwoColWithTwoHorizontalFeaturesAnd
 import FeatureWithSteps from "components/features/TwoColWithSteps.js";
 import Pricing from "components/pricing/ThreePlans.js";
 import Testimonial from "components/testimonials/TwoColumnWithImageAndRating.js";
-import FAQ from "components/faqs/SingleCol.js";
+import FAQ from "components/faqs/PanierCols.js";
 import GetStarted from "components/cta/GetStarted";
 import Footer from "components/footers/FiveColumnWithBackground.js";
 import heroScreenshotImageSrc from "images/hero-screenshot-1.png";

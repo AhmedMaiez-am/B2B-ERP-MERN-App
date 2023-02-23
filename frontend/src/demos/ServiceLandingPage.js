@@ -11,7 +11,7 @@ import FeatureStats from "components/features/ThreeColCenteredStatsPrimaryBackgr
 import Pricing from "components/pricing/TwoPlansWithDurationSwitcher.js";
 import Blog from "components/blogs/GridWithFeaturedPost.js";
 import Testimonial from "components/testimonials/TwoColumnWithImageAndRating.js";
-import FAQ from "components/faqs/SingleCol.js";
+import FAQ from "components/faqs/PanierCols.js";
 import GetStarted from "components/cta/GetStartedLight.js";
 import Footer from "components/footers/FiveColumnWithInputForm.js";
 
