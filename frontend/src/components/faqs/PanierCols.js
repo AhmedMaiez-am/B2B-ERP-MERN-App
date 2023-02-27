@@ -10,6 +10,7 @@ import { ReactComponent as SvgDecoratorBlob2 } from "images/svg-decorator-blob-8
 import { SectionHeading as HeadingTitle } from "components/misc/Headings.js";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
+import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import Tooltip from "@material-ui/core/Tooltip";
 import {
   Button,
@@ -20,6 +21,9 @@ import {
   DialogContentText,
 } from "@material-ui/core";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import SyncProblemOutlinedIcon from '@mui/icons-material/SyncProblemOutlined';
+import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined';
+import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 const Column = tw.div`flex flex-col items-center`;
@@ -53,14 +57,27 @@ const DecoratorBlob1 = styled(SvgDecoratorBlob1)`
 const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
   ${tw`pointer-events-none -z-20 absolute left-0 bottom-0 h-64 w-64 opacity-15 transform -translate-x-2/3 text-primary-500`}
 `;
+const Actions = styled.div`
+  ${tw`relative max-w-md text-center mx-auto lg:mx-0`}
+  input {
+    ${tw`sm:pr-40 pl-4 py-2 sm:py-3 rounded-full border-2 w-full font-medium text-sm focus:outline-none transition duration-300 focus:border-primary-500 hover:border-gray-500`}
+  }
+  button {
+    ${tw`w-full sm:absolute right-0 top-0 bottom-0 bg-primary-500 text-gray-100 font-bold mr-2 my-3 sm:my-2 rounded-full py-3 flex items-center justify-center sm:w-2/5 sm:leading-none focus:outline-none hover:bg-primary-900 transition duration-300`}
+  }
+`;
 
 export default () => {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
+  const [open3, setOpen3] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [data, setData] = React.useState([]);
+
   //Retrieve cart from local Storage
   React.useEffect(() => {
     const panier = JSON.parse(localStorage.getItem("panier"));
@@ -113,6 +130,45 @@ export default () => {
       window.location.reload();
     }
   };
+
+  //check stock
+  const handleDeleteClick1 = (index, inputValues) => {
+    const stockValue = data[index].stocks;
+    const inputValue = inputValues[index]?.value;
+    if (inputValues.length === 0) {
+      setOpen3(true);
+    } else {
+      if (inputValue && inputValue <= stockValue) {
+        setOpen2(true);
+      } else {
+        setOpen1(true);
+      }
+    }
+    setInputValues([]);
+  };
+  //confirm unavailable article delete
+  const handleDialogClose1 = (confirmDelete) => {
+    setOpen1(false);
+    if (confirmDelete) {
+      // Delete the object from local storage and refresh the page
+      const panier = JSON.parse(localStorage.getItem("panier")) || [];
+      panier.splice(deleteIndex, 1);
+      localStorage.setItem("panier", JSON.stringify(panier));
+      window.location.reload();
+    }
+  };
+
+  //confirm unavailable article delete
+  const handleDialogClose2 = () => {
+    setOpen2(false);
+  };
+
+  //insert quantity warning 
+  const handleDialogClose3 = () => {
+    setOpen3(false);
+  };
+
+  const [inputValues, setInputValues] = useState([]);
 
   return (
     <Container>
@@ -178,20 +234,33 @@ export default () => {
                 >
                   <P>Prix Unitaire:</P> {faq.prixUni}
                 </Answer>
-
-                <Answer
-                  variants={{
-                    open: { opacity: 1, height: "auto", marginTop: "16px" },
-                    collapsed: { opacity: 0, height: 0, marginTop: "0px" },
-                  }}
-                  initial="collapsed"
-                  animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                  transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-                ></Answer>
+                <Actions>
+                  <input
+                    type="number"
+                    placeholder="Quantité désirée"
+                    value={inputValues[index]?.value || ""}
+                    onChange={(event) => {
+                      setInputValues((prevInputValues) => {
+                        const newInputValues = [...prevInputValues];
+                        newInputValues[index] = { value: event.target.value };
+                        return newInputValues;
+                      });
+                    }}
+                  />
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleDeleteClick1(index, inputValues);
+                    }}
+                  >
+                    <InventoryOutlinedIcon /> Vérifier Stock
+                  </button>
+                </Actions>
                 <Tooltip title="Retirer l'article du panier">
                   <IconButton
                     variant="outlined"
                     color="error"
+                    style={{ color: "#c2111b" }}
                     onClick={(event) => {
                       event.stopPropagation();
                       handleDeleteClick(index);
@@ -207,7 +276,12 @@ export default () => {
                 Prix Total: <span tw="text-primary-500">{cartTotalPrice}</span>{" "}
               </>
               <br></br>
-              <Button color="primary" variant="contained" endIcon={<AddShoppingCartIcon />}>
+              <Button
+                color="primary"
+                variant="contained"
+                style={{ borderRadius: "50px" }}
+                endIcon={<AddShoppingCartIcon />}
+              >
                 Confirmer Panier
               </Button>
             </HeadingTitle>
@@ -216,6 +290,8 @@ export default () => {
       </ContentWithPaddingXl>
       <DecoratorBlob1 />
       <DecoratorBlob2 />
+
+      {/* delete article dialog  */}
       <Dialog
         fullScreen={fullScreen}
         open={open}
@@ -244,6 +320,8 @@ export default () => {
             onClick={() => handleDialogClose(false)}
             variant="outlined"
             color="primary"
+            style={{ borderRadius: "50px" }}
+            
           >
             Annuler
           </Button>
@@ -251,9 +329,140 @@ export default () => {
             onClick={() => handleDialogClose(true)}
             variant="outlined"
             color="secondary"
-            autoFocus
+            style={{ borderRadius: "50px" }}
           >
             Suprrimer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* verfiy stock and delete if unavailable dialog  */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={open1}
+        onClose={() => handleDialogClose1(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{
+            backgroundColor: "#FDE7E9",
+            color: "#9B2C2C",
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1rem",
+          }}
+        ><BlockOutlinedIcon/>&nbsp;
+          {"Article n'est plus disponible dans le stock"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Cet article n'est plus disponible dans le stock, voulez-vous le
+            supprimer de votre panier ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => handleDialogClose1(false)}
+            variant="outlined"
+            color="primary"
+            style={{ backgroundColor: "#4543a0", color: "#FFFFFF", borderRadius: "50px" }}
+          >
+            Changer Quantité
+          </Button>
+          <Button
+            onClick={() => handleDialogClose1(true)}
+            variant="outlined"
+            color="secondary"
+            style={{ backgroundColor: "#a04348", color: "#FFFFFF", borderRadius: "50px" }}
+          >
+            Suprrimer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+{/* stock verification success dialog */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={open2}
+        onClose={() => handleDialogClose2(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{
+            backgroundColor: "#ebfde7",
+            color: "#4f9b2c",
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1rem",
+          }}
+        ><FactCheckOutlinedIcon/>&nbsp;
+          {"Article validé en stock"}
+        </DialogTitle>
+        <DialogContent style={{ borderRadius: "20px" }}>
+          <DialogContentText
+            id="alert-dialog-description"
+            style={{ color: "#4F4F4F" }}
+          >
+            La quantité insérée est disponible en stock.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => handleDialogClose2(false)}
+            variant="contained"
+            color="primary"
+            style={{ backgroundColor: "#43A047", color: "#FFFFFF", borderRadius: "50px" }}
+          >
+            Continuer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+{/* user forgot to insert quantity warning */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={open3}
+        onClose={() => handleDialogClose3(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{
+            backgroundColor: "#fdfde7",
+            color: "#9b9b2c",
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1rem",
+          }}
+        ><SyncProblemOutlinedIcon/> &nbsp;
+          {"Veuillez indiquer la quatité"}
+        </DialogTitle>
+        <DialogContent style={{ borderRadius: "20px" }}>
+          <DialogContentText
+            id="alert-dialog-description"
+            style={{ color: "#4F4F4F" }}
+          >
+            Veuillez insérer la quantité désirée afin de vérifier si le stock est suffisant.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => handleDialogClose3(false)}
+            variant="contained"
+            color="primary"
+            style={{ backgroundColor: "#98a043", color: "#FFFFFF", borderRadius: "50px" }}
+          >
+            OK
           </Button>
         </DialogActions>
       </Dialog>

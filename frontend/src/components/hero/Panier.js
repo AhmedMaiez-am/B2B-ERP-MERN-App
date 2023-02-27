@@ -92,7 +92,7 @@ export default ({
             <Heading>{heading}</Heading>
             <Paragraph>{description}</Paragraph>
             <Actions>
-              <PrimaryButton as="a" href={primaryButtonUrl}>
+              <PrimaryButton style={{ borderRadius: "50px" }} as="a" href={primaryButtonUrl}>
                 {primaryButtonText}
               </PrimaryButton>
               <WatchVideoButton onClick={toggleModal}>

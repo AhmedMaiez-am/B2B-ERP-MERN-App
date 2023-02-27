@@ -116,7 +116,7 @@ export default ({
                 Administration
               </NavLink>
               <div tw="md:hidden flex-100 h-0"></div>
-              <PrimaryNavLink href="/components/innerPages/LoginPage">
+              <PrimaryNavLink style={{ borderRadius: "50px" }} href="/components/innerPages/LoginPage">
                 Se Connecter
               </PrimaryNavLink>
             </div>
@@ -134,10 +134,10 @@ export default ({
                 ))}
               </FeatureList>
               <Actions>
-                <PrimaryButton href={primaryButtonUrl} css={buttonRoundedCss}>
+                <PrimaryButton style={{ borderRadius: "50px" }} href={primaryButtonUrl} css={buttonRoundedCss}>
                   {primaryButtonText}
                 </PrimaryButton>
-                <SecondaryButton href={secondaryButtonUrl}>{secondaryButtonText}</SecondaryButton>
+                <SecondaryButton style={{ borderRadius: "50px" }} href={secondaryButtonUrl}>{secondaryButtonText}</SecondaryButton>
               </Actions>
             </TextColumn>
             <ImageColumn>

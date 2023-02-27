@@ -72,7 +72,7 @@ export default () => {
       <NavLink href="#">Administration</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLink href="/#">Se Déconnecter</PrimaryLink>
+      <PrimaryLink style={{ borderRadius: "50px" }} href="/#">Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
   const history = useHistory();
@@ -94,7 +94,7 @@ export default () => {
                   <br />
                   <SlantedBackground>articles.</SlantedBackground>
                 </Heading>
-                <PrimaryAction onClick={handleButtonClick}>Accéder au panier</PrimaryAction>
+                <PrimaryAction style={{ borderRadius: "50px" }} onClick={handleButtonClick}>Accéder au panier</PrimaryAction>
               </LeftColumn>
               <RightColumn>
                 <StyledResponsiveVideoEmbed
