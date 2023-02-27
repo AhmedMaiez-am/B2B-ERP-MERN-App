@@ -21,9 +21,10 @@ import {
   DialogContentText,
 } from "@material-ui/core";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import SyncProblemOutlinedIcon from '@mui/icons-material/SyncProblemOutlined';
-import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined';
-import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
+import SyncProblemOutlinedIcon from "@mui/icons-material/SyncProblemOutlined";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
+import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 const Column = tw.div`flex flex-col items-center`;
@@ -40,6 +41,7 @@ const Question = tw.dt`flex justify-between items-center`;
 const QuestionText = tw.span`text-lg lg:text-xl font-semibold`;
 const Q = tw.span`text-xl font-bold text-blue-700 mb-4 underline`;
 const P = tw.span`font-bold text-blue-500 mb-4`;
+
 
 const QuestionToggleIcon = motion(styled.span`
   ${tw`ml-2 transition duration-300`}
@@ -81,7 +83,7 @@ export default () => {
   //Retrieve cart from local Storage
   React.useEffect(() => {
     const panier = JSON.parse(localStorage.getItem("panier"));
-    setData(panier);
+    setData(panier || []);
   }, []);
 
   //calculate articles total price
@@ -89,6 +91,11 @@ export default () => {
     return total + item.prixUni;
   }, 0);
 
+  //empty cart
+  const handleDeleteCart = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   //populate faqs with data from local storage to pass it into return
   const faqs = data.map((panier) => {
     return {
@@ -163,7 +170,7 @@ export default () => {
     setOpen2(false);
   };
 
-  //insert quantity warning 
+  //insert quantity warning
   const handleDialogClose3 = () => {
     setOpen3(false);
   };
@@ -171,301 +178,373 @@ export default () => {
   const [inputValues, setInputValues] = useState([]);
 
   return (
-    <Container>
-      <ContentWithPaddingXl>
-        <Column>
-          <FAQSContainer>
-            {faqs.map((faq, index) => (
-              <FAQ key={index} className="group">
-                <Question
-                  onClick={handleClick(index)}
-                  open={activeQuestionIndex === index}
-                >
-                  <QuestionText>
-                    <Q>Description de l'article:</Q> {faq.description}
-                  </QuestionText>
-                  <QuestionToggleIcon
-                    variants={{
-                      collapsed: { rotate: 0 },
-                      open: { rotate: -180 },
-                    }}
-                    initial="collapsed"
-                    animate={
-                      activeQuestionIndex === index ? "open" : "collapsed"
-                    }
-                    transition={{
-                      duration: 0.02,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <ChevronDownIcon />
-                  </QuestionToggleIcon>
-                </Question>
-                <Answer
-                  variants={{
-                    open: { opacity: 1, height: "auto", marginTop: "16px" },
-                    collapsed: { opacity: 0, height: 0, marginTop: "0px" },
-                  }}
-                  initial="collapsed"
-                  animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                  transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-                >
-                  <P>Numéro du fournisseur:</P> {faq.numFrounisseur}
-                </Answer>
-                <Answer
-                  variants={{
-                    open: { opacity: 1, height: "auto", marginTop: "16px" },
-                    collapsed: { opacity: 0, height: 0, marginTop: "0px" },
-                  }}
-                  initial="collapsed"
-                  animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                  transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-                >
-                  <P>Numéro du gamme:</P> {faq.numGamme}
-                </Answer>
-                <Answer
-                  variants={{
-                    open: { opacity: 1, height: "auto", marginTop: "16px" },
-                    collapsed: { opacity: 0, height: 0, marginTop: "0px" },
-                  }}
-                  initial="collapsed"
-                  animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                  transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-                >
-                  <P>Prix Unitaire:</P> {faq.prixUni}
-                </Answer>
-                <Actions>
-                  <input
-                    type="number"
-                    placeholder="Quantité désirée"
-                    value={inputValues[index]?.value || ""}
-                    onChange={(event) => {
-                      setInputValues((prevInputValues) => {
-                        const newInputValues = [...prevInputValues];
-                        newInputValues[index] = { value: event.target.value };
-                        return newInputValues;
-                      });
-                    }}
-                  />
-                  <button
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleDeleteClick1(index, inputValues);
-                    }}
-                  >
-                    <InventoryOutlinedIcon /> Vérifier Stock
-                  </button>
-                </Actions>
-                <Tooltip title="Retirer l'article du panier">
-                  <IconButton
-                    variant="outlined"
-                    color="error"
-                    style={{ color: "#c2111b" }}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleDeleteClick(index);
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </FAQ>
-            ))}
-            <HeadingTitle>
-              <>
-                Prix Total: <span tw="text-primary-500">{cartTotalPrice}</span>{" "}
-              </>
-              <br></br>
-              <Button
-                color="primary"
-                variant="contained"
-                style={{ borderRadius: "50px" }}
-                endIcon={<AddShoppingCartIcon />}
+    
+          <Container>
+            <ContentWithPaddingXl>
+              <Column>
+                <FAQSContainer>
+                  {faqs.map((faq, index) => (
+                    <FAQ key={index} className="group">
+                      <Question
+                        onClick={handleClick(index)}
+                        open={activeQuestionIndex === index}
+                      >
+                        <QuestionText>
+                          <Q>Description de l'article:</Q> {faq.description}
+                        </QuestionText>
+                        <QuestionToggleIcon
+                          variants={{
+                            collapsed: { rotate: 0 },
+                            open: { rotate: -180 },
+                          }}
+                          initial="collapsed"
+                          animate={
+                            activeQuestionIndex === index ? "open" : "collapsed"
+                          }
+                          transition={{
+                            duration: 0.02,
+                            ease: [0.04, 0.62, 0.23, 0.98],
+                          }}
+                        >
+                          <ChevronDownIcon />
+                        </QuestionToggleIcon>
+                      </Question>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du fournisseur:</P> {faq.numFrounisseur}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du gamme:</P> {faq.numGamme}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Prix Unitaire:</P> {faq.prixUni}
+                      </Answer>
+                      <Actions>
+                        <input
+                          type="number"
+                          placeholder="Quantité désirée"
+                          value={inputValues[index]?.value || ""}
+                          onChange={(event) => {
+                            setInputValues((prevInputValues) => {
+                              const newInputValues = [...prevInputValues];
+                              newInputValues[index] = {
+                                value: event.target.value,
+                              };
+                              return newInputValues;
+                            });
+                          }}
+                        />
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick1(index, inputValues);
+                          }}
+                        >
+                          <InventoryOutlinedIcon /> Vérifier Stock
+                        </button>
+                      </Actions>
+                      <Tooltip title="Retirer l'article du panier">
+                        <IconButton
+                          variant="outlined"
+                          color="error"
+                          style={{ color: "#c2111b" }}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick(index);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </FAQ>
+                  ))}
+                  <HeadingTitle>
+                    <>
+                      Prix Total:{" "}
+                      <span tw="text-primary-500">{cartTotalPrice}</span>{" "}
+                    </>
+                    <br></br>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      style={{ borderRadius: "50px" }}
+                      endIcon={<AddShoppingCartIcon />}
+                    >
+                      Confirmer Panier
+                    </Button>
+                    <br />
+                    <Button
+                      onClick={() => handleDeleteCart()}
+                      variant="contained"
+                      color="secondary"
+                      style={{ borderRadius: "50px" }}
+                      endIcon={<DeleteForeverOutlinedIcon />}
+                    >
+                      Vider Panier
+                    </Button>
+                  </HeadingTitle>
+                </FAQSContainer>
+              </Column>
+            </ContentWithPaddingXl>
+            <DecoratorBlob1 />
+            <DecoratorBlob2 />
+
+            {/* delete article dialog  */}
+            <Dialog
+              fullScreen={fullScreen}
+              open={open}
+              onClose={() => handleDialogClose(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle
+                id="alert-dialog-title"
+                style={{
+                  backgroundColor: "#F9FAFB",
+                  color: "#1F2937",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                }}
               >
-                Confirmer Panier
-              </Button>
-            </HeadingTitle>
-          </FAQSContainer>
-        </Column>
-      </ContentWithPaddingXl>
-      <DecoratorBlob1 />
-      <DecoratorBlob2 />
+                {"Confirmer suppression d'article"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Veuillez confirmer votre choix de suprression de l'article ?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => handleDialogClose(false)}
+                  variant="outlined"
+                  color="primary"
+                  style={{ borderRadius: "50px" }}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  onClick={() => handleDialogClose(true)}
+                  variant="outlined"
+                  color="secondary"
+                  style={{ borderRadius: "50px" }}
+                >
+                  Suprrimer
+                </Button>
+              </DialogActions>
+            </Dialog>
 
-      {/* delete article dialog  */}
-      <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={() => handleDialogClose(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          style={{
-            backgroundColor: "#F9FAFB",
-            color: "#1F2937",
-            fontWeight: "bold",
-            fontSize: "1.25rem",
-          }}
-        >
-          {"Confirmer suppression d'article"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Veuillez confirmer votre choix de suprression de l'article ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => handleDialogClose(false)}
-            variant="outlined"
-            color="primary"
-            style={{ borderRadius: "50px" }}
-            
-          >
-            Annuler
-          </Button>
-          <Button
-            onClick={() => handleDialogClose(true)}
-            variant="outlined"
-            color="secondary"
-            style={{ borderRadius: "50px" }}
-          >
-            Suprrimer
-          </Button>
-        </DialogActions>
-      </Dialog>
+            {/* verfiy stock and delete if unavailable dialog  */}
+            <Dialog
+              fullScreen={fullScreen}
+              open={open1}
+              onClose={() => handleDialogClose1(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle
+                id="alert-dialog-title"
+                style={{
+                  backgroundColor: "#FDE7E9",
+                  color: "#9B2C2C",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                  borderRadius: "10px 10px 0px 0px",
+                  padding: "1rem",
+                }}
+              >
+                <BlockOutlinedIcon />
+                &nbsp;
+                {"Article n'est plus disponible dans le stock"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Cet article n'est plus disponible dans le stock, voulez-vous
+                  le supprimer de votre panier ?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => handleDialogClose1(false)}
+                  variant="outlined"
+                  color="primary"
+                  style={{
+                    backgroundColor: "#4543a0",
+                    color: "#FFFFFF",
+                    borderRadius: "50px",
+                  }}
+                >
+                  Changer Quantité
+                </Button>
+                <Button
+                  onClick={() => handleDialogClose1(true)}
+                  variant="outlined"
+                  color="secondary"
+                  style={{
+                    backgroundColor: "#a04348",
+                    color: "#FFFFFF",
+                    borderRadius: "50px",
+                  }}
+                >
+                  Suprrimer
+                </Button>
+              </DialogActions>
+            </Dialog>
 
-      {/* verfiy stock and delete if unavailable dialog  */}
-      <Dialog
-        fullScreen={fullScreen}
-        open={open1}
-        onClose={() => handleDialogClose1(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          style={{
-            backgroundColor: "#FDE7E9",
-            color: "#9B2C2C",
-            fontWeight: "bold",
-            fontSize: "1.25rem",
-            borderRadius: "10px 10px 0px 0px",
-            padding: "1rem",
-          }}
-        ><BlockOutlinedIcon/>&nbsp;
-          {"Article n'est plus disponible dans le stock"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Cet article n'est plus disponible dans le stock, voulez-vous le
-            supprimer de votre panier ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => handleDialogClose1(false)}
-            variant="outlined"
-            color="primary"
-            style={{ backgroundColor: "#4543a0", color: "#FFFFFF", borderRadius: "50px" }}
-          >
-            Changer Quantité
-          </Button>
-          <Button
-            onClick={() => handleDialogClose1(true)}
-            variant="outlined"
-            color="secondary"
-            style={{ backgroundColor: "#a04348", color: "#FFFFFF", borderRadius: "50px" }}
-          >
-            Suprrimer
-          </Button>
-        </DialogActions>
-      </Dialog>
+            {/* stock verification success dialog */}
+            <Dialog
+              fullScreen={fullScreen}
+              open={open2}
+              onClose={() => handleDialogClose2(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle
+                id="alert-dialog-title"
+                style={{
+                  backgroundColor: "#ebfde7",
+                  color: "#4f9b2c",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                  borderRadius: "10px 10px 0px 0px",
+                  padding: "1rem",
+                }}
+              >
+                <FactCheckOutlinedIcon />
+                &nbsp;
+                {"Article validé en stock"}
+              </DialogTitle>
+              <DialogContent style={{ borderRadius: "20px" }}>
+                <DialogContentText
+                  id="alert-dialog-description"
+                  style={{ color: "#4F4F4F" }}
+                >
+                  La quantité insérée est disponible en stock.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => handleDialogClose2(false)}
+                  variant="contained"
+                  color="primary"
+                  style={{
+                    backgroundColor: "#43A047",
+                    color: "#FFFFFF",
+                    borderRadius: "50px",
+                  }}
+                >
+                  Continuer
+                </Button>
+              </DialogActions>
+            </Dialog>
 
-
-{/* stock verification success dialog */}
-      <Dialog
-        fullScreen={fullScreen}
-        open={open2}
-        onClose={() => handleDialogClose2(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          style={{
-            backgroundColor: "#ebfde7",
-            color: "#4f9b2c",
-            fontWeight: "bold",
-            fontSize: "1.25rem",
-            borderRadius: "10px 10px 0px 0px",
-            padding: "1rem",
-          }}
-        ><FactCheckOutlinedIcon/>&nbsp;
-          {"Article validé en stock"}
-        </DialogTitle>
-        <DialogContent style={{ borderRadius: "20px" }}>
-          <DialogContentText
-            id="alert-dialog-description"
-            style={{ color: "#4F4F4F" }}
-          >
-            La quantité insérée est disponible en stock.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => handleDialogClose2(false)}
-            variant="contained"
-            color="primary"
-            style={{ backgroundColor: "#43A047", color: "#FFFFFF", borderRadius: "50px" }}
-          >
-            Continuer
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-
-{/* user forgot to insert quantity warning */}
-      <Dialog
-        fullScreen={fullScreen}
-        open={open3}
-        onClose={() => handleDialogClose3(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          style={{
-            backgroundColor: "#fdfde7",
-            color: "#9b9b2c",
-            fontWeight: "bold",
-            fontSize: "1.25rem",
-            borderRadius: "10px 10px 0px 0px",
-            padding: "1rem",
-          }}
-        ><SyncProblemOutlinedIcon/> &nbsp;
-          {"Veuillez indiquer la quatité"}
-        </DialogTitle>
-        <DialogContent style={{ borderRadius: "20px" }}>
-          <DialogContentText
-            id="alert-dialog-description"
-            style={{ color: "#4F4F4F" }}
-          >
-            Veuillez insérer la quantité désirée afin de vérifier si le stock est suffisant.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => handleDialogClose3(false)}
-            variant="contained"
-            color="primary"
-            style={{ backgroundColor: "#98a043", color: "#FFFFFF", borderRadius: "50px" }}
-          >
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+            {/* user forgot to insert quantity warning */}
+            <Dialog
+              fullScreen={fullScreen}
+              open={open3}
+              onClose={() => handleDialogClose3(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle
+                id="alert-dialog-title"
+                style={{
+                  backgroundColor: "#fdfde7",
+                  color: "#9b9b2c",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                  borderRadius: "10px 10px 0px 0px",
+                  padding: "1rem",
+                }}
+              >
+                <SyncProblemOutlinedIcon /> &nbsp;
+                {"Veuillez indiquer la quatité"}
+              </DialogTitle>
+              <DialogContent style={{ borderRadius: "20px" }}>
+                <DialogContentText
+                  id="alert-dialog-description"
+                  style={{ color: "#4F4F4F" }}
+                >
+                  Veuillez insérer la quantité désirée afin de vérifier si le
+                  stock est suffisant.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => handleDialogClose3(false)}
+                  variant="contained"
+                  color="primary"
+                  style={{
+                    backgroundColor: "#98a043",
+                    color: "#FFFFFF",
+                    borderRadius: "50px",
+                  }}
+                >
+                  OK
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Container>
   );
 };

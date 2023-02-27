@@ -56,9 +56,9 @@ export default () => {
   const columns = [
     {
       field: "id",
-      headerName: "Numéro",
+      headerName: "Numéro Article",
       headerClassName: "header-style",
-      width: 100,
+      width: 140,
     },
     {
       field: "description",
@@ -83,14 +83,14 @@ export default () => {
       headerName: "Prix Unitaire",
       headerClassName: "header-style",
       type: "number",
-      width: 130,
+      width: 140,
     },
     {
       field: "stocks",
       headerName: "Quantité Stock",
       headerClassName: "header-style",
       type: "number",
-      width: 130,
+      width: 140,
     },
     {
       field: "status",
@@ -224,40 +224,42 @@ export default () => {
             <style>
               {`
         
-          .header-style {
-            background-color: #f0f0f0;
-            color: #333;
-            font-size: 16px;
-            font-weight: 600;
-            flex-grow: 1;
-            flex-shrink: 1;
-            flex-basis: 0;
-          }
-
-          .header-style .MuiDataGrid-columnSeparator {
-            display: none;
-          }
-          .status {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-            text-transform: capitalize;
-          }
+        .header-style {
+          background-color: transparent;
+          color: #333;
+          font-size: 16px;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid #ccc;
+        }
         
-          .epuisé {
-            background-color: transparent;
-            color: #ff4d4f;
-            border: 2px solid #ff4d4f;
-          }
+        .header-style .MuiDataGrid-columnSeparator {
+          display: block;
+        }
         
-          .disponible {
-            background-color: transparent;
-            color: #73d13d;
-            border: 2px solid #73d13d;
-          }
+        .status {
+          display: inline-block;
+          padding: 2px 8px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          text-align: center;
+          text-transform: capitalize;
+        }
+        
+        .epuisé {
+          background-color: transparent;
+          color: #ff4d4f;
+          border: 2px solid #ff4d4f;
+        }
+        
+        .disponible {
+          background-color: transparent;
+          color: #73d13d;
+          border: 2px solid #73d13d;
+        }
+        
         
         `}
             </style>

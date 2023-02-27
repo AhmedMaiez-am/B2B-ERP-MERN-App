@@ -33,6 +33,7 @@ const Paragraph = tw.p`my-5 lg:my-8 text-sm lg:text-base font-medium text-gray-6
 
 const Actions = tw.div`flex flex-col items-center sm:flex-row justify-center lg:justify-start mt-8`;
 const PrimaryButton = tw.button`font-bold px-8 lg:px-10 py-3 rounded bg-blue-500 text-gray-100 hocus:bg-blue-700 focus:shadow-outline focus:outline-none transition duration-300`;
+const PrimaryButton1 = tw.button`font-bold px-8 lg:px-10 py-3 rounded bg-yellow-500 text-gray-100 hocus:bg-yellow-700 focus:shadow-outline focus:outline-none transition duration-300`;
 const WatchVideoButton = styled.button`
   ${tw`mt-4 sm:mt-0 sm:ml-8 flex items-center text-secondary-300 transition duration-300 hocus:text-blue-400 focus:outline-none`}
   .playIcon {
@@ -65,6 +66,18 @@ const StyledModal = styled(ReactModalAdapter)`
   }
 `;
 
+const StyledModal1 = styled(ReactModalAdapter)`
+  &.mainHeroModal__overlay {
+    ${tw`fixed inset-0 z-50`}
+  }
+  &.mainHeroModal__content {
+    ${tw`xl:mx-auto m-4 sm:m-16 max-w-screen-xl absolute inset-0 flex justify-center items-center rounded-lg bg-red-100 outline-none`}
+  }
+  .content {
+    ${tw`w-full lg:p-16 overflow-y-auto  max-h-[80vh]`}
+  }
+`;
+
 const CloseModalButton = tw.button`absolute top-0 right-0 mt-8 mr-8 hocus:text-primary-500`;
 
 export default ({
@@ -80,7 +93,13 @@ export default ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const toggleModal = () => setModalIsOpen(!modalIsOpen);
+  const [data, setData] = React.useState([]);
 
+  //Retrieve cart from local Storage
+  React.useEffect(() => {
+    const panier = JSON.parse(localStorage.getItem("panier"));
+    setData(panier || []);
+  }, []);
 
 
   return (
@@ -111,6 +130,9 @@ export default ({
           </RightColumn>
         </TwoColumn>
         <DecoratorBlob1 />
+        <div>
+      {data.length > 0 ? (
+        <>
         <StyledModal
           closeTimeoutMS={300}
           className="mainHeroModal"
@@ -136,6 +158,38 @@ export default ({
             </Container1>
           </div>
         </StyledModal>
+         </>
+         ) : (
+           <>
+           <StyledModal1
+          closeTimeoutMS={300}
+          className="mainHeroModal"
+          isOpen={modalIsOpen}
+          onRequestClose={toggleModal}
+          shouldCloseOnOverlayClick={true}
+        >
+          <CloseModalButton onClick={toggleModal}>
+            <CloseIcon tw="w-6 h-6" />
+          </CloseModalButton>
+          <div className="content">
+            <Container1>
+              <SingleColumn>
+                <HeadingInfoContainer>
+                  <HeadingTitle>Panier Vide</HeadingTitle>
+                  <HeadingDescription>
+                    Votre panier ne contient pas d'articles, veuillez sélectionner des articles de la liste des articles afin de visualiser leurs détails et confirmer votre choix.
+                  </HeadingDescription><br/><br/>
+                  <PrimaryButton1 style={{ borderRadius: "50px" }} as="a" href={primaryButtonUrl}>
+                {primaryButtonText}
+              </PrimaryButton1>
+                </HeadingInfoContainer>
+              </SingleColumn>
+            </Container1>
+          </div>
+        </StyledModal1>
+         </>
+         )}
+       </div>
       </Container>
       <Footer/>
     </>
