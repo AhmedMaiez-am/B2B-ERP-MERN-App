@@ -57,6 +57,7 @@ router.post(
       "Veuillez insérer votre mot de passe avec un minimum de 6 caractères"
     ).isLength({ min: 6 }),
     check("tel", "Veuillez insérer votre numèro de telephone").not().isEmpty(),
+    check("entreprise", "Veuillez insérer le libelle de votre entreprise").not().isEmpty(),
   ],
   async (req, res) => {
     try {
@@ -64,7 +65,7 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { lastname, firstname, email, password, tel } = req.body;
+      const { lastname, firstname, email, password, tel, entreprise } = req.body;
 
       let user = await User.findOne({ email });
       if (user) {
@@ -79,6 +80,7 @@ router.post(
         email,
         password,
         tel,
+        entreprise
       });
       const salt = await bcrypt.genSalt(10);
 
@@ -239,6 +241,7 @@ router.post("/addUser", async (req, res, next) => {
       email: req.body.email,
       password: req.body.password,
       tel: req.body.tel,
+      entreprise: req.body.entreprise
     });
     // Hash password
     const hashedpassword = bcrypt.hashSync(newUser.password, salt);
@@ -266,6 +269,7 @@ router.post("/updateUser/:id", async (req, res) => {
     user.firstname = req.body.firstname;
     user.email = req.body.email;
     user.tel = req.body.tel;
+    user.entreprise = req.body.entreprise;
 
     user.save();
     res.send({ msg: "Utilisateur modifié" });
@@ -309,6 +313,16 @@ router.post("/updateTel/:id", async (req, res) => {
     else user.tel = req.body.tel;
     user.save();
     res.send({ msg: "Tel modifié" });
+  });
+});
+
+//update entreprise
+router.post("/updateEntreprise/:id", async (req, res) => {
+  User.findById(req.params.id, function (err, user) {
+    if (!user) res.status(404).send("Utilisateur non trouvé");
+    else user.entreprise = req.body.entreprise;
+    user.save();
+    res.send({ msg: "Entreprise modifié" });
   });
 });
 

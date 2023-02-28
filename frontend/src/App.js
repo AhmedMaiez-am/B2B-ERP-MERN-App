@@ -1,6 +1,8 @@
 import "tailwindcss/dist/base.css";
 import "styles/globalStyles.css";
 import React from "react";
+import { Provider } from "react-redux";
+import store from "store";
 import { css } from "styled-components/macro"; //eslint-disable-line
 
 import ComponentRenderer from "ComponentRenderer.js";
@@ -14,6 +16,7 @@ export default function App() {
 
 
   return (
+    <Provider store={store}>
     <Router>
       <Switch>
         <Route path="/components/:type/:subtype/:name">
@@ -27,5 +30,6 @@ export default function App() {
         </Route>
       </Switch>
     </Router>
+    </Provider>
   );
 }

@@ -181,6 +181,7 @@ export default () => {
                   <ColorButton
                     variant="outlined"
                     size="small"
+                    style={{ borderRadius: "50px" }}
                     onClick={handleAddToCart}
                   >
                     <AddShoppingCartIcon />
