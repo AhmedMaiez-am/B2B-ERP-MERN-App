@@ -11,6 +11,7 @@ import { SectionHeading as HeadingTitle } from "components/misc/Headings.js";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
+import FolderDeleteOutlinedIcon from '@mui/icons-material/FolderDeleteOutlined';
 import Tooltip from "@material-ui/core/Tooltip";
 import {
   Button,
@@ -77,6 +78,7 @@ export default () => {
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
+  const [open4, setOpen4] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [data, setData] = React.useState([]);
 
@@ -91,6 +93,11 @@ export default () => {
     return total + item.prixUni;
   }, 0);
 
+
+  //emptyCartDialog
+  const handleDeleteCartDialog = () => {
+    setOpen4(true);
+  }
   //empty cart
   const handleDeleteCart = () => {
     localStorage.clear();
@@ -174,6 +181,11 @@ export default () => {
   const handleDialogClose3 = () => {
     setOpen3(false);
   };
+
+  //empty cart dialog
+  const handleDialogClose4 = () => {
+    setOpen4(false);
+  }
 
   const [inputValues, setInputValues] = useState([]);
 
@@ -336,7 +348,7 @@ export default () => {
                     </Button>
                     <br />
                     <Button
-                      onClick={() => handleDeleteCart()}
+                      onClick={() => handleDeleteCartDialog()}
                       variant="contained"
                       color="secondary"
                       style={{ borderRadius: "50px" }}
@@ -542,6 +554,65 @@ export default () => {
                   }}
                 >
                   OK
+                </Button>
+              </DialogActions>
+            </Dialog>
+
+            {/* empty cart confirmation dialog */}
+            {/* user forgot to insert quantity warning */}
+            <Dialog
+              fullScreen={fullScreen}
+              open={open4}
+              onClose={() => handleDialogClose4(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle
+                id="alert-dialog-title"
+                style={{
+                  backgroundColor: "#fde7e7",
+                  color: "#9b2c33",
+                  fontWeight: "bold",
+                  fontSize: "1.25rem",
+                  borderRadius: "10px 10px 0px 0px",
+                  padding: "1rem",
+                }}
+              >
+                <FolderDeleteOutlinedIcon /> &nbsp;
+                {"Confirmer la suppression des articles"}
+              </DialogTitle>
+              <DialogContent style={{ borderRadius: "20px" }}>
+                <DialogContentText
+                  id="alert-dialog-description"
+                  style={{ color: "#4F4F4F" }}
+                >
+                  Voulez vous supprimer tous les articles dans votre panier?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+              <Button
+                  onClick={() => handleDialogClose4(false)}
+                  variant="contained"
+                  color="primary"
+                  style={{
+                    backgroundColor: "#438fa0",
+                    color: "#FFFFFF",
+                    borderRadius: "50px",
+                  }}
+                >
+                  Non
+                </Button>
+                <Button
+                  onClick={() => handleDeleteCart()}
+                  variant="contained"
+                  color="secondary"
+                  style={{
+                    backgroundColor: "#de1f29",
+                    color: "#FFFFFF",
+                    borderRadius: "50px",
+                  }}
+                >
+                  Oui
                 </Button>
               </DialogActions>
             </Dialog>

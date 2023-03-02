@@ -39,7 +39,7 @@ export default () => {
             <LogoText>Smart-BS</LogoText>
           </LogoContainer>
           <LinksContainer>
-            <Link href="#">Se Connecter</Link>
+            <Link href="/components/innerPages/LoginPage">Se Connecter</Link>
             <Link href="#services">Services</Link>
           </LinksContainer>
           <SocialLinksContainer>

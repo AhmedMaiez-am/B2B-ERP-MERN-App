@@ -29,11 +29,73 @@ async function SendMail(user, code) {
     subject: "Récuprération du mot de passe",
     // plaintext body
     // text: msg,
-    html: `<div>
-            <p><strong>Bonjour ${user.lastname}</strong></p>\
-             <br>
-             <p> Veuillez trouver ici le code de récupération de votre mot de passe : <span style="font-weight:500"> <strong>${code} </strong></span> </p>
-             </div>`,
+    html: `
+    <html>
+    <head>
+      <style>
+        /* Add your styles here */
+        body {
+          font-family: Arial, sans-serif;
+          font-size: 16px;
+          line-height: 1.5;
+        }
+
+        .container {
+          margin: 0 auto;
+          max-width: 600px;
+          padding: 20px;
+          text-align: center;
+        }
+
+        .header {
+          background-color: #f5f5f5;
+          border-bottom: 1px solid #ddd;
+          margin-bottom: 20px;
+          padding: 10px 20px;
+          border-radius: 10px;
+        }
+
+        .title {
+          font-size: 24px;
+          font-weight: bold;
+          margin: 0;
+          color:#26a4ab;
+        }
+
+        .content {
+          background-color: #fff;
+          border: 1px solid #ddd;
+          padding: 20px;
+          border-radius: 10px;
+          
+        }
+        h2 {
+            color: #7d1a1a;
+            display: inline-block;
+            border-radius: 10px;
+        }
+      </style>
+      <!-- Load Bootstrap CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 class="title">Votre demande de changement de mot de passe</h1>
+        </div>
+        <div class="content">
+          <p>Bonjour Mr/Mme <strong>${user.lastname} ${user.firstname},</strong></p>
+          <p>Nous avons reçu votre demande pour changer votre mot de passe.</p>
+          <p>Veuillez trouvez ci-dessous le code pour confirmer votre identité afin de changer le mot de passe:</p>
+          <h2 style="font-size: 36px; font-weight: bold;">${code}</h2>
+          <p>Vous pouvez utiliser ce code seulement une fois.</p>
+        </div>
+      </div>
+    </body>
+  </html>
+  `,
+  
+
   };
 
   await transporter.sendMail(message, (error, success) => {

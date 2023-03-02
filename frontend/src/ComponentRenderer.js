@@ -99,6 +99,7 @@ import FiveColumnWithBackgroundFooter from "components/footers/FiveColumnWithBac
 import FiveColumnDarkFooter from "components/footers/FiveColumnDark.js";
 import LandingPageFooter from "components/footers/LandingPageFooter.js";
 
+
 export const components = {
  landingPages : {
     RestaurantLandingPage: {

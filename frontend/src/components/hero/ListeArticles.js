@@ -64,6 +64,10 @@ const StyledResponsiveVideoEmbed = styled(ResponsiveVideoEmbed)`
 `;
 
 export default () => {
+  const handleLogout = () => {
+    localStorage.clear();
+  }
+  
   const navLinks = [
     <NavLinks key={1}>
       <NavLink href="#">Commandes</NavLink>
@@ -72,9 +76,10 @@ export default () => {
       <NavLink href="#">Administration</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLink style={{ borderRadius: "50px" }} href="/#">Se Déconnecter</PrimaryLink>
+      <PrimaryLink style={{ borderRadius: "50px" }} href="/components/innerPages/LoginPage" onClick={handleLogout}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
+  
   const history = useHistory();
   const handleButtonClick = () => {
     history.push('/components/blocks/Hero/Panier');

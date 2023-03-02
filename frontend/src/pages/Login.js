@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useState } from "react"; 
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import { Container as ContainerBase } from "components/misc/Layouts";
 import tw from "twin.macro";
 import styled from "styled-components";
-import { css } from "styled-components/macro"; //eslint-disable-line
+import {css} from "styled-components/macro"; //eslint-disable-line
 import illustration from "images/login-illustration.svg";
 import logo from "images/logo.png";
 import { ReactComponent as LoginIcon } from "feather-icons/dist/icons/log-in.svg";
+import { Link } from "react-router-dom";
+import { login } from "../Actions/auth";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import axios from "axios";
+import { useHistory} from "react-router-dom";
 import { IconButton } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 const Container = tw(
   ContainerBase
 )`min-h-screen bg-gradient-to-b from-transparent via-transparent to-blue-300 text-white font-medium flex justify-center -m-8`;
+const DividerTextContainer = tw.div`my-12 border-b text-center relative`;
+const DividerText = tw.div`leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2 absolute inset-x-0 top-1/2 bg-transparent`;
 
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
 
@@ -47,15 +55,17 @@ const IllustrationImage = styled.div`
   ${tw`m-12 xl:m-16 w-full max-w-sm bg-contain bg-center bg-no-repeat`}
 `;
 
-export default ({
-  logoLinkUrl = "/",
+function Login ({
+  logoLinkUrl = "#",
   illustrationImageSrc = illustration,
-  headingText = "Se connecter à votre compte",
-  submitButtonText = "Se connecter",
+  headingText = "Bienvenue à votre espace de gestion des ressources",
+  submitButtonText = "Se Connecter",
   SubmitButtonIcon = LoginIcon,
-  forgotPasswordUrl = "#",
   signupUrl = "/components/innerPages/SignupPage",
-}) => {
+
+}) {
+  let history = useHistory();
+
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -67,22 +77,58 @@ export default ({
     setShowPassword(!showPassword);
   };
 
-  return (
-    <AnimationRevealPage>
-      <Container>
-        <Content>
-          <MainContainer>
-            <LogoLink href={logoLinkUrl}>
-              <LogoImage src={logo} />
-            </LogoLink>
-            <MainContent>
-              <Heading>{headingText}</Heading>
-              <br />
-              <br />
-              <FormContainer>
-                <Form>
-                  <Input type="email" placeholder="Email" />
-                  <Input
+  const [fromData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const { email } = fromData;
+  const [errors, setErrors] = useState([]);
+  const hundelchange = (e) =>
+    setFormData({ ...fromData, [e.target.name]: e.target.value });
+  const onsubmit = (e) => {
+    e.preventDefault();
+    // login(email, password);
+    loginFetch(email, password);
+  };
+
+  const loginFetch = async (email, password) => {
+    try {
+      const result = await axios.post("/users", { email, password });
+      console.log(result);
+      localStorage.setItem("user", JSON.stringify(result.data.user));
+      localStorage.setItem("token", result.data.token);
+        history.push("/components/blocks/Hero/ListeArticles");
+      
+    } catch (error) {
+      setErrors(error.response.data.errors);
+    }
+  };
+
+
+return (
+  <AnimationRevealPage>
+    <Container>
+      <Content>
+        <MainContainer>
+          <LogoLink href={logoLinkUrl}>
+            <LogoImage src={logo} />
+          </LogoLink>
+          <MainContent>
+            <Heading>{headingText}</Heading>
+            <FormContainer>
+              <DividerTextContainer>
+                <DividerText>Veuillez insérer vos coordonnées de connexion</DividerText>
+              </DividerTextContainer>
+              <Form onSubmit={(e) => onsubmit(e)}>
+              <Input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => hundelchange(e)}
+                    required
+                    placeholder="Email"
+                  />
+                <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Mot de passe"
                     value={password}
@@ -102,38 +148,52 @@ export default ({
                     </IconButton>
                   </div>
                   <br />
-                  <SubmitButton style={{ borderRadius: "50px" }} type="submit">
-                    <SubmitButtonIcon className="icon" />
-                    <span className="text">{submitButtonText}</span>
-                  </SubmitButton>
-                </Form>
-                <br />
-                <br />
+                <SubmitButton style={{ borderRadius: "50px" }} type="submit">
+                  <SubmitButtonIcon className="icon" />
+                  <span className="text">{submitButtonText}</span>
+                </SubmitButton>
+              </Form>
+              {errors.length !== 0 ? (
+                  <p tw="mt-6 text-xs text-red-600 text-center">
+                    <span
+                      tw="border-red-500"
+                      style={{ fontSize: "15px", color: " red" }}
+                    >
+                      {errors[0].msg}
+                    </span>
+                  </p>
+                ) : null}
                 <p tw="mt-6 text-xs text-gray-600 text-center">
-                  <a
-                    href={forgotPasswordUrl}
+                  <Link
+                    // href={forgotPLinksswordUrl}
+                    to="/ForgetPassword"
                     tw="border-b border-gray-500 border-dotted"
                   >
-                    Mot de passe oublié ?
-                  </a>
-                </p>
-                <p tw="mt-8 text-sm text-gray-600 text-center">
-                  Vous n'avez pas de compte?{" "}
-                  <a
-                    href={signupUrl}
-                    tw="border-b border-gray-500 border-dotted"
-                  >
-                    Créer un compte
-                  </a>
-                </p>
-              </FormContainer>
-            </MainContent>
-          </MainContainer>
-          <IllustrationContainer>
-            <IllustrationImage imageSrc={illustrationImageSrc} />
-          </IllustrationContainer>
-        </Content>
-      </Container>
-    </AnimationRevealPage>
-  );
+                  Mot de passe oublié ?
+                  </Link>
+              </p>
+              <p tw="mt-8 text-sm text-gray-600 text-center">
+                Vous n'avez pas de compte ?{" "}
+                <a href={signupUrl} tw="border-b border-gray-500 border-dotted">
+                  Créer un compte
+                </a> maintenant
+              </p>
+            </FormContainer>
+          </MainContent>
+        </MainContainer>
+        <IllustrationContainer>
+          <IllustrationImage imageSrc={illustrationImageSrc} />
+        </IllustrationContainer>
+      </Content>
+    </Container>
+  </AnimationRevealPage>
+);
+}
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { login })(Login);
