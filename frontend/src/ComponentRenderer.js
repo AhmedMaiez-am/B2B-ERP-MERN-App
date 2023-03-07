@@ -39,6 +39,7 @@ import PrivacyPolicyPageImageSrc from "images/demo/PrivacyPolicyPage.jpeg";
 
 import ListeArticles from "components/hero/ListeArticles.js";
 import Panier from "components/hero/Panier.js";
+import Commande from "components/hero/Commande.js";
 import IllustrationAndInputHero from "components/hero/TwoColumnWithInput.js";
 import FeaturesAndTestimonialHero from "components/hero/TwoColumnWithFeaturesAndTestimonial.js";
 import FullWidthWithImageHero from "components/hero/FullWidthWithImage.js";
@@ -201,6 +202,11 @@ export const components = {
           name: "Panier",
           component: Panier,
           url: "/components/blocks/Hero/Panier",
+        },
+        Commande: {
+          name: "Commande",
+          component: Commande,
+          url: "/components/blocks/Hero/Commande",
         },
         FeaturesAndTestimonial: {
           name: "With Features And Customer Testimonial",
