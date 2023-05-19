@@ -28,6 +28,7 @@ import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import axios from "axios";
 const Column = tw.div`flex flex-col items-center`;
 
 const FAQSContainer = tw.dl`mt-12 max-w-4xl relative`;
@@ -211,6 +212,28 @@ export default () => {
         setFilteredResults(data)
     }
 }
+
+
+
+// Function to handle the button click event
+const handleButtonClickAddCommande = async () => {
+  try {
+    // Retrieve cart items from localStorage
+    const articles = JSON.parse(localStorage.getItem('panier'));
+    const user = JSON.parse(localStorage.getItem('user'))
+    // Make a POST request to your server's "/add" endpoint using Axios
+    const response = await axios.post('/enteteVentes/add', { articles, user });
+
+    console.log(response.data); // Display the response from the server
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+React.useEffect(() => {
+  // Call the function when the component mounts or whenever appropriate
+  handleButtonClickAddCommande();
+}, []); // Empty dependency array to run the effect only once
 /////////////////////////////////////////////////
 
   return (
@@ -496,11 +519,12 @@ export default () => {
               </>
               <br></br>
               <Button
-                href="/components/blocks/Hero/Commande"
+                // href="/components/blocks/Hero/Commande"
                 color="primary"
                 variant="contained"
                 style={{ borderRadius: "50px" }}
                 endIcon={<AddShoppingCartIcon />}
+                onClick={handleButtonClickAddCommande}
               >
                 Confirmer Panier
               </Button>

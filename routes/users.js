@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const httpntlm = require("httpntlm");
 const { check, validationResult } = require("express-validator");
 const SecretCode = require("../models/SecretCode");
 const nodemailer = require("nodemailer");
@@ -94,8 +95,6 @@ async function SendMail(user, code) {
     </body>
   </html>
   `,
-  
-
   };
 
   await transporter.sendMail(message, (error, success) => {
@@ -111,15 +110,37 @@ async function SendMail(user, code) {
 router.post(
   "/signup",
   [
-    check("lastname", "Veuillez insérer votre nom").not().isEmpty(),
-    check("firstname", "Veuillez insérer votre prenom").not().isEmpty(),
+    check("no", "Veuillez vérifier vote identifiant unique").not().isEmpty(),
+    check("name", "Veuillez insérer votre nom et prénom").not().isEmpty(),
     check("email", "Veuillez insérer votre adresse email").not().isEmpty(),
     check(
       "password",
       "Veuillez insérer votre mot de passe avec un minimum de 6 caractères"
     ).isLength({ min: 6 }),
     check("tel", "Veuillez insérer votre numèro de telephone").not().isEmpty(),
-    check("entreprise", "Veuillez insérer le libelle de votre entreprise").not().isEmpty(),
+    check("address", "Veuillez insérer votre adresse").not().isEmpty(),
+    check("address", "Veuillez insérer votre adresse").not().isEmpty(),
+    check("genBusGroup", "Veuillez sélectionner votre type commercial")
+      .not()
+      .isEmpty(),
+    check("customerGroup", "Veuillez sélectionner le type du marché")
+      .not()
+      .isEmpty(),
+    check("code_magasin", "Veuillez sélectionner votre code du magasin")
+      .not()
+      .isEmpty(),
+    check("codeLivraison", "Veuillez sélectionner le code de livraison")
+      .not()
+      .isEmpty(),
+    check("codeTVA", "Veuillez sélectionner le code TVA")
+      .not()
+      .isEmpty(),
+      check("paymentTerm", "Veuillez sélectionner le terme de paiement")
+      .not()
+      .isEmpty(),
+      check("paymentCode", "Veuillez sélectionner le code de paiement")
+      .not()
+      .isEmpty(),
   ],
   async (req, res) => {
     try {
@@ -127,7 +148,21 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { lastname, firstname, email, password, tel, entreprise } = req.body;
+      const {
+        no,
+        name,
+        email,
+        password,
+        tel,
+        address,
+        genBusGroup,
+        customerGroup,
+        code_magasin,
+        codeLivraison,
+        codeTVA,
+        paymentTerm,
+        paymentCode
+      } = req.body;
 
       let user = await User.findOne({ email });
       if (user) {
@@ -137,12 +172,19 @@ router.post(
       }
 
       user = new User({
-        lastname,
-        firstname,
+        no,
+        name,
         email,
         password,
         tel,
-        entreprise
+        address,
+        genBusGroup,
+        customerGroup,
+        code_magasin,
+        codeLivraison,
+        codeTVA,
+        paymentTerm,
+        paymentCode
       });
       const salt = await bcrypt.genSalt(10);
 
@@ -298,18 +340,84 @@ router.put("/resetNewPassword/:id", async (req, res) => {
 router.post("/addUser", async (req, res, next) => {
   try {
     const newUser = new User({
-      lastname: req.body.lastname,
-      firstname: req.body.firstname,
+      no: req.body.no,
+      name: req.body.name,
       email: req.body.email,
       password: req.body.password,
       tel: req.body.tel,
-      entreprise: req.body.entreprise
+      address: req.body.address,
+      genBusGroup: req.body.genBusGroup,
+      customerGroup: req.body.customerGroup,
+      code_magasin: req.body.code_magasin,
+      codeLivraison: req.body.codeLivraison,
+      codeTVA: req.body.codeTVA,
+      paymentTerm: req.body.paymentTerm,
+      paymentCode: req.body.paymentCode
     });
     // Hash password
     const hashedpassword = bcrypt.hashSync(newUser.password, salt);
     newUser.password = hashedpassword;
     await newUser.save();
-    res.send({ msg: "Utilisateur ajouté" });
+    try {
+      //insert new client to business central
+      const BC_user = {
+        No: req.body.no,
+        Name: req.body.name,
+        Address: req.body.address,
+        Phone_No: req.body.tel,
+        E_Mail: req.body.email,
+        Gen_Bus_Posting_Group: req.body.genBusGroup,
+        Customer_Posting_Group: req.body.customerGroup,
+        Location_Code: req.body.code_magasin,
+        Shipment_Method_Code: req.body.codeLivraison,
+        VAT_Bus_Posting_Group: req.body.codeTVA,
+        Payment_Terms_Code: req.body.paymentTerm,
+        Payment_Method_Code: req.body.paymentCode
+      };
+      const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
+      const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ficheclient`;
+      const options = {
+        url: url,
+        username: process.env.USERNAME,
+        password: process.env.PASSWORD,
+        workstation: process.env.WORKSTATION,
+        domain: process.env.DOMAIN,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        json: true,
+        body: JSON.stringify(BC_user),
+      };
+      try {
+        // send the new record data to Business Central
+        const response = await new Promise((resolve, reject) => {
+          httpntlm.post(options, (err, res) => {
+            if (err) reject(err);
+            else resolve(res);
+          });
+        });
+        console.log(response);
+        // Check the response for any errors
+        if (response.statusCode !== 201) {
+          console.error(
+            "Error creating ligne in Business Central:",
+            response.statusCode,
+            response.statusMessage
+          );
+          res.status(500).send("Error creating user in Business Central");
+          return;
+        }
+      } catch (error) {
+        console.error("Error sending user data to Business Central:", error);
+        res.status(500).send("Error sending user data to Business Central");
+        return;
+      }
+      res.send(`User ${BC_user.Name} added successfully to Business Central`);
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Error occurred");
+    }
   } catch (error) {
     console.log(error);
   }
