@@ -36,7 +36,12 @@ const TwoColumn = tw.div`flex flex-col lg:flex-row md:items-center max-w-screen-
 const LeftColumn = tw.div`relative lg:w-6/12 lg:pr-12 flex-shrink-0 text-center lg:text-left`;
 const RightColumn = tw.div`relative mt-12 lg:mt-0 flex flex-col justify-center`;
 
+const TwoColumn1 = tw.div`flex flex-col lg:flex-row md:items-center max-w-screen-xl mx-auto py-10 md:py-12`;
+const LeftColumn1 = tw.div`relative lg:w-6/12 lg:pr-12 flex-shrink-0 text-center lg:text-left`;
+const RightColumn1 = tw.div`relative mt-12 lg:mt-0 flex flex-col justify-center`;
+
 const Heading = tw.h1`font-black text-3xl md:text-5xl leading-snug max-w-3xl`;
+const Heading1 = tw.h1`font-black text-3xl md:text-5xl leading-snug max-w-3xl`;
 const Paragraph = tw.p`my-5 lg:my-8 text-sm lg:text-base font-medium text-gray-600 max-w-lg mx-auto lg:mx-0`;
 
 const Actions = tw.div`flex flex-col items-center sm:flex-row justify-center lg:justify-start mt-8`;
@@ -96,27 +101,79 @@ export default ({
           </RightColumn>
         </TwoColumn>
         <ContentWithPaddingXl>
+          <Heading1>Propriètaire de la Commande :</Heading1>
+          <TwoColumn1>
+          <LeftColumn1>
           <Text>
-            <h2>Propriètaire de la Commande: </h2>
-            <p>Informations de l'utilisateur qui a passé la commande:</p>
+            <h2>Coordonnées : </h2>
+            <br/>
             <ul>
               <li>
-                <strong>Nom: </strong> {user.lastname}
+                <strong>Nom et prénom : </strong> {user.name}
               </li>
               <li>
-                <strong>Prénom: </strong> {user.firstname}
+                <strong>E-Mail : </strong> {user.email}
               </li>
               <li>
-                <strong>E-Mail: </strong> {user.email}
+                <strong>Numéro de téléphone : </strong> {user.tel}
               </li>
               <li>
-                <strong>Numéro de téléphone: </strong> {user.tel}
-              </li>
-              <li>
-                <strong>Entreprise: </strong> {user.entreprise}
+                <strong>Addresse : </strong> {user.address}
               </li>
             </ul>
-          </Text>
+            </Text>
+            </LeftColumn1>
+            <RightColumn1>
+              <Text>
+            <h2>Détails de validation : </h2>
+            <br/>
+            <ul>
+              <li>
+                <strong>Groupe compta. marché : </strong> {user.genBusGroup}
+              </li>
+              <li>
+                <strong>Groupe compta. marché TVA : </strong> {user.codeTVA}
+              </li>
+              <li>
+                <strong>Groupe compta. client : </strong> {user.customerGroup}
+              </li>
+              <li>
+                <strong>Code remise facture : </strong> {user.no}
+              </li>
+            </ul>
+            </Text>
+            </RightColumn1>
+            </TwoColumn1>
+            <TwoColumn1>
+              <LeftColumn1>
+              <Text>
+            <h2>Paiements : </h2>
+            <br/>
+            <ul>
+              <li>
+                <strong>Code conditions paiement : </strong> {user.paymentTerm}
+              </li>
+              <li>
+                <strong>Code mode de règelement : </strong> {user.paymentCode}
+              </li>
+            </ul>
+            </Text>
+              </LeftColumn1>
+              <RightColumn1>
+              <Text>
+            <h2>Livraison : </h2>
+            <br/>
+            <ul>
+              <li>
+                <strong>Code magasin : </strong> {user.code_magasin}
+              </li>
+              <li>
+                <strong>Code conditions de livraison : </strong> {user.codeLivraison}
+              </li>
+            </ul>
+            </Text>
+              </RightColumn1>
+            </TwoColumn1>
         </ContentWithPaddingXl>
         <DecoratorBlob1 />
       </Container>

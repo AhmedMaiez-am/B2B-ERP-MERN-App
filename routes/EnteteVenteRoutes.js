@@ -123,7 +123,6 @@ router.post("/add", async (req, res) => {
       responseBody.value = [];
     }
     responseBody.value.push(newEntete);
-console.log(responseBody);
     // send the modified JSON data back to the URL
     const modifiedJson = JSON.stringify(responseBody);
     const modifiedOptions = {
@@ -154,6 +153,7 @@ console.log(responseBody);
       const article = articles[i];
 
       const ligne = {
+        Type: "Item",
         Document_Type: "Order",
         Document_No: newNo.toString(),
         Line_No: i + 1,
@@ -161,7 +161,6 @@ console.log(responseBody);
         Description: article.description,
         Unit_Price: article.prixUni,
       };
-
       const encodedCompanyId1 = encodeURIComponent("CRONUS France S.A.");
       const urlLigne = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId1}')/ccv`;
       const optionsLigne = {

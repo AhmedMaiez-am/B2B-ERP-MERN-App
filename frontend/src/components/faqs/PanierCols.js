@@ -229,11 +229,6 @@ const handleButtonClickAddCommande = async () => {
     console.error('Error:', error);
   }
 };
-
-React.useEffect(() => {
-  // Call the function when the component mounts or whenever appropriate
-  handleButtonClickAddCommande();
-}, []); // Empty dependency array to run the effect only once
 /////////////////////////////////////////////////
 
   return (
@@ -519,7 +514,7 @@ React.useEffect(() => {
               </>
               <br></br>
               <Button
-                // href="/components/blocks/Hero/Commande"
+                 href="/components/blocks/Hero/Commande"
                 color="primary"
                 variant="contained"
                 style={{ borderRadius: "50px" }}

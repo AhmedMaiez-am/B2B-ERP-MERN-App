@@ -397,7 +397,6 @@ router.post("/addUser", async (req, res, next) => {
             else resolve(res);
           });
         });
-        console.log(response);
         // Check the response for any errors
         if (response.statusCode !== 201) {
           console.error(
