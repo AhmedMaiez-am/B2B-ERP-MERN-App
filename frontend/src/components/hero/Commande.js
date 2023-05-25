@@ -8,6 +8,20 @@ import Header from "../headers/light.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "../../images/dot-pattern.svg";
 import { Container, ContentWithPaddingXl } from "components/misc/Layouts";
+import axios from "axios";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import FolderDeleteOutlinedIcon from "@mui/icons-material/FolderDeleteOutlined";
+
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+} from "@material-ui/core";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 const Text = styled.div`
   ${tw`text-lg  text-gray-800`}
   p {
@@ -36,7 +50,7 @@ const TwoColumn = tw.div`flex flex-col lg:flex-row md:items-center max-w-screen-
 const LeftColumn = tw.div`relative lg:w-6/12 lg:pr-12 flex-shrink-0 text-center lg:text-left`;
 const RightColumn = tw.div`relative mt-12 lg:mt-0 flex flex-col justify-center`;
 
-const TwoColumn1 = tw.div`flex flex-col lg:flex-row md:items-center max-w-screen-xl mx-auto py-10 md:py-12`;
+const TwoColumn1 = tw.div`flex flex-col lg:flex-row md:items-center max-w-screen-xl mx-auto py-10 md:py-6`;
 const LeftColumn1 = tw.div`relative lg:w-6/12 lg:pr-12 flex-shrink-0 text-center lg:text-left`;
 const RightColumn1 = tw.div`relative mt-12 lg:mt-0 flex flex-col justify-center`;
 
@@ -66,9 +80,43 @@ export default ({
   imageDecoratorBlob = false,
 }) => {
   const [user, setUser] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   React.useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
+  }, []);
+  //emptyCartDialog
+  const handleDeleteCartDialog = () => {
+    setOpen(true);
+  };
+  //empty cart dialog
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
+  const [commandeData, setCommandeData] = React.useState(null);
+  const [ligneCommandeData, setLigneCommandeData] = React.useState(null);
+  //get the latest commande posted by the connected user
+  React.useEffect(() => {
+    const sendConnectedUserData = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const response = await axios.get("/commande", {
+          params: { userNo: user.no },
+        });
+        const responseLigne = await axios.get("/commande/getLignes", {
+          params: { cmdNo: response.data.No },
+        });
+
+        setCommandeData(response.data); // Store the latest commanderesponse data
+        setLigneCommandeData(responseLigne.data); // Store the lignes response data
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    sendConnectedUserData();
   }, []);
 
   return (
@@ -103,81 +151,357 @@ export default ({
         <ContentWithPaddingXl>
           <Heading1>Propriètaire de la Commande :</Heading1>
           <TwoColumn1>
-          <LeftColumn1>
-          <Text>
-            <h2>Coordonnées : </h2>
-            <br/>
-            <ul>
-              <li>
-                <strong>Nom et prénom : </strong> {user.name}
-              </li>
-              <li>
-                <strong>E-Mail : </strong> {user.email}
-              </li>
-              <li>
-                <strong>Numéro de téléphone : </strong> {user.tel}
-              </li>
-              <li>
-                <strong>Addresse : </strong> {user.address}
-              </li>
-            </ul>
-            </Text>
+            <LeftColumn1>
+              <Text>
+                <h2>Coordonnées : </h2>
+                <ul>
+                  <li>
+                    <strong>Nom et prénom : </strong> {user.name}
+                  </li>
+                  <li>
+                    <strong>E-Mail : </strong> {user.email}
+                  </li>
+                  <li>
+                    <strong>Numéro de téléphone : </strong> {user.tel}
+                  </li>
+                  <li>
+                    <strong>Addresse : </strong> {user.address}
+                  </li>
+                </ul>
+              </Text>
             </LeftColumn1>
             <RightColumn1>
               <Text>
-            <h2>Détails de validation : </h2>
-            <br/>
-            <ul>
-              <li>
-                <strong>Groupe compta. marché : </strong> {user.genBusGroup}
-              </li>
-              <li>
-                <strong>Groupe compta. marché TVA : </strong> {user.codeTVA}
-              </li>
-              <li>
-                <strong>Groupe compta. client : </strong> {user.customerGroup}
-              </li>
-              <li>
-                <strong>Code remise facture : </strong> {user.no}
-              </li>
-            </ul>
-            </Text>
+                <h2>Détails de validation : </h2>
+                <ul>
+                  <li>
+                    <strong>Groupe compta. marché : </strong> {user.genBusGroup}
+                  </li>
+                  <li>
+                    <strong>Groupe compta. marché TVA : </strong> {user.codeTVA}
+                  </li>
+                  <li>
+                    <strong>Groupe compta. client : </strong>{" "}
+                    {user.customerGroup}
+                  </li>
+                  <li>
+                    <strong>Code remise facture : </strong> {user.no}
+                  </li>
+                </ul>
+              </Text>
             </RightColumn1>
-            </TwoColumn1>
-            <TwoColumn1>
-              <LeftColumn1>
+          </TwoColumn1>
+          <TwoColumn1>
+            <LeftColumn1>
               <Text>
-            <h2>Paiements : </h2>
-            <br/>
-            <ul>
-              <li>
-                <strong>Code conditions paiement : </strong> {user.paymentTerm}
-              </li>
-              <li>
-                <strong>Code mode de règelement : </strong> {user.paymentCode}
-              </li>
-            </ul>
-            </Text>
-              </LeftColumn1>
-              <RightColumn1>
+                <h2>Paiements : </h2>
+                <ul>
+                  <li>
+                    <strong>Code conditions paiement : </strong>{" "}
+                    {user.paymentTerm}
+                  </li>
+                  <li>
+                    <strong>Code mode de règelement : </strong>{" "}
+                    {user.paymentCode}
+                  </li>
+                </ul>
+              </Text>
+            </LeftColumn1>
+            <RightColumn1>
               <Text>
-            <h2>Livraison : </h2>
-            <br/>
-            <ul>
-              <li>
-                <strong>Code magasin : </strong> {user.code_magasin}
-              </li>
-              <li>
-                <strong>Code conditions de livraison : </strong> {user.codeLivraison}
-              </li>
-            </ul>
-            </Text>
-              </RightColumn1>
-            </TwoColumn1>
+                <h2>Livraison : </h2>
+                <ul>
+                  <li>
+                    <strong>Code magasin : </strong> {user.code_magasin}
+                  </li>
+                  <li>
+                    <strong>Code conditions de livraison : </strong>{" "}
+                    {user.codeLivraison}
+                  </li>
+                </ul>
+              </Text>
+            </RightColumn1>
+          </TwoColumn1>
+          <Heading1>Détails de la commande :</Heading1>
+          <br></br>
+          {commandeData && (
+            <div>
+              <Text>
+                <ul>
+                  <li>
+                    <strong>N° client : </strong>
+                    {commandeData.No}
+                  </li>
+                  <li>
+                    <strong>Nom du client :</strong>{" "}
+                    {commandeData.Sell_to_Customer_Name}
+                  </li>
+                  <li>
+                    <strong>Adresse : </strong>
+                    {commandeData.Bill_to_Address}
+                  </li>
+                  <li>
+                    <strong>N° contact : </strong>
+                    {commandeData.Bill_to_Contact_No}
+                  </li>
+                  <li>
+                    <strong>N° téléphone : </strong>
+                    {commandeData.Sell_to_Phone_No}
+                  </li>
+                  <li>
+                    <strong>Adresse E-Mail : </strong>
+                    {commandeData.Sell_to_E_Mail}
+                  </li>
+                  <li>
+                    <strong>Date document : </strong>
+                    {commandeData.Document_Date}
+                  </li>
+                </ul>
+              </Text>
+            </div>
+          )}
+          <div>
+            <h2
+              style={{
+                textAlign: "center",
+                fontSize: "18px",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                color: "navy",
+                fontWeight: "bold",
+                padding: "30px 0",
+              }}
+            >
+              Lignes de la commande
+            </h2>
+
+            <div className="table-wrapper">
+              <table className="fl-table">
+                <thead>
+                  <tr>
+                    <th>N° de commande</th>
+                    <th>N° de ligne</th>
+                    <th>Description</th>
+                    <th>Code Magasin</th>
+                    <th>Code Unité</th>
+                    <th>Prix Unitaire HT</th>
+                    <th>Montant Ligne HT</th>
+                    <th>Quantité</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ligneCommandeData &&
+                    ligneCommandeData.map((ligne, index) => (
+                      <tr key={index}>
+                        <td>{ligne.Document_No}</td>
+                        <td>{ligne.Line_No}</td>
+                        <td>{ligne.Description}</td>
+                        <td>{ligne.Location_Code}</td>
+                        <td>{ligne.Unit_of_Measure_Code}</td>
+                        <td>{ligne.Unit_Price}</td>
+                        <td>{ligne.Line_Amount}</td>
+                        <td>{ligne.Quantity}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <style>
+            {`
+
+
+
+/* Table Styles */
+
+.table-wrapper{
+  margin: 10px 70px 70px;
+  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+}
+
+.fl-table {
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: normal;
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  white-space: nowrap;
+  background-color: white;
+  
+}
+
+.fl-table td, .fl-table th {
+  text-align: center;
+  padding: 8px;
+}
+
+.fl-table td {
+  border-right: 1px solid #f8f8f8;
+  font-size: 12px;
+}
+
+.fl-table thead th {
+  color: #ffffff;
+  background: #4FC3A1;
+  
+}
+
+
+.fl-table thead th:nth-child(odd) {
+  color: #ffffff;
+  background: #324960;
+}
+
+.fl-table tr:nth-child(even) {
+  background: #F8F8F8;
+}
+
+/* Responsive */
+
+@media (max-width: 767px) {
+  .fl-table {
+      display: block;
+      width: 100%;
+  }
+  .table-wrapper:before{
+      content: "Scroll horizontally >";
+      display: block;
+      text-align: right;
+      font-size: 11px;
+      color: white;
+      padding: 0 0 10px;
+  }
+  .fl-table thead, .fl-table tbody, .fl-table thead th {
+      display: block;
+  }
+  .fl-table thead th:last-child{
+      border-bottom: none;
+  }
+  .fl-table thead {
+      float: left;
+  }
+  .fl-table tbody {
+      width: auto;
+      position: relative;
+      overflow-x: auto;
+  }
+  .fl-table td, .fl-table th {
+      padding: 20px .625em .625em .625em;
+      height: 60px;
+      vertical-align: middle;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      overflow-y: auto;
+      width: 120px;
+      font-size: 13px;
+      text-overflow: ellipsis;
+  }
+  .fl-table thead th {
+      text-align: left;
+      border-bottom: 1px solid #f7f7f9;
+  }
+  .fl-table tbody tr {
+      display: table-cell;
+  }
+  .fl-table tbody tr:nth-child(odd) {
+      background: none;
+  }
+  .fl-table tr:nth-child(even) {
+      background: transparent;
+  }
+  .fl-table tr td:nth-child(odd) {
+      background: #F8F8F8;
+      border-right: 1px solid #E6E4E4;
+  }
+  .fl-table tr td:nth-child(even) {
+      border-right: 1px solid #E6E4E4;
+  }
+  .fl-table tbody td {
+      display: block;
+      text-align: center;
+  }
+}
+        `}
+          </style>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              onClick={() => handleDeleteCartDialog()}
+              variant="contained"
+              color="secondary"
+              style={{ borderRadius: "50px" }}
+              endIcon={<DeleteForeverOutlinedIcon />}
+            >
+              Annuler Commande
+            </Button>
+          </div>
         </ContentWithPaddingXl>
         <DecoratorBlob1 />
       </Container>
       <Footer />
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={() => handleDialogClose(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{
+            backgroundColor: "#fde7e7",
+            color: "#9b2c33",
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1rem",
+          }}
+        >
+          <FolderDeleteOutlinedIcon /> &nbsp;
+          {"Confirmer la suppression de la commande"}
+        </DialogTitle>
+        <DialogContent style={{ borderRadius: "20px" }}>
+          <DialogContentText
+            id="alert-dialog-description"
+            style={{ color: "#4F4F4F" }}
+          >
+            Voulez vous supprimer tous les articles et annuler la commande?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => handleDialogClose(false)}
+            variant="contained"
+            color="primary"
+            style={{
+              backgroundColor: "#438fa0",
+              color: "#FFFFFF",
+              borderRadius: "50px",
+            }}
+          >
+            Non
+          </Button>
+          <Button
+            //onClick={() => handleDeleteCart()}
+            variant="contained"
+            color="secondary"
+            style={{
+              backgroundColor: "#de1f29",
+              color: "#FFFFFF",
+              borderRadius: "50px",
+            }}
+          >
+            Oui
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

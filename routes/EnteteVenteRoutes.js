@@ -160,6 +160,7 @@ router.post("/add", async (req, res) => {
         No: article.id,
         Description: article.description,
         Unit_Price: article.prixUni,
+        Quantity: article.quantity
       };
       const encodedCompanyId1 = encodeURIComponent("CRONUS France S.A.");
       const urlLigne = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId1}')/ccv`;

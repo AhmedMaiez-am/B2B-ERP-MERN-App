@@ -9,6 +9,7 @@ var config = require("./db/config.json");
 
 var usersRouter = require("./routes/users");
 var enteteRouter = require("./routes/EnteteVenteRoutes");
+var commandeRouter = require("./routes/Commande");
 
 
 var app = express();
@@ -56,7 +57,7 @@ app.use(function (req, res, next) {
 app.use("/users", usersRouter);
 app.use("/articles", articlesRouter);
 app.use("/enteteVentes", enteteRouter);
-
+app.use("/commande", commandeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

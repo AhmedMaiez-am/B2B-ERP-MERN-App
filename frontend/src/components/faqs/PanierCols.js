@@ -212,23 +212,36 @@ export default () => {
         setFilteredResults(data)
     }
 }
-
-
-
 // Function to handle the button click event
 const handleButtonClickAddCommande = async () => {
   try {
     // Retrieve cart items from localStorage
     const articles = JSON.parse(localStorage.getItem('panier'));
-    const user = JSON.parse(localStorage.getItem('user'))
-    // Make a POST request to your server's "/add" endpoint using Axios
-    const response = await axios.post('/enteteVentes/add', { articles, user });
+    const user = JSON.parse(localStorage.getItem('user'));
 
+    // Create a new array with updated article objects
+    const updatedArticles = articles.map((article, index) => {
+      // Retrieve the input value for the corresponding article
+      const inputValue = inputValues[index]?.value || '';
+
+      // Create a new article object with the quantity property
+      const updatedArticle = {
+        ...article,
+        quantity: parseInt(inputValue),
+      };
+
+      return updatedArticle;
+    });
+    // Make a POST request to your server's "/add" endpoint using Axios
+    const response = await axios.post('/enteteVentes/add', { articles: updatedArticles, user });
+console.log(updatedArticles);
     console.log(response.data); // Display the response from the server
   } catch (error) {
     console.error('Error:', error);
   }
 };
+
+
 /////////////////////////////////////////////////
 
   return (
@@ -514,7 +527,7 @@ const handleButtonClickAddCommande = async () => {
               </>
               <br></br>
               <Button
-                 href="/components/blocks/Hero/Commande"
+                href="/components/blocks/Hero/Commande"
                 color="primary"
                 variant="contained"
                 style={{ borderRadius: "50px" }}

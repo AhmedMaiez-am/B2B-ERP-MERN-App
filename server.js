@@ -7,6 +7,7 @@ var articleRouter = require("./routes/ArticleRoutes");
 var usersRouter = require("./routes/users");
 var auth = require("./routes/auth");
 var enteteRouter = require ("./routes/EnteteVenteRoutes");
+var commandeRouter = require ("./routes/Commande");
 
 app.use(cors());
 app.use(express.json());
@@ -41,6 +42,7 @@ app.use("/articles", articleRouter);
 app.use("/users", usersRouter);
 app.use("/auth", auth);
 app.use("/enteteVentes", enteteRouter);
+app.use("/commande", commandeRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
