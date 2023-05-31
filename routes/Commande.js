@@ -123,9 +123,10 @@ router.get("/getLignes", async (req, res) => {
 // Route to delete a commande
 router.delete("/delete", async (req, res) => {
   try {
-    const commandeData = req.body; // Access the JSON object sent in the request body
+    const commandeData = req.body; // Access the JSON array sent in the request body
     const commandeNo = commandeData.No; 
     const commandeType = commandeData.Document_Type;
+    
     // Perform the deletion operation in Business Central using the commandeNo
     await deleteCommandeFromBC(commandeNo, commandeType);
     res.status(200).send("Commande deleted successfully");
@@ -151,7 +152,52 @@ async function deleteCommandeFromBC(commandeNo, commandeType) {
     domain: domain,
   };
   return new Promise((resolve, reject) => {
-    httpntlm.delete(options, (err, response) => { // Changed the response parameter name to avoid conflicts
+    httpntlm.delete(options, (err, response) => { 
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+
+// Route to delete a commande
+router.delete("/delete1", async (req, res) => {
+  try {
+    const commandeData = req.body; // Access the JSON array sent in the request body
+    const firstCommande = commandeData[0]; // Assuming you want to access the first element in the array
+    const commandeNo = firstCommande.No; 
+    const commandeType = firstCommande.Document_Type;
+    
+    // Perform the deletion operation in Business Central using the commandeNo
+    await deleteCommandeFromBC(commandeNo, commandeType);
+    res.status(200).send("Commande deleted successfully");
+  } catch (error) {
+    console.error("Error deleting commande from Business Central:", error.message);
+    res.status(500).send("Error deleting commande from Business Central");
+  }
+});
+
+async function deleteCommandeFromBC(commandeNo, commandeType) {
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
+  const domain = process.env.DOMAIN;
+  const workstation = process.env.WORKSTATION;
+  const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
+  const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/commandeV(Document_Type=('${commandeType}'),No=('${commandeNo}'))`;
+  const options = {
+    url: url,
+    method: "DELETE",
+    username: username,
+    password: password,
+    workstation: workstation,
+    domain: domain,
+  };
+  return new Promise((resolve, reject) => {
+    httpntlm.delete(options, (err, response) => { 
       if (err) {
         console.error(err);
         reject(err);

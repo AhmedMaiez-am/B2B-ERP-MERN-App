@@ -46,6 +46,7 @@ import FullWidthWithImageHero from "components/hero/FullWidthWithImage.js";
 import BackgroundAsImageWithCenteredContentHero from "components/hero/BackgroundAsImageWithCenteredContent.js";
 import ListeCommandes from "components/hero/ListeCommandes.js";
 import DetailsCommande from 'components/hero/DetailsCommande.js';
+import MainFooter from 'components/footers/MainFooter';
 
 import TwoPlansWithDurationSwitcherPricing from "components/pricing/TwoPlansWithDurationSwitcher.js";
 import ThreePlansWithHalfPrimaryBackgroundPricing from "components/pricing/ThreePlansWithHalfPrimaryBackground.js";
@@ -510,6 +511,11 @@ export const components = {
           name: "LandingPageFooter",
           component: LandingPageFooter,
           url: "/components/blocks/Footer/LandingPageFooter",
+        },
+        MainFooter: {
+          name: "MainFooter",
+          component: MainFooter,
+          url: "/components/blocks/Footer/MainFooter",
         },
       }
     }

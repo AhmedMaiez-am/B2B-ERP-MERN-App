@@ -3,7 +3,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 //eslint-disable-next-line
 import { css } from "styled-components/macro";
-import Footer from "components/footers/LandingPageFooter";
+import Footer from "components/footers/MainFooter.js";
 import Header from "../headers/light.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "../../images/dot-pattern.svg";
@@ -72,7 +72,6 @@ const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
 `;
 
 export default ({
-  heading = "Vérification de commande",
   description = "Consulter la liste complète des articles passés en commande, vérifier leurs quatités et prix afin de valider votre commande  ",
   primaryButtonText = "Panier",
   primaryButtonUrl = "/components/blocks/Hero/Panier",
@@ -122,7 +121,7 @@ export default ({
   // Empty cart
   const handleDeleteCart = async () => {
     try {
-      const response = await axios.delete("/commande/delete", {
+      const response = await axios.delete("/commande/delete1", {
         data: commandeData1,
       });
     } catch (error) {
@@ -359,7 +358,7 @@ export default ({
 
 .fl-table td {
   border-right: 1px solid #f8f8f8;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .fl-table thead th {
@@ -511,7 +510,7 @@ export default ({
           </Button>
           <Button
             onClick={() => handleDeleteCart()}
-            href="/components/blocks/Hero/Panier"
+            href="/components/blocks/Hero/ListeCommandes"
             variant="contained"
             color="secondary"
             style={{

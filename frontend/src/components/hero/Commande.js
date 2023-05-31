@@ -3,7 +3,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 //eslint-disable-next-line
 import { css } from "styled-components/macro";
-import Footer from "components/footers/LandingPageFooter";
+import Footer from "components/footers/MainFooter.js";
 import Header from "../headers/light.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "../../images/dot-pattern.svg";
@@ -352,7 +352,7 @@ const handleDeleteCart = async () => {
 
 .fl-table td {
   border-right: 1px solid #f8f8f8;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .fl-table thead th {

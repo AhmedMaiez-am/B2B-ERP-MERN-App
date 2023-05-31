@@ -21,7 +21,20 @@ import axios from "axios";
 import LoupeOutlinedIcon from "@mui/icons-material/LoupeOutlined";
 import IconButton from "@mui/material/IconButton";
 import { useHistory } from "react-router-dom";
-import Footer from "components/footers/LandingPageFooter";
+import Footer from "components/footers/MainFooter.js";
+import FolderDeleteOutlinedIcon from "@mui/icons-material/FolderDeleteOutlined";
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+} from "@material-ui/core";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const PrimaryBackgroundContainer = tw.div`-mx-8 px-8 bg-gradient-to-t from-transparent to-blue-300 text-blue-900 text-gray-100`;
 const Header = tw(HeaderBase)`max-w-none -mt-8 py-8 -mx-8 px-8`;
@@ -72,7 +85,23 @@ export default ({
     </NavLinks>,
   ];
 
+  const [selectedLigne, setSelectedLigne] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [commandeData, setCommandeData] = React.useState(null);
+
+   //emptyCartDialog
+   const handleDeleteCartDialog = (ligne) => {
+    setSelectedLigne(ligne);
+    setOpen(true);
+  };
+  //empty cart dialog
+  const handleDialogClose = () => {
+    setSelectedLigne(null);
+    setOpen(false);
+  };
+
   //get the latest commande posted by the connected user
   React.useEffect(() => {
     const sendConnectedUserData = async () => {
@@ -98,6 +127,24 @@ export default ({
       // Navigate to the second component
       history.push('/components/blocks/Hero/DetailsCommande');
     };
+
+
+// Empty cart
+const handleDeleteCart = async () => {
+  if (selectedLigne) {
+    try {
+      const response = await axios.delete("/commande/delete1", {
+        data: [selectedLigne],
+      });
+
+      // Reload the page
+     // window.location.reload();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+};
+
 
   return (
     <PrimaryBackgroundContainer>
@@ -149,6 +196,7 @@ export default ({
                     <th>Code magasin</th>
                     <th>Date de création</th>
                     <th>Détails</th>
+                    <th>Spprimmer</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -171,7 +219,17 @@ export default ({
                             <LoupeOutlinedIcon />
                           </IconButton>
                         </td>
+                        <td>
+                          <IconButton
+                          variant="outlined"
+                          color="error"
+                          style={{ color: "#ed2f21" }}
+                          onClick={() => handleDeleteCartDialog(ligne)}>
+                            <HighlightOffOutlinedIcon />
+                          </IconButton>
+                        </td>
                       </tr>
+                      
                     ))}
                 </tbody>
               </table>
@@ -206,7 +264,7 @@ export default ({
 
 .fl-table td {
   border-right: 1px solid #f8f8f8;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .fl-table thead th {
@@ -233,7 +291,7 @@ export default ({
       width: 100%;
   }
   .table-wrapper:before{
-      content: "Scroll horizontally >";
+      content: "Glisser horizontallement >";
       display: block;
       text-align: right;
       font-size: 11px;
@@ -295,6 +353,65 @@ export default ({
         </Container>
       </Content2Xl>
       <Footer/>
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={() => handleDialogClose(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{
+            backgroundColor: "#fde7e7",
+            color: "#9b2c33",
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1rem",
+          }}
+        >
+          <FolderDeleteOutlinedIcon /> &nbsp;
+          {"Confirmer la suppression de la commande"}
+        </DialogTitle>
+        <DialogContent style={{ borderRadius: "20px" }}>
+          <DialogContentText
+            id="alert-dialog-description"
+            style={{ color: "#4F4F4F" }}
+          >
+            Voulez vous supprimer tous les articles et annuler la commande ?
+            Vous serez redirigé vers votre Panier.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDialogClose}
+            variant="contained"
+            color="primary"
+            style={{
+              backgroundColor: "#58d2ed",
+              color: "#FFFFFF",
+              borderRadius: "50px",
+            }}
+          >
+            <strong>Non</strong>
+          </Button>
+          <Button
+            onClick={handleDeleteCart}
+            href="/components/blocks/Hero/ListeCommandes"
+            variant="contained"
+            color="secondary"
+            style={{
+              backgroundColor: "#de1f29",
+              color: "#FFFFFF",
+              borderRadius: "50px",
+            }}
+          >
+            <strong>Oui</strong>
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </PrimaryBackgroundContainer>
     
   );

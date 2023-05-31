@@ -2,7 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import Footer from "components/footers/LandingPageFooter";
+import Footer from "components/footers/MainFooter.js";
 import ArticlesTable from "components/tables/Articles";
 import { useHistory } from 'react-router-dom';
 import Header, {

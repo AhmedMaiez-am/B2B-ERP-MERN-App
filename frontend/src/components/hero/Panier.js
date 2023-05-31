@@ -5,7 +5,7 @@ import tw from "twin.macro";
 import { css } from "styled-components/macro";
 
 import PanierCols from "components/faqs/PanierCols.js";
-import Footer from "components/footers/LandingPageFooter";
+import Footer from "components/footers/MainFooter.js";
 import Header from "../headers/light.js";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import { SectionHeading as HeadingTitle } from "../misc/Headings.js";
