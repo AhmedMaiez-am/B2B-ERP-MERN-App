@@ -44,7 +44,8 @@ import IllustrationAndInputHero from "components/hero/TwoColumnWithInput.js";
 import FeaturesAndTestimonialHero from "components/hero/TwoColumnWithFeaturesAndTestimonial.js";
 import FullWidthWithImageHero from "components/hero/FullWidthWithImage.js";
 import BackgroundAsImageWithCenteredContentHero from "components/hero/BackgroundAsImageWithCenteredContent.js";
-import IllustrationAndPrimaryBackgroundHero from "components/hero/TwoColumnWithPrimaryBackground.js";
+import ListeCommandes from "components/hero/ListeCommandes.js";
+import DetailsCommande from 'components/hero/DetailsCommande.js';
 
 import TwoPlansWithDurationSwitcherPricing from "components/pricing/TwoPlansWithDurationSwitcher.js";
 import ThreePlansWithHalfPrimaryBackgroundPricing from "components/pricing/ThreePlansWithHalfPrimaryBackground.js";
@@ -223,10 +224,15 @@ export const components = {
           component: BackgroundAsImageWithCenteredContentHero,
           url: "/components/blocks/Hero/BackgroundAsImageWithCenteredContent",
         },
-        IllustrationAndPrimaryBackground: {
-          name: "Primary Background With Illustration",
-          component: IllustrationAndPrimaryBackgroundHero,
-          url: "/components/blocks/Hero/IllustrationAndPrimaryBackground",
+        ListeCommandes: {
+          name: "Liste commandes",
+          component: ListeCommandes,
+          url: "/components/blocks/Hero/ListeCommande",
+        },
+        DetailsCommande: {
+          name: "Details commandes",
+          component: DetailsCommande,
+          url: "/components/blocks/Hero/DetailsCommande",
         },
       }
     },

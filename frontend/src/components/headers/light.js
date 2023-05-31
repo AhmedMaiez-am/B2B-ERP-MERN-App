@@ -72,7 +72,7 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
    */
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="/#">Commandes</NavLink>
+      <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
       <NavLink href="/#">Factures et Bandes de livraison</NavLink>
       <NavLink href="/#">Retours et Avoirs</NavLink>
       <NavLink href="/#">Administration</NavLink>

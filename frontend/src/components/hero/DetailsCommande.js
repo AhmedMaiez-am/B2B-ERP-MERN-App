@@ -95,42 +95,40 @@ export default ({
   const handleDialogClose = () => {
     setOpen(false);
   };
-   
-  const [commandeData, setCommandeData] = React.useState(null);
-  const [ligneCommandeData, setLigneCommandeData] = React.useState(null);
-  //get the latest commande posted by the connected user
+
+  const [commandeData1, setCommandeData1] = React.useState(null);
+  const [ligneCommandeData1, setLigneCommandeData1] = React.useState(null);
+
   React.useEffect(() => {
-    const sendConnectedUserData = async () => {
+    const fetchCommandeData = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const response = await axios.get("/commande", {
-          params: { userNo: user.no },
+        const No = localStorage.getItem("No");
+        const response = await axios.get("/commande/details", {
+          params: { No },
         });
         const responseLigne = await axios.get("/commande/getLignes", {
-          params: { cmdNo: response.data.No },
+          params: { cmdNo: No },
         });
-
-        setCommandeData(response.data); // Store the latest commande response data
-        setLigneCommandeData(responseLigne.data); // Store the lignes response data
+        setCommandeData1(response.data); // Store the commande response data
+        setLigneCommandeData1(responseLigne.data); // Store the lignes response data
       } catch (error) {
         console.error("Error:", error);
       }
     };
 
-    sendConnectedUserData();
+    fetchCommandeData();
   }, []);
 
-// Empty cart
-const handleDeleteCart = async () => {
-  try {
-    const response = await axios.delete('/commande/delete', {
-      data: commandeData,
-    });
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-
+  // Empty cart
+  const handleDeleteCart = async () => {
+    try {
+      const response = await axios.delete("/commande/delete", {
+        data: commandeData1,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
@@ -138,7 +136,13 @@ const handleDeleteCart = async () => {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading>{heading}</Heading>
+            <Heading>Détails de la commande N° :{commandeData1 !== null && (
+            <div>
+              {commandeData1.map((commande, index) => (
+               commande.No
+              ))}
+            </div>
+          )}</Heading>
             <Paragraph>{description}</Paragraph>
             <Actions>
               <PrimaryButton
@@ -154,7 +158,7 @@ const handleDeleteCart = async () => {
             <IllustrationContainer>
               <img
                 css={imageCss}
-                src="https://img.freepik.com/free-vector/happy-rich-banker-celebrating-income-growth_74855-5867.jpg?size=626&ext=jpg&ga=GA1.1.40375638.1678093605&semt=ais"
+                src="https://cdni.iconscout.com/illustration/free/thumb/free-sales-team-2043015-1730192.png"
                 alt="Hero"
               />
               {imageDecoratorBlob && <DecoratorBlob2 />}
@@ -237,42 +241,45 @@ const handleDeleteCart = async () => {
           </TwoColumn1>
           <Heading1>Détails de la commande :</Heading1>
           <br></br>
-          {commandeData && (
+          {commandeData1 !== null && (
             <div>
-              <Text>
-                <ul>
-                  <li>
-                    <strong>N° client : </strong>
-                    {commandeData.Sell_to_Customer_No}
-                  </li>
-                  <li>
-                    <strong>Nom du client :</strong>{" "}
-                    {commandeData.Sell_to_Customer_Name}
-                  </li>
-                  <li>
-                    <strong>Adresse : </strong>
-                    {commandeData.Bill_to_Address}
-                  </li>
-                  <li>
-                    <strong>N° contact : </strong>
-                    {commandeData.Bill_to_Contact_No}
-                  </li>
-                  <li>
-                    <strong>N° téléphone : </strong>
-                    {commandeData.Sell_to_Phone_No}
-                  </li>
-                  <li>
-                    <strong>Adresse E-Mail : </strong>
-                    {commandeData.Sell_to_E_Mail}
-                  </li>
-                  <li>
-                    <strong>Date document : </strong>
-                    {commandeData.Document_Date}
-                  </li>
-                </ul>
-              </Text>
+              {commandeData1.map((commande, index) => (
+                <Text key={index}>
+                  <ul>
+                    <li>
+                      <strong>N° client : </strong>
+                      {commande.Sell_to_Customer_No}
+                    </li>
+                    <li>
+                      <strong>Nom du client :</strong>{" "}
+                      {commande.Sell_to_Customer_Name}
+                    </li>
+                    <li>
+                      <strong>Adresse : </strong>
+                      {commande.Bill_to_Address}
+                    </li>
+                    <li>
+                      <strong>N° contact : </strong>
+                      {commande.Bill_to_Contact_No}
+                    </li>
+                    <li>
+                      <strong>N° téléphone : </strong>
+                      {commande.Sell_to_Phone_No}
+                    </li>
+                    <li>
+                      <strong>Adresse E-Mail : </strong>
+                      {commande.Sell_to_E_Mail}
+                    </li>
+                    <li>
+                      <strong>Date document : </strong>
+                      {commande.Document_Date}
+                    </li>
+                  </ul>
+                </Text>
+              ))}
             </div>
           )}
+
           <div>
             <h2
               style={{
@@ -303,8 +310,8 @@ const handleDeleteCart = async () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {ligneCommandeData &&
-                    ligneCommandeData.map((ligne, index) => (
+                  {ligneCommandeData1 &&
+                    ligneCommandeData1.map((ligne, index) => (
                       <tr key={index}>
                         <td>{ligne.Document_No}</td>
                         <td>{ligne.Line_No}</td>
@@ -357,7 +364,7 @@ const handleDeleteCart = async () => {
 
 .fl-table thead th {
   color: #ffffff;
-  background: #4FC3A1;
+  background: #c34f4f;
   
 }
 

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const httpntlm = require("httpntlm");
 const Entete = require("../models/EnteteVente.js");
+const nodemailer = require("nodemailer");
 
 //get entete-vente from BC
 async function getEnteteFromBC() {
@@ -200,12 +201,113 @@ router.post("/add", async (req, res) => {
         return;
       }
     }
-
+    SendMail(BC_user,newNo)
     res.send(`New Entete with No ${newNo} and Lignes added successfully`);
+    
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Error occurred");
   }
+
 });
+
+
+//send mail on successfull commande insertion
+async function SendMail(BC_user, newNo) {
+  // Create a SMTP transporter object
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "maiezahmed98@gmail.com",
+      pass: "qputeyqhqoglpkao",
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+
+  // Message object
+  let message = {
+    from: "maiezahmed98@gmail.com",
+    to: BC_user.email,
+    // Subject of the message
+    subject: "Enregistrement d'une nouvelle commande",
+    // plaintext body
+    // text: msg,
+    html: `
+    <html>
+    <head>
+      <style>
+        /* Add your styles here */
+        body {
+          font-family: Arial, sans-serif;
+          font-size: 16px;
+          line-height: 1.5;
+        }
+
+        .container {
+          margin: 0 auto;
+          max-width: 600px;
+          padding: 20px;
+          text-align: center;
+        }
+
+        .header {
+          background-color: #f5f5f5;
+          border-bottom: 1px solid #ddd;
+          margin-bottom: 20px;
+          padding: 10px 20px;
+          border-radius: 10px;
+        }
+
+        .title {
+          font-size: 24px;
+          font-weight: bold;
+          margin: 0;
+          color:#26a4ab;
+        }
+
+        .content {
+          background-color: #fff;
+          border: 1px solid #ddd;
+          padding: 20px;
+          border-radius: 10px;
+          
+        }
+        h2 {
+            color: #7d1a1a;
+            display: inline-block;
+            border-radius: 10px;
+        }
+      </style>
+      <!-- Load Bootstrap CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 class="title">Votre commande a été bien enregistrée</h1>
+        </div>
+        <div class="content">
+          <p>Bonjour Mr/Mme <strong>${BC_user.name} ,</strong></p>
+          <p>On a le plaisir de vous informer que votre commmande a été bien enregistrée.</p>
+          <p>Veuillez trouvez ci-dessous le numéro de la nouvelle commande:</p>
+          <h2 style="font-size: 36px; font-weight: bold;">${newNo}</h2>
+        </div>
+      </div>
+    </body>
+  </html>
+  `,
+  };
+
+  await transporter.sendMail(message, (error, success) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent successfully!");
+    }
+  });
+  transporter.close();
+}
 
 module.exports = router;

@@ -106,7 +106,7 @@ export default () => {
   };
   //empty cart
   const handleDeleteCart = () => {
-    localStorage.clear();
+    localStorage.removeItem("panier");
     window.location.reload();
   };
   //populate faqs with data from local storage to pass it into return
