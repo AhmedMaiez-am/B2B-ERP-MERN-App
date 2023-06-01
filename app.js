@@ -10,6 +10,7 @@ var config = require("./db/config.json");
 var usersRouter = require("./routes/users");
 var enteteRouter = require("./routes/EnteteVenteRoutes");
 var commandeRouter = require("./routes/Commande");
+var factureRouter = require("./routes/Factures");
 
 
 var app = express();
@@ -58,6 +59,7 @@ app.use("/users", usersRouter);
 app.use("/articles", articlesRouter);
 app.use("/enteteVentes", enteteRouter);
 app.use("/commande", commandeRouter);
+app.use("/facture", factureRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

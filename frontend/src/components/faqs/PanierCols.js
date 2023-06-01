@@ -29,6 +29,8 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
+
 const Column = tw.div`flex flex-col items-center`;
 
 const FAQSContainer = tw.dl`mt-12 max-w-4xl relative`;
@@ -88,6 +90,7 @@ export default () => {
   const [open4, setOpen4] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [data, setData] = React.useState([]);
+  const history = useHistory();
 
   //Retrieve cart from local Storage
   React.useEffect(() => {
@@ -234,8 +237,13 @@ const handleButtonClickAddCommande = async () => {
     });
     // Make a POST request to your server's "/add" endpoint using Axios
     const response = await axios.post('/enteteVentes/add', { articles: updatedArticles, user });
-console.log(updatedArticles);
     console.log(response.data); // Display the response from the server
+    // Delete "panier" from localStorage
+    localStorage.removeItem('panier');
+
+    // Programmatically redirect to another component
+    history.push('/components/blocks/Hero/Commande');
+
   } catch (error) {
     console.error('Error:', error);
   }
@@ -527,7 +535,6 @@ console.log(updatedArticles);
               </>
               <br></br>
               <Button
-                href="/components/blocks/Hero/Commande"
                 color="primary"
                 variant="contained"
                 style={{ borderRadius: "50px" }}

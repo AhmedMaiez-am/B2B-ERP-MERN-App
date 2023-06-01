@@ -73,9 +73,9 @@ const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
 
 export default ({
   heading = "Vérification de commande",
-  description = "Consulter la liste complète des articles passés en commande, vérifier leurs quatités et prix afin de valider votre commande  ",
-  primaryButtonText = "Panier",
-  primaryButtonUrl = "/components/blocks/Hero/Panier",
+  description = "Consulter la liste complète des articles passés en commande, vérifier leurs quatités et prix afin de valider votre commande. Vous pouvez consulter la liste de vos commande par ici :  ",
+  primaryButtonText = "Commandes",
+  primaryButtonUrl = "/components/blocks/Hero/ListeCommandes",
   imageCss = null,
   imageDecoratorBlob = false,
 }) => {

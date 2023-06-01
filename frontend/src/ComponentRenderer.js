@@ -41,7 +41,7 @@ import ListeArticles from "components/hero/ListeArticles.js";
 import Panier from "components/hero/Panier.js";
 import Commande from "components/hero/Commande.js";
 import IllustrationAndInputHero from "components/hero/TwoColumnWithInput.js";
-import FeaturesAndTestimonialHero from "components/hero/TwoColumnWithFeaturesAndTestimonial.js";
+import ListeFactures from "components/hero/ListeFactures.js";
 import FullWidthWithImageHero from "components/hero/FullWidthWithImage.js";
 import BackgroundAsImageWithCenteredContentHero from "components/hero/BackgroundAsImageWithCenteredContent.js";
 import ListeCommandes from "components/hero/ListeCommandes.js";
@@ -210,10 +210,10 @@ export const components = {
           component: Commande,
           url: "/components/blocks/Hero/Commande",
         },
-        FeaturesAndTestimonial: {
+        ListeFactures: {
           name: "With Features And Customer Testimonial",
-          component: FeaturesAndTestimonialHero,
-          url: "/components/blocks/Hero/FeaturesAndTestimonial",
+          component: ListeFactures,
+          url: "/components/blocks/Hero/ListeFactures",
         },
         FullWidthWithImage: {
           name: "Full Width With Image",

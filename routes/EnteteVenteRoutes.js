@@ -161,7 +161,8 @@ router.post("/add", async (req, res) => {
         No: article.id,
         Description: article.description,
         Unit_Price: article.prixUni,
-        Quantity: article.quantity
+        Quantity: article.quantity,
+        Qty_to_Ship: article.quantity
       };
       const encodedCompanyId1 = encodeURIComponent("CRONUS France S.A.");
       const urlLigne = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId1}')/ccv`;
@@ -201,7 +202,7 @@ router.post("/add", async (req, res) => {
         return;
       }
     }
-    SendMail(BC_user,newNo)
+    // SendMail(BC_user,newNo)
     res.send(`New Entete with No ${newNo} and Lignes added successfully`);
     
   } catch (error) {

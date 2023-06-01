@@ -65,7 +65,7 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
     <NavLinks key={1}>
       <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
-      <NavLink href="/#">Factures et Bandes de livraison</NavLink>
+      <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
       <NavLink href="/#">Retours et Avoirs</NavLink>
       <NavLink href="/#" tw="lg:ml-12!">
         Articles
