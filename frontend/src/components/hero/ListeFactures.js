@@ -3,8 +3,14 @@ import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 
-import Header, { LogoLink, NavLinks, NavLink as NavLinkBase } from "../headers/light.js";
+import Header, {
+  LogoLink,
+  NavLinks,
+  NavLink as NavLinkBase,
+} from "../headers/light.js";
 import Footer from "components/footers/MainFooter.js";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const StyledHeader = styled(Header)`
   ${tw`justify-between`}
@@ -43,14 +49,13 @@ const Actions = styled.div`
 `;
 
 export default ({
-  
   navLinks = [
     <NavLinks key={1}>
       <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
       <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
       <NavLink href="">Se Déconnecter</NavLink>
-    </NavLinks>
+    </NavLinks>,
   ],
   heading = (
     <>
@@ -64,32 +69,224 @@ export default ({
   primaryActionUrl = "/components/blocks/Hero/ListeArticles",
   primaryActionText = "Articles",
   secondaryActionUrl = "/components/blocks/Hero/ListeCommandes",
-  secondaryActionText = "Commandes"
+  secondaryActionText = "Commandes",
 }) => {
-  
+  const [factureData, setFactureData] = React.useState(null);
+
+  //get the list of all facture assigned to the connected user
+  React.useEffect(() => {
+    const sendConnectedUserData = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const response = await axios.get("/facture/getAll", {
+          params: { userNo: user.tel },
+        });
+        setFactureData(response.data); // Store the latest commande response data
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    sendConnectedUserData();
+  }, []);
+
+  const history = useHistory();
+  const handleDetailsClick = (No) => {
+    // Store No in localStorage
+    localStorage.setItem('NoFacture', No);
+
+    // Navigate to the second component
+    history.push('/components/blocks/Hero/DetailsFacture');
+  };
   return (
     <>
-    <Container>
-      <TwoColumn>
-        <LeftColumn>
-          <StyledHeader links={navLinks} collapseBreakpointClass="sm" />
-          <Content>
-            <Heading>{heading}</Heading>
-            <Paragraph>{description}</Paragraph>
-            <Actions>
-              <a style={{ borderRadius: "50px" }} href={primaryActionUrl} className="action primaryAction">
-                {primaryActionText}
-              </a>
-              <a style={{ borderRadius: "50px" }} href={secondaryActionUrl} className="action secondaryAction">
-                {secondaryActionText}
-              </a>
-            </Actions>
-          </Content>
-        </LeftColumn>
-        <RightColumn></RightColumn>
-      </TwoColumn>
-    </Container>
-    <Footer/>
+      <Container>
+        <TwoColumn>
+          <LeftColumn>
+            <StyledHeader links={navLinks} collapseBreakpointClass="sm" />
+            <Content>
+              <Heading>{heading}</Heading>
+              <Paragraph>{description}</Paragraph>
+              <Actions>
+                <a
+                  style={{ borderRadius: "50px" }}
+                  href={primaryActionUrl}
+                  className="action primaryAction"
+                >
+                  {primaryActionText}
+                </a>
+                <a
+                  style={{ borderRadius: "50px" }}
+                  href={secondaryActionUrl}
+                  className="action secondaryAction"
+                >
+                  {secondaryActionText}
+                </a>
+              </Actions>
+            </Content>
+          </LeftColumn>
+          <RightColumn></RightColumn>
+        </TwoColumn>
+      </Container>
+      <div className="container">
+        {factureData &&
+          factureData.map((ligne, index) => (
+            <div className="card">
+              <div className="box">
+                <div className="content">
+                  <h2>N°</h2>
+                  <br/><br/><br/>
+                  <h3>{ligne.No}</h3>
+                  <p>
+                    <strong>Client</strong>
+                  </p>{" "}
+                  <p1>{ligne.Sell_to_Customer_Name}</p1>
+                  <br /><br/>
+                  <p>
+                    <strong>Date de facturation</strong>{" "}
+                  </p>{" "}
+                  <p1>{ligne.Posting_Date}</p1>
+                  <br/><br/>
+                  <p>
+                    <strong>Date d'échéance</strong>
+                  </p>{" "}
+                  <p1>{ligne.Due_Date}</p1><br/>
+                  <a style={{ borderRadius: "50px" }} onClick={() => handleDetailsClick(ligne.No)}>Détails</a>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+      <Footer />
+      <style>
+        {`
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
+        .container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+          max-width: 1200px;
+          margin: 40px auto;
+        }
+        
+    .container .card {
+  position: relative;
+  min-width: 320px;
+  height: 440px;
+  box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.2),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.1),
+    5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  margin: 30px;
+  transition: 0.5s;
+}
+
+body .container .card:nth-child(1) .box .content a {
+  background: #2196f3;
+}
+
+body .container .card:nth-child(2) .box .content a {
+  background: #e91e63;
+}
+
+body .container .card:nth-child(3) .box .content a {
+  background: #23c186;
+}
+
+body .container .card .box {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  background: linear-gradient(to bottom, #87ceeb, #fff); /* Use linear-gradient with color stops */
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
+
+body .container .card .box:hover {
+  transform: translateY(-50px);
+}
+
+body .container .card .box:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+body .container .card .box .content {
+  padding: 20px;
+  text-align: center;
+}
+
+body .container .card .box .content h2 {
+  font-family: "Poppins", sans-serif;
+  position: absolute;
+  top: -10px;
+  left: 30px;
+  font-size: 8rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+body .container .card .box .content h3 {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.8rem;
+  color: #020957;
+  z-index: 1;
+  transition: 0.5s;
+  margin-bottom: 15px;
+  margin-left: 50px;
+}
+
+body .container .card .box .content p1 {
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #020957;
+  z-index: 1;
+  transition: 0.5s;
+}
+.container .card .box .content p {
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: bold; /* Add font-weight property */
+  color: #010638;
+  z-index: 1;
+  transition: 0.5s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add box-shadow property */
+}
+
+
+body .container .card .box .content a {
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  display: inline-block;
+  padding: 8px 20px;
+  background: black;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  margin-top: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
+}
+body .container .card .box .content a:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+  background: #fff;
+  color: #000;
+}
+`}
+      </style>
     </>
   );
 };

@@ -43,7 +43,7 @@ import Commande from "components/hero/Commande.js";
 import IllustrationAndInputHero from "components/hero/TwoColumnWithInput.js";
 import ListeFactures from "components/hero/ListeFactures.js";
 import FullWidthWithImageHero from "components/hero/FullWidthWithImage.js";
-import BackgroundAsImageWithCenteredContentHero from "components/hero/BackgroundAsImageWithCenteredContent.js";
+import DetailsFacture from "components/hero/DetailsFacture.js";
 import ListeCommandes from "components/hero/ListeCommandes.js";
 import DetailsCommande from 'components/hero/DetailsCommande.js';
 import MainFooter from 'components/footers/MainFooter';
@@ -220,10 +220,10 @@ export const components = {
           component: FullWidthWithImageHero,
           url: "/components/blocks/Hero/FullWidthWithImage",
         },
-        BackgroundAsImageWithCenteredContent: {
-          name: "Full Width Background Image with centered content",
-          component: BackgroundAsImageWithCenteredContentHero,
-          url: "/components/blocks/Hero/BackgroundAsImageWithCenteredContent",
+        DetailsFacture: {
+          name: "Details Facture",
+          component: DetailsFacture,
+          url: "/components/blocks/Hero/DetailsFacture",
         },
         ListeCommandes: {
           name: "Liste commandes",

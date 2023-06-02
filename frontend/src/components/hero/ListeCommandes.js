@@ -102,7 +102,7 @@ export default ({
     setOpen(false);
   };
 
-  //get the latest commande posted by the connected user
+  //get the list of all commandes posted by the connected user
   React.useEffect(() => {
     const sendConnectedUserData = async () => {
       try {

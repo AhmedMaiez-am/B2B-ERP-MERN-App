@@ -42,6 +42,7 @@ export default () => {
             <Link href="/components/blocks/Hero/ListeArticles">Articles</Link>
             <Link href="/components/blocks/Hero/ListeCommandes">Commandes</Link>
             <Link href="/components/blocks/Hero/Panier">Panier</Link>
+            <Link href="/components/blocks/Hero/ListeFactures">Factures</Link>
           </LinksContainer>
           <SocialLinksContainer>
             <SocialLink href="https://facebook.com">
