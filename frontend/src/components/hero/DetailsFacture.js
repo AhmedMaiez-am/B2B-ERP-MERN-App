@@ -15,6 +15,18 @@ import axios from "axios";
 import Footer from "components/footers/MainFooter.js";
 import { Button } from "@material-ui/core";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import ReactModalAdapter from "../../helpers/ReactModalAdapter.js";
+import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
+import { SectionHeading as HeadingTitle } from "../misc/Headings.js";
+import Stripe from "react-stripe-checkout";
+
+const Container1 = tw.div`relative`;
+const SingleColumn = tw.div`max-w-screen-xl mx-auto`;
+
+const HeadingInfoContainer = tw.div`flex flex-col items-center`;
+
+const HeadingDescription = tw.p`mt-4 font-medium text-gray-600 text-center max-w-sm`;
+const CloseModalButton = tw.button`absolute top-0 right-0 mt-8 mr-8 hocus:text-primary-500`;
 const StyledHeader = styled(Header)`
   ${tw`pt-8 max-w-none w-full`}
   ${DesktopNavLinks} ${NavLink}, ${LogoLink} {
@@ -45,6 +57,21 @@ const Heading = styled.h1`
 
 const PrimaryAction = tw.button`rounded-full px-8 py-3 mt-10 text-sm sm:text-base sm:mt-16 sm:px-8 sm:py-4 bg-gray-100 font-bold shadow transition duration-300 bg-blue-500 text-gray-100 hocus:bg-blue-700 hocus:text-gray-200 focus:outline-none focus:shadow-outline`;
 
+const StyledModal = styled(ReactModalAdapter)`
+  &.mainHeroModal__overlay {
+    ${tw`fixed inset-0 z-50 bg-transparent backdrop-blur-md`}
+    backdrop-filter: blur(8px); /* Standard syntax */
+    --webkit-backdrop-filter: blur(8px); /* Vendor-specific syntax */
+  }
+  &.mainHeroModal__content {
+    ${tw`xl:mx-auto m-4 sm:m-16 max-w-screen-xl absolute inset-0 flex justify-center items-center rounded-lg outline-none`}
+    background-color: rgba(255, 255, 255, 0.8); /* Add transparency to the background */
+  }
+  .content {
+    ${tw`w-full lg:p-16 overflow-y-auto max-h-[80vh]`}
+  }
+`;
+
 export default () => {
   const navLinks = [
     <NavLinks key={1}>
@@ -60,6 +87,29 @@ export default () => {
   const [user, setUser] = React.useState([]);
   const [factureData1, setFactureData1] = React.useState(null);
   const [ligneFactureData1, setLigneFactureData1] = React.useState(null);
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
+
+  //payment modal
+  const toggleModal = () => setModalIsOpen(!modalIsOpen);
+
+
+  //payment function
+  const paymentAmount = localStorage.getItem("Amount");
+ const handleToken = (paymentAmount, token) => {
+    try {
+      axios.post("http:/localhost:5000/api/stripe/pay", {
+        token: token.id,
+        amount: paymentAmount,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const tokenHandler = (token) => {
+    handleToken(paymentAmount, token);
+  };
+  //
+
 
   React.useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
@@ -84,6 +134,12 @@ export default () => {
 
     fetchFactureData();
   }, []);
+
+  //payment button handling
+
+  const handlePayClick = (Amount) => {
+    localStorage.setItem("Amount", Amount);
+  };
 
   return (
     <>
@@ -192,6 +248,10 @@ export default () => {
         }}
       >
         <Button
+          onClick={() => {
+            handlePayClick(ligneFactureData1[0].Total_Amount_Incl_VAT);
+            toggleModal();
+          }}
           variant="contained"
           style={{
             borderRadius: "50px",
@@ -322,6 +382,40 @@ export default () => {
 
         `}
       </style>
+      <>
+        <StyledModal
+          closeTimeoutMS={300}
+          className="mainHeroModal"
+          isOpen={modalIsOpen}
+          onRequestClose={toggleModal}
+          shouldCloseOnOverlayClick={true}
+        >
+          <CloseModalButton onClick={toggleModal}>
+            <CloseIcon tw="w-6 h-6" />
+          </CloseModalButton>
+          <div className="content">
+            <Container1>
+              <SingleColumn>
+                <HeadingInfoContainer>
+                  <HeadingTitle>Paiement</HeadingTitle>
+                  <HeadingDescription>
+                    Procéder à payer les frais de la facture{" "}
+                    {factureData1 !== null && (
+                      <div>
+                        {factureData1.map((facture, index) => facture.No)}
+                      </div>
+                    )}
+                  </HeadingDescription>
+                  <Stripe 
+                stripeKey="pk_test_51NFYMWC0bbJKKtql7dzFeFURJbmvR8nPrFEZ7ltt49z7fyooAqnSoc3RR0KW4KeZfjbcrRoogJa6ZsG4V63Aca6w00Af91tEMD"
+                token={tokenHandler}
+                />
+                </HeadingInfoContainer>
+              </SingleColumn>
+            </Container1>
+          </div>
+        </StyledModal>
+      </>
       <Footer />
     </>
   );
