@@ -11,6 +11,7 @@ import Header, {
 import Footer from "components/footers/MainFooter.js";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 
 const StyledHeader = styled(Header)`
   ${tw`justify-between`}
@@ -21,6 +22,20 @@ const StyledHeader = styled(Header)`
 
 const NavLink = tw(NavLinkBase)`
   sm:text-sm sm:mx-6
+`;
+
+ const PrimaryLink = tw(NavLink)`
+  lg:mx-0
+  px-8 py-3 rounded bg-blue-500 text-gray-100
+  hocus:bg-blue-700 hocus:text-gray-200 focus:shadow-outline
+  border-b-0
+`;
+
+ const PrimaryLinkChat = tw(NavLink)`
+  lg:mx-3
+  px-8 py-3 rounded bg-green-500 text-gray-100
+  hocus:bg-green-700 hocus:text-gray-200 focus:shadow-outline
+  border-b-0
 `;
 
 const Container = tw.div`relative -mx-8 -mt-8`;
@@ -34,6 +49,7 @@ const RightColumn = styled.div`
 const Content = tw.div`mt-24 lg:mt-24 lg:mb-24 flex flex-col sm:items-center lg:items-stretch`;
 const Heading = tw.h1`text-3xl sm:text-5xl md:text-6xl lg:text-5xl font-black leading-none`;
 const Paragraph = tw.p`max-w-md my-8 lg:my-5 lg:my-8 sm:text-lg lg:text-base xl:text-lg leading-loose`;
+
 
 const Actions = styled.div`
   ${tw`mb-8 lg:mb-0`}
@@ -49,13 +65,17 @@ const Actions = styled.div`
 `;
 
 export default ({
+  
   navLinks = [
     <NavLinks key={1}>
       <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
       <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
-      <NavLink href="">Se Déconnecter</NavLink>
     </NavLinks>,
+    <NavLinks key={2}>
+    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/blocks/Hero/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+    <PrimaryLink style={{ borderRadius: "50px" }} href="/components/innerPages/LoginPage">Se Déconnecter</PrimaryLink>
+  </NavLinks>
   ],
   heading = (
     <>

@@ -1,15 +1,14 @@
 const express = require("express");
-
-// express app
 const app = express();
 const cors = require("cors");
-var articleRouter = require("./routes/ArticleRoutes");
-var usersRouter = require("./routes/users");
-var auth = require("./routes/auth");
-var enteteRouter = require ("./routes/EnteteVenteRoutes");
-var commandeRouter = require ("./routes/Commande");
-var factureRouter = require ("./routes/Factures");
-var StripeRouter = require("./routes/Stripe");
+const articleRouter = require("./routes/ArticleRoutes");
+const usersRouter = require("./routes/users");
+const auth = require("./routes/auth");
+const enteteRouter = require("./routes/EnteteVenteRoutes");
+const commandeRouter = require("./routes/Commande");
+const factureRouter = require("./routes/Factures");
+const StripeRouter = require("./routes/Stripe");
+const socketIO = require('socket.io');
 
 app.use(cors());
 app.use(express.json());
@@ -26,7 +25,6 @@ app.use(
 require("dotenv").config();
 // Import DATABASE CONNEXION
 const connectDB = require("./db/conn.js");
-
 connectDB();
 
 app.use(express.static(path.join(__dirname, "frontend", "build")));
@@ -37,7 +35,6 @@ app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
-
 
 //routes
 app.use("/articles", articleRouter);
@@ -53,7 +50,22 @@ app.get("*", (req, res) => {
 });
 
 // Start server
-// PORT
-app.listen(PORT, (err) => {
+const server = app.listen(PORT, (err) => {
   err ? console.log(err) : console.log(`Server is Running on PORT ${PORT}`);
+});
+
+// Socket.IO integration
+const io = socketIO(server);
+
+io.on('connection', (socket) => {
+  
+  socket.on('chat message', (message) => {
+    
+    // Broadcast the message to all connected sockets
+    io.emit('chat message', message);
+  });
+  
+  // Handle disconnect event
+  socket.on('disconnect', () => {
+  });
 });

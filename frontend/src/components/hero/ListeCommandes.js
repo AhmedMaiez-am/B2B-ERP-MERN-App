@@ -23,7 +23,8 @@ import IconButton from "@mui/material/IconButton";
 import { useHistory } from "react-router-dom";
 import Footer from "components/footers/MainFooter.js";
 import FolderDeleteOutlinedIcon from "@mui/icons-material/FolderDeleteOutlined";
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 
 import {
   Button,
@@ -45,6 +46,10 @@ const LogoLink = tw(LogoLinkBase)`text-blue-100 hocus:text-blue-900`;
 const PrimaryLink = tw(
   PrimaryLinkBase
 )`shadow-raised lg:bg-blue-500 lg:hocus:bg-blue-900`;
+
+const PrimaryLinkChat = tw(
+  PrimaryLinkBase
+)`shadow-raised lg:bg-green-500 lg:hocus:bg-green-900`;
 
 const Container = tw(ContainerBase)`text-blue-900`;
 const Row = tw.div`flex items-center flex-col lg:flex-row`;
@@ -79,6 +84,12 @@ export default ({
     <NavLinks key={1}>
       <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
+      <PrimaryLinkChat
+        style={{ borderRadius: "50px" }}
+        href="/components/blocks/Hero/Chat"
+      >
+        Chat <ChatOutlinedIcon />
+      </PrimaryLinkChat>
       <PrimaryLink style={{ borderRadius: "50px" }} href="#">
         Se Déconnecter
       </PrimaryLink>
@@ -91,8 +102,8 @@ export default ({
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [commandeData, setCommandeData] = React.useState(null);
 
-   //emptyCartDialog
-   const handleDeleteCartDialog = (ligne) => {
+  //emptyCartDialog
+  const handleDeleteCartDialog = (ligne) => {
     setSelectedLigne(ligne);
     setOpen(true);
   };
@@ -119,32 +130,30 @@ export default ({
     sendConnectedUserData();
   }, []);
 
-    const history = useHistory();
-    const handleDetailsClick = (No) => {
-      // Store No in localStorage
-      localStorage.setItem('No', No);
-  
-      // Navigate to the second component
-      history.push('/components/blocks/Hero/DetailsCommande');
-    };
+  const history = useHistory();
+  const handleDetailsClick = (No) => {
+    // Store No in localStorage
+    localStorage.setItem("No", No);
 
+    // Navigate to the second component
+    history.push("/components/blocks/Hero/DetailsCommande");
+  };
 
-// Empty cart
-const handleDeleteCart = async () => {
-  if (selectedLigne) {
-    try {
-      const response = await axios.delete("/commande/delete1", {
-        data: [selectedLigne],
-      });
+  // Empty cart
+  const handleDeleteCart = async () => {
+    if (selectedLigne) {
+      try {
+        const response = await axios.delete("/commande/delete1", {
+          data: [selectedLigne],
+        });
 
-      // Reload the page
-     // window.location.reload();
-    } catch (error) {
-      console.error("Error:", error);
+        // Reload the page
+        // window.location.reload();
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
-  }
-};
-
+  };
 
   return (
     <PrimaryBackgroundContainer>
@@ -212,24 +221,25 @@ const handleDeleteCart = async () => {
                         <td>{ligne.Posting_Date}</td>
                         <td>
                           <IconButton
-                          variant="outlined"
-                          color="error"
-                          style={{ color: "#02047a" }}
-                          onClick={() => handleDetailsClick(ligne.No)}>
+                            variant="outlined"
+                            color="error"
+                            style={{ color: "#02047a" }}
+                            onClick={() => handleDetailsClick(ligne.No)}
+                          >
                             <LoupeOutlinedIcon />
                           </IconButton>
                         </td>
                         <td>
                           <IconButton
-                          variant="outlined"
-                          color="error"
-                          style={{ color: "#ed2f21" }}
-                          onClick={() => handleDeleteCartDialog(ligne)}>
+                            variant="outlined"
+                            color="error"
+                            style={{ color: "#ed2f21" }}
+                            onClick={() => handleDeleteCartDialog(ligne)}
+                          >
                             <HighlightOffOutlinedIcon />
                           </IconButton>
                         </td>
                       </tr>
-                      
                     ))}
                 </tbody>
               </table>
@@ -352,7 +362,7 @@ const handleDeleteCart = async () => {
           </style>
         </Container>
       </Content2Xl>
-      <Footer/>
+      <Footer />
       <Dialog
         fullScreen={fullScreen}
         open={open}
@@ -411,8 +421,6 @@ const handleDeleteCart = async () => {
           </Button>
         </DialogActions>
       </Dialog>
-
     </PrimaryBackgroundContainer>
-    
   );
 };

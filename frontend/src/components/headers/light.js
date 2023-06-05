@@ -10,6 +10,8 @@ import logo from "../../images/logo.png";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+
 const Header = tw.header`
   flex justify-between items-center
   max-w-screen-xl mx-auto
@@ -30,6 +32,13 @@ export const PrimaryLink = tw(NavLink)`
   lg:mx-0
   px-8 py-3 rounded bg-blue-500 text-gray-100
   hocus:bg-blue-700 hocus:text-gray-200 focus:shadow-outline
+  border-b-0
+`;
+
+export const PrimaryLinkChat = tw(NavLink)`
+  lg:mx-3
+  px-8 py-3 rounded bg-green-500 text-gray-100
+  hocus:bg-green-700 hocus:text-gray-200 focus:shadow-outline
   border-b-0
 `;
 
@@ -56,7 +65,15 @@ export const DesktopNavLinks = tw.nav`
   hidden lg:flex flex-1 justify-between items-center
 `;
 
-export default ({ roundedHeaderButton = false, logoLink, links, className, collapseBreakpointClass = "lg" }) => {
+
+
+export default ({
+  roundedHeaderButton = false,
+  logoLink,
+  links,
+  className,
+  collapseBreakpointClass = "lg",
+}) => {
   const clearLocalStorageAndRedirect = () => {
     localStorage.clear();
     window.location.href = "/components/innerPages/LoginPage";
@@ -66,16 +83,28 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
       <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
       <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
-      <NavLink href="/#">Retours et Avoirs</NavLink>
-      <NavLink href="/#" tw="lg:ml-12!">
+      <NavLink href="/components/blocks/Hero/ListeArticles" tw="lg:ml-12!">
         Articles
       </NavLink>
-      <PrimaryLink style={{ borderRadius: "50px" }} css={roundedHeaderButton && tw`rounded-full`} onClick={clearLocalStorageAndRedirect}>Se Déconnecter</PrimaryLink>
-    </NavLinks>
+      <PrimaryLinkChat
+      href ="/components/blocks/Hero/Chat"
+        style={{ borderRadius: "50px" }}
+      >
+        Chat <ChatOutlinedIcon />
+      </PrimaryLinkChat>
+      <PrimaryLink
+        style={{ borderRadius: "50px" }}
+        css={roundedHeaderButton && tw`rounded-full`}
+        onClick={clearLocalStorageAndRedirect}
+      >
+        Se Déconnecter
+      </PrimaryLink>
+    </NavLinks>,
   ];
 
   const { showNavLinks, animation, toggleNavbar } = useAnimatedNavToggler();
-  const collapseBreakpointCss = collapseBreakPointCssMap[collapseBreakpointClass];
+  const collapseBreakpointCss =
+    collapseBreakPointCssMap[collapseBreakpointClass];
 
   const defaultLogoLink = (
     <LogoLink href="/">
@@ -86,7 +115,6 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
 
   logoLink = logoLink || defaultLogoLink;
   links = links || defaultLinks;
-
   return (
     <Header className={className || "header-light"}>
       <DesktopNavLinks css={collapseBreakpointCss.desktopNavLinks}>
@@ -94,13 +122,26 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
         {links}
       </DesktopNavLinks>
 
-      <MobileNavLinksContainer css={collapseBreakpointCss.mobileNavLinksContainer}>
+      <MobileNavLinksContainer
+        css={collapseBreakpointCss.mobileNavLinksContainer}
+      >
         {logoLink}
-        <MobileNavLinks initial={{ x: "150%", display: "none" }} animate={animation} css={collapseBreakpointCss.mobileNavLinks}>
+        <MobileNavLinks
+          initial={{ x: "150%", display: "none" }}
+          animate={animation}
+          css={collapseBreakpointCss.mobileNavLinks}
+        >
           {links}
         </MobileNavLinks>
-        <NavToggle onClick={toggleNavbar} className={showNavLinks ? "open" : "closed"}>
-          {showNavLinks ? <CloseIcon tw="w-6 h-6" /> : <MenuIcon tw="w-6 h-6" />}
+        <NavToggle
+          onClick={toggleNavbar}
+          className={showNavLinks ? "open" : "closed"}
+        >
+          {showNavLinks ? (
+            <CloseIcon tw="w-6 h-6" />
+          ) : (
+            <MenuIcon tw="w-6 h-6" />
+          )}
         </NavToggle>
       </MobileNavLinksContainer>
     </Header>
@@ -111,21 +152,21 @@ const collapseBreakPointCssMap = {
   sm: {
     mobileNavLinks: tw`sm:hidden`,
     desktopNavLinks: tw`sm:flex`,
-    mobileNavLinksContainer: tw`sm:hidden`
+    mobileNavLinksContainer: tw`sm:hidden`,
   },
   md: {
     mobileNavLinks: tw`md:hidden`,
     desktopNavLinks: tw`md:flex`,
-    mobileNavLinksContainer: tw`md:hidden`
+    mobileNavLinksContainer: tw`md:hidden`,
   },
   lg: {
     mobileNavLinks: tw`lg:hidden`,
     desktopNavLinks: tw`lg:flex`,
-    mobileNavLinksContainer: tw`lg:hidden`
+    mobileNavLinksContainer: tw`lg:hidden`,
   },
   xl: {
     mobileNavLinks: tw`lg:hidden`,
     desktopNavLinks: tw`lg:flex`,
-    mobileNavLinksContainer: tw`lg:hidden`
-  }
+    mobileNavLinksContainer: tw`lg:hidden`,
+  },
 };

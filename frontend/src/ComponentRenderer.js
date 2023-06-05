@@ -47,6 +47,8 @@ import DetailsFacture from "components/hero/DetailsFacture.js";
 import ListeCommandes from "components/hero/ListeCommandes.js";
 import DetailsCommande from 'components/hero/DetailsCommande.js';
 import MainFooter from 'components/footers/MainFooter';
+import ChatWindow from 'components/hero/ChatWindow.js';
+import Chat from 'components/hero/Chat.js';
 
 import TwoPlansWithDurationSwitcherPricing from "components/pricing/TwoPlansWithDurationSwitcher.js";
 import ThreePlansWithHalfPrimaryBackgroundPricing from "components/pricing/ThreePlansWithHalfPrimaryBackground.js";
@@ -234,6 +236,16 @@ export const components = {
           name: "Details commandes",
           component: DetailsCommande,
           url: "/components/blocks/Hero/DetailsCommande",
+        },
+        ChatWindow: {
+          name: "Chat Window",
+          component: ChatWindow,
+          url: "/components/blocks/Hero/ChatWindow",
+        },
+        Chat: {
+          name: "Chat",
+          component: Chat,
+          url: "/components/blocks/Hero/Chat",
         },
       }
     },

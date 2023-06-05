@@ -12,8 +12,12 @@ import Header, {
   LogoLink,
   NavToggle,
   DesktopNavLinks,
+  PrimaryLinkChat,
 } from "../headers/light.js";
 import ResponsiveVideoEmbed from "../../helpers/ResponsiveVideoEmbed.js";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+
+
 const StyledHeader = styled(Header)`
   ${tw`pt-8 max-w-none`}
   ${DesktopNavLinks} ${NavLink}, ${LogoLink} {
@@ -70,12 +74,12 @@ export default () => {
   
   const navLinks = [
     <NavLinks key={1}>
-      <NavLink href="#">Commandes</NavLink>
-      <NavLink href="#">Factures et Bandes de livraison</NavLink>
-      <NavLink href="#">Retours et Avoirs</NavLink>
-      <NavLink href="#">Administration</NavLink>
+      <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
+      <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
+      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/blocks/Hero/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
       <PrimaryLink style={{ borderRadius: "50px" }} href="/components/innerPages/LoginPage" onClick={handleLogout}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];

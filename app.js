@@ -13,7 +13,6 @@ var commandeRouter = require("./routes/Commande");
 var factureRouter = require("./routes/Factures");
 var StripeRouter = require("./routes/Stripe");
 
-
 var app = express();
 app.use(
   bodyparser.urlencoded({
@@ -26,16 +25,12 @@ var mongoose = require("mongoose");
 //mongo config
 const connect = mongoose.connect(
   config.mongo.uri,
-
   function (err, db) {
     if (err) {
       throw err;
     }
   }
 );
-
-
-
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

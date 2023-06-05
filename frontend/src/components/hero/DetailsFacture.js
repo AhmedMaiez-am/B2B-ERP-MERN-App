@@ -15,10 +15,19 @@ import axios from "axios";
 import Footer from "components/footers/MainFooter.js";
 import { Button } from "@material-ui/core";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ReactModalAdapter from "../../helpers/ReactModalAdapter.js";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { SectionHeading as HeadingTitle } from "../misc/Headings.js";
 import Stripe from "react-stripe-checkout";
+import * as XLSX from "xlsx";
+import Tooltip from "@material-ui/core/Tooltip";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+
+
 
 const Container1 = tw.div`relative`;
 const SingleColumn = tw.div`max-w-screen-xl mx-auto`;
@@ -38,6 +47,12 @@ const StyledHeader = styled(Header)`
 `;
 
 const PrimaryLink = tw(PrimaryLinkBase)`rounded-full`;
+const PrimaryLinkChat = tw(NavLink)`
+lg:mx-3
+px-8 py-3 rounded bg-green-500 text-gray-100
+hocus:bg-green-700 hocus:text-gray-200 focus:shadow-outline
+border-b-0
+`;
 const Container = styled.div`
   ${tw`relative -mx-8 -mt-8 bg-center bg-cover h-screen min-h-144`}
   background-image: url("https://cdn.dribbble.com/users/2475681/screenshots/15431471/invoice_illustration.png");
@@ -81,6 +96,7 @@ export default () => {
       <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
+      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/blocks/Hero/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
       <PrimaryLink href="/#">Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
@@ -92,10 +108,9 @@ export default () => {
   //payment modal
   const toggleModal = () => setModalIsOpen(!modalIsOpen);
 
-
   //payment function
   const paymentAmount = localStorage.getItem("Amount");
- const handleToken = (paymentAmount, token) => {
+  const handleToken = (paymentAmount, token) => {
     try {
       axios.post("http:/localhost:5000/api/stripe/pay", {
         token: token.id,
@@ -109,7 +124,6 @@ export default () => {
     handleToken(paymentAmount, token);
   };
   //
-
 
   React.useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
@@ -136,10 +150,73 @@ export default () => {
   }, []);
 
   //payment button handling
-
   const handlePayClick = (Amount) => {
     localStorage.setItem("Amount", Amount);
   };
+
+
+  //expoert excel file
+  const exportToExcel = () => {
+    const table = document.querySelector(".fl-table");
+    const ws = XLSX.utils.table_to_sheet(table);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+    const currentDate = new Date().toISOString().slice(0, 10);
+    const fileName = `Facture ${currentDate}.xlsx`;
+  
+    XLSX.writeFile(wb, fileName);
+  }; 
+  // Export button click event
+const handleExportExcel = () => {
+  exportToExcel();
+};
+  
+
+//donwload as PDF
+const exportToPDF = () => {
+  const table = document.querySelector(".fl-table");
+
+  // Create a new jsPDF instance
+  const doc = new jsPDF();
+
+  // Set the table header style
+  doc.setTextColor("#FFFFFF");
+  doc.setFillColor("#32a8a0");
+  doc.setFont("bold");
+
+  // Get the table dimensions
+  const tableWidth = table.offsetWidth;
+  const tableHeight = table.offsetHeight;
+
+  // Set the initial position for rendering the table
+  let x = 10;
+  let y = 10;
+
+  // Render the table header
+  doc.rect(x, y, tableWidth, 10, "F");
+  doc.autoTable({
+    html: table,
+    startY: y + 2,
+    theme: "grid",
+    styles: {
+      halign: "center",
+      valign: "middle",
+      textColor: "#000000",
+      cellPadding: 2,
+    },
+    headerStyles: {
+      fillColor: "#32a8a0",
+      fontStyle: "bold",
+    },
+  });
+
+  // Save the PDF file
+  const currentDate = new Date().toISOString().slice(0, 10);
+  const fileName = `Facture ${currentDate}.pdf`;
+  doc.save(fileName);
+};
+
 
   return (
     <>
@@ -247,6 +324,27 @@ export default () => {
           alignItems: "center",
         }}
       >
+        <Tooltip title="Télécharger la facture en Excel">
+        <Button
+         onClick={handleExportExcel}
+          variant="outlined"
+          style={{
+            borderRadius: "50px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "8px",
+            borderColor: "#087525",
+            borderWidth: "2px",
+          }}
+          endIcon={<TableRowsOutlinedIcon />}
+        >
+          <strong>Exporter Excel</strong>
+        </Button>
+        </Tooltip>
+        &nbsp; &nbsp;
+        <Tooltip title='Payer la facture'>
         <Button
           onClick={() => {
             handlePayClick(ligneFactureData1[0].Total_Amount_Incl_VAT);
@@ -266,6 +364,27 @@ export default () => {
         >
           <strong>Payer</strong>
         </Button>
+        </Tooltip>
+        &nbsp; &nbsp;
+        <Tooltip title ='Télécharger la facture en PDF'>
+        <Button
+          variant="outlined"
+          style={{
+            borderRadius: "50px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "8px",
+            borderColor: "#730305",
+            borderWidth: "2px",
+          }}
+          endIcon={<PictureAsPdfOutlinedIcon />}
+          onClick={exportToPDF}
+        >
+          <strong>Télécharger PDF</strong>
+        </Button>
+        </Tooltip>
       </div>
       <style>
         {`
@@ -406,10 +525,10 @@ export default () => {
                       </div>
                     )}
                   </HeadingDescription>
-                  <Stripe 
-                stripeKey="pk_test_51NFYMWC0bbJKKtql7dzFeFURJbmvR8nPrFEZ7ltt49z7fyooAqnSoc3RR0KW4KeZfjbcrRoogJa6ZsG4V63Aca6w00Af91tEMD"
-                token={tokenHandler}
-                />
+                  <Stripe
+                    stripeKey="pk_test_51NFYMWC0bbJKKtql7dzFeFURJbmvR8nPrFEZ7ltt49z7fyooAqnSoc3RR0KW4KeZfjbcrRoogJa6ZsG4V63Aca6w00Af91tEMD"
+                    token={tokenHandler}
+                  />
                 </HeadingInfoContainer>
               </SingleColumn>
             </Container1>
