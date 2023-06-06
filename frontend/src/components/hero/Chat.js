@@ -9,7 +9,6 @@ import Footer from "components/footers/MainFooter.js";
 import Header from "../headers/light.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "../../images/dot-pattern.svg";
-import DesignIllustration from "../../images/design-illustration.svg";
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col lg:flex-row md:items-center max-w-screen-xl mx-auto py-20 md:py-24`;
 const LeftColumn = tw.div`relative lg:w-6/12 lg:pr-12 flex-shrink-0 text-center lg:text-left`;
@@ -35,7 +34,6 @@ const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
 export default ({
   heading = "Discussion Instantannée",
   description = "Avez besoin d'aide ? Vous pouvez contacter un responsable et discuter avec lui en temps réel.",
-  imageSrc = DesignIllustration,
   imageCss = null,
   imageDecoratorBlob = false,
 }) => {
@@ -52,7 +50,7 @@ export default ({
           </LeftColumn>
           <RightColumn>
             <IllustrationContainer>
-              <img css={imageCss} src={imageSrc} alt="Hero" />
+              <img css={imageCss} src={"https://unblast.com/wp-content/uploads/2020/10/Live-Chat-Vector-Illustration.jpg"} alt="Hero" />
               {imageDecoratorBlob && <DecoratorBlob2 />}
             </IllustrationContainer>
           </RightColumn>

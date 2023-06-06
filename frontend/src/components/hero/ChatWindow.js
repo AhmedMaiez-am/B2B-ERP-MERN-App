@@ -52,6 +52,7 @@ const MessageContainer = styled.div`
   padding: 16px;
   display: flex;
   flex-direction: column;
+  width: 300px;
 `;
 
 const fadeIn = keyframes`
@@ -72,6 +73,7 @@ const Message = styled.div`
   border-radius: 16px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   animation: ${fadeIn} 0.3s ease-in;
+  word-wrap: break-word;
 `;
 
 const InputContainer = styled.div`
@@ -90,7 +92,13 @@ const Input = styled.input`
   background-color: #f0f0f0;
   font-size: 14px;
   outline: none;
+  &:focus {
+    border-color: cyan;
+    box-shadow: 0 0 0 2px cyan;
+  }
 `;
+
+
 
 const Button = styled.button`
   background-color: #4cafaf;
@@ -122,7 +130,7 @@ const ChatWindow = () => {
   }, []);
 
   const sendMessage = () => {
-    const socket = io(); // Connect to the same server host and port
+    const socket = io.connect('http://localhost:5000'); // Connect to the same server host and port
     socket.emit("chat message", inputMessage);
     setInputMessage("");
   };
@@ -140,6 +148,13 @@ const ChatWindow = () => {
       socket.disconnect();
     };
   }, []);
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      // Enter key pressed
+      sendMessage();
+    }
+  };
 
   return (
     <ChatContainer>
@@ -164,6 +179,7 @@ const ChatWindow = () => {
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Type a message..."
           />
           <Button onClick={sendMessage}>Send</Button>

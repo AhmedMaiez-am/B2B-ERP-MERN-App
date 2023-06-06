@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const http = require("http");
 const articleRouter = require("./routes/ArticleRoutes");
 const usersRouter = require("./routes/users");
 const auth = require("./routes/auth");
@@ -8,7 +9,7 @@ const enteteRouter = require("./routes/EnteteVenteRoutes");
 const commandeRouter = require("./routes/Commande");
 const factureRouter = require("./routes/Factures");
 const StripeRouter = require("./routes/Stripe");
-const socketIO = require('socket.io');
+const { Server } = require("socket.io");
 
 app.use(cors());
 app.use(express.json());
@@ -18,7 +19,7 @@ const path = require("path");
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3006", 
   })
 );
 
@@ -50,22 +51,24 @@ app.get("*", (req, res) => {
 });
 
 // Start server
-const server = app.listen(PORT, (err) => {
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3006", 
+    methods: ["GET", "POST"],
+  },
+});
+
+server.listen(PORT, (err) => {
   err ? console.log(err) : console.log(`Server is Running on PORT ${PORT}`);
 });
 
-// Socket.IO integration
-const io = socketIO(server);
-
-io.on('connection', (socket) => {
-  
-  socket.on('chat message', (message) => {
-    
-    // Broadcast the message to all connected sockets
-    io.emit('chat message', message);
+io.on("connection", (socket) => {
+  socket.on("chat message", (message) => {
+    io.emit("chat message", message);
   });
-  
-  // Handle disconnect event
-  socket.on('disconnect', () => {
+
+  socket.on("disconnect", () => {
+    // Handle disconnect event
   });
 });
