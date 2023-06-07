@@ -49,6 +49,10 @@ import DetailsCommande from 'components/hero/DetailsCommande.js';
 import MainFooter from 'components/footers/MainFooter';
 import ChatWindow from 'components/hero/ChatWindow.js';
 import Chat from 'components/hero/Chat.js';
+import Avoirs from 'components/hero/Avoirs';
+import ArticlesAvoir from 'components/hero/ArticlesAvoir.js';
+import ComfirmAvoir from 'components/hero/ConfirmAvoir.js'
+import MotifAvoir from 'components/hero/MotifAvoir.js';
 
 import TwoPlansWithDurationSwitcherPricing from "components/pricing/TwoPlansWithDurationSwitcher.js";
 import ThreePlansWithHalfPrimaryBackgroundPricing from "components/pricing/ThreePlansWithHalfPrimaryBackground.js";
@@ -246,6 +250,26 @@ export const components = {
           name: "Chat",
           component: Chat,
           url: "/components/blocks/Hero/Chat",
+        },
+        Avoirs: {
+          name: "Avoirs",
+          component: Avoirs,
+          url: "/components/blocks/Hero/Avoirs",
+        },
+        ArticlesAvoir: {
+          name: "ArticlesAvoir",
+          component: ArticlesAvoir,
+          url: "/components/blocks/Hero/ArticlesAvoir",
+        },
+        ComfirmAvoir: {
+          name: "ComfirmAvoir",
+          component: ComfirmAvoir,
+          url: "/components/blocks/Hero/ComfirmAvoir",
+        },
+        MotifAvoir: {
+          name: "MotifAvoir",
+          component: MotifAvoir,
+          url: "/components/blocks/Hero/MotifAvoir",
         },
       }
     },

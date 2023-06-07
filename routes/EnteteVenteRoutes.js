@@ -202,7 +202,7 @@ router.post("/add", async (req, res) => {
         return;
       }
     }
-    // SendMail(BC_user,newNo)
+    SendMail(BC_user,newNo)
     res.send(`New Entete with No ${newNo} and Lignes added successfully`);
     
   } catch (error) {

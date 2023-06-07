@@ -77,6 +77,7 @@ export default () => {
       <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
       <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
+      <NavLink href="/components/blocks/Hero/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
       <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/blocks/Hero/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>

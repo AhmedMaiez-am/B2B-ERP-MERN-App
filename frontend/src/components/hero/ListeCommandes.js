@@ -84,12 +84,14 @@ export default ({
     <NavLinks key={1}>
       <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
+      <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/blocks/Hero/Avoirs">Avoirs</NavLink>
       <PrimaryLinkChat
         style={{ borderRadius: "50px" }}
         href="/components/blocks/Hero/Chat"
       >
         Chat <ChatOutlinedIcon />
-      </PrimaryLinkChat>
+      </PrimaryLinkChat>&nbsp;
       <PrimaryLink style={{ borderRadius: "50px" }} href="#">
         Se Déconnecter
       </PrimaryLink>

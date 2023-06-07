@@ -83,6 +83,7 @@ export default ({
       <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
       <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
       <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/blocks/Hero/ArticlesAvoir">Avoirs</NavLink>
       <NavLink href="/components/blocks/Hero/ListeArticles" tw="lg:ml-12!">
         Articles
       </NavLink>
