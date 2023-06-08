@@ -118,56 +118,61 @@ router.post("/create", async (req, res) => {
     });
 
     // Get the articles from the request body
-    const articles = req.body.RetourArticle;
+    const articles = req.body.RetourArticles;
 
-      const ligne = {
+    for (let i = 0; i < articles.length; i++) {
+      const article = articles[i];
+
+      const lignes = {
         Type: "Item",
         Document_Type: "Credit Memo",
         Document_No: newNo.toString(),
-        Line_No: articles.Line_No,
-        No: articles.No,
-        Description: articles.Description,
-        Unit_Price: articles.Unit_Price,
-        Quantity: articles.Quantity,
+        Line_No: article.Line_No,
+        No: article.No,
+        Description: article.Description,
+        Unit_Price: article.Unit_Price,
+        Quantity: article.Quantity,
       };
-      const encodedCompanyId1 = encodeURIComponent("CRONUS France S.A.");
-      const urlLigne = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId1}')/lignesAvoir`;
-      const optionsLigne = {
-        url: urlLigne,
-        username: process.env.USERNAME,
-        password: process.env.PASSWORD,
-        workstation: process.env.WORKSTATION,
-        domain: process.env.DOMAIN,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        json: true,
-        body: JSON.stringify(ligne),
-      };
-      try {
-        const responseLigne = await new Promise((resolve, reject) => {
-          httpntlm.post(optionsLigne, (err, res) => {
-            if (err) reject(err);
-            else resolve(res);
-          });
+
+    const encodedCompanyId1 = encodeURIComponent("CRONUS France S.A.");
+    const urlLigne = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId1}')/lignesAvoir`;
+    const optionsLigne = {
+      url: urlLigne,
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      workstation: process.env.WORKSTATION,
+      domain: process.env.DOMAIN,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      json: true,
+      body: JSON.stringify(lignes),
+    };
+
+    try {
+      const responseLigne = await new Promise((resolve, reject) => {
+        httpntlm.post(optionsLigne, (err, res) => {
+          if (err) reject(err);
+          else resolve(res);
         });
-        // Check the response for any errors
-        if (responseLigne.statusCode !== 201) {
-          console.error(
-            "Error creating ligne in Business Central:",
-            responseLigne.statusCode,
-            responseLigne.statusMessage
-          );
-          res.status(500).send("Error creating ligne in Business Central");
-          return;
-        }
-      } catch (error) {
-        console.error("Error sending ligne data to Business Central:", error);
-        res.status(500).send("Error sending ligne data to Business Central");
+      });
+      // Check the response for any errors
+      if (responseLigne.statusCode !== 201) {
+        console.error(
+          "Error creating ligne in Business Central:",
+          responseLigne.statusCode,
+          responseLigne.statusMessage
+        );
+        res.status(500).send("Error creating ligne in Business Central");
         return;
       }
-    
+    } catch (error) {
+      console.error("Error sending ligne data to Business Central:", error);
+      res.status(500).send("Error sending ligne data to Business Central");
+      return;
+    }
+    }
     res.send(`New Entete with No ${newNo} and Lignes added successfully`);
   } catch (error) {
     console.error("Error:", error);

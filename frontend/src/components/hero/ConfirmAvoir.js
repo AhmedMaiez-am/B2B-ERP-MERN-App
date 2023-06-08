@@ -58,7 +58,7 @@ const PostList = ({
   posts = [
     {
       imageSrc:
-        "https://cdni.iconscout.com/illustration/premium/thumb/return-product-7981519-6414794.png",
+        "https://static.vecteezy.com/system/resources/previews/015/277/506/original/product-return-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg",
       category: "Avoir",
       title: "Retourner un article",
       description: `Vous trouvez ci-dessous la liste des articles validés dans la facture numéro : ${NoAvoir}, ,

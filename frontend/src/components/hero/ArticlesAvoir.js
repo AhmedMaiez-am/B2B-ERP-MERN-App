@@ -12,6 +12,19 @@ import IconButton from "@mui/material/IconButton";
 import AssignmentReturnOutlinedIcon from "@mui/icons-material/AssignmentReturnOutlined";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useHistory } from "react-router-dom";
+import CommentsDisabledOutlinedIcon from "@mui/icons-material/CommentsDisabledOutlined";
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+} from "@material-ui/core";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const HeadingRow = tw.div`flex`;
 const Heading = tw(SectionHeading)`text-gray-900`;
@@ -65,14 +78,26 @@ const PostList = ({
         "https://cdni.iconscout.com/illustration/premium/thumb/return-product-7981519-6414794.png",
       category: "Avoir",
       title: "Retourner un article",
-      description: `Vous trouvez ci-dessous la liste des articles validés dans la facture numéro : ${NoAvoir}, ,
-      sélectionner l'article que vous voulez retourner.`,
+      description: `Vous trouvez ci-dessous la liste des articles validés dans la facture numéro : ${NoAvoir}.`,
       featured: true,
     },
   ],
 }) => {
   const [visible, setVisible] = useState(7);
   const [ligneArticleAvoir, setLigneArticleAvoir] = React.useState(null);
+  const [selectedLigneNos, setSelectedLigneNos] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  //confirm avoir Dialog
+  const handleConfirmAvoirDialog = () => {
+    setOpen(true);
+  };
+  //confirm avoir dialog
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
 
   React.useEffect(() => {
     const fetchFactureData = async () => {
@@ -92,10 +117,18 @@ const PostList = ({
   const history = useHistory();
   const handleReturnArticle = (ligne) => {
     // Store No in localStorage
-    localStorage.setItem('RetourArticle', JSON.stringify(ligne));
+    localStorage.setItem("RetourArticle", JSON.stringify([ligne]));
 
     // Navigate to the second component
-    history.push('/components/blocks/Hero/ComfirmAvoir');
+    history.push("/components/blocks/Hero/ComfirmAvoir");
+  };
+
+  //pass all lines to avoir
+  const handleSelectAll = () => {
+    const allLigne = ligneArticleAvoir.map((ligne) => ligne);
+    setSelectedLigneNos(allLigne);
+    localStorage.setItem("RetourArticle", JSON.stringify(allLigne));
+    history.push("/components/blocks/Hero/ComfirmAvoir");
   };
 
   return (
@@ -117,7 +150,20 @@ const PostList = ({
                       <CreationDate>{getCurrentDate()}</CreationDate>
                       <Title>{post.title}</Title>
                       {post.featured && post.description && (
-                        <Description>{post.description}</Description>
+                        <Description>
+                          {post.description}
+                          <br />
+                          Sélectionner l'article que vous voulez retourner.{" "}
+                          <br />
+                          <ReportProblemOutlinedIcon
+                            style={{ color: "#ed2f21" }}
+                          />
+                          &nbsp;
+                          <strong>
+                            Aprés confirmation de l'envoi d'avoir, les articles
+                            seront supprimés!
+                          </strong>
+                        </Description>
                       )}
                     </Info>
                   </Post>
@@ -168,6 +214,90 @@ const PostList = ({
             </div>
           </ContentWithPaddingXl>
         </Container>
+        <Tooltip title="Retourner tous les articles dans la commande">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="outlined"
+              style={{
+                borderRadius: "50px",
+                display: "flex",
+                alignItems: "center",
+                padding: "2px 40px",
+                borderColor: "#eb4034",
+                borderWidth: "2px",
+                whiteSpace: "nowrap",
+              }}
+              endIcon={
+                <CommentsDisabledOutlinedIcon style={{ color: "#ed2f21" }} />
+              }
+              onClick={() => handleConfirmAvoirDialog()}
+            >
+              <strong>Retourner Tous</strong>
+            </Button>
+          </div>
+        </Tooltip>
+        <Dialog
+          fullScreen={fullScreen}
+          open={open}
+          onClose={() => handleDialogClose(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle
+            id="alert-dialog-title"
+            style={{
+              backgroundColor: "#fdf5e7",
+              color: "#9b2c33",
+              fontWeight: "bold",
+              fontSize: "1.25rem",
+              borderRadius: "10px 10px 0px 0px",
+              padding: "1rem",
+            }}
+          >
+            {"Confirmer la sélection des articles"}
+          </DialogTitle>
+          <DialogContent style={{ borderRadius: "20px" }}>
+            <DialogContentText
+              id="alert-dialog-description"
+              style={{ color: "#4F4F4F" }}
+            >
+              Vous serez redirigé vers la page de sélection du motif de l'avoir.
+              Une fois votre avoir envoyé, les articles seront supprimés !
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => handleDialogClose(false)}
+              variant="contained"
+              color="primary"
+              style={{
+                backgroundColor: "#f5d0ce",
+                color: "#050505",
+                borderRadius: "50px",
+              }}
+            >
+              <strong>Retour</strong>
+            </Button>
+            <Button
+              onClick={() => handleSelectAll()}
+              variant="contained"
+              color="secondary"
+              style={{
+                backgroundColor: "#de1f29",
+                color: "#FFFFFF",
+                borderRadius: "50px",
+              }}
+            >
+              <strong>Confirmer</strong>
+            </Button>
+          </DialogActions>
+        </Dialog>
       </AnimationRevealPage>
       <Footer />
       <style>
