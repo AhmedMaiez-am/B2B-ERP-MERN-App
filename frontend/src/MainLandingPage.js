@@ -81,16 +81,13 @@ export default ({
   features = null,
   primaryButtonUrl = "#services",
   primaryButtonText = "Services",
-  secondaryButtonUrl = components.innerPages.LoginPage.url,
+  secondaryButtonUrl = components.LoginPage.url,
   secondaryButtonText = "Démarrer",
   buttonRoundedCss = "",
   heading = "Votre portail en ligne pour la gestion de vos stocks",
   description = "Notre portail vous offre la possibilité de gérer vos ressources, en consultant votre stocks, passer des commandes et suivre leurs états, générer vos bandes de livraison et factures ainsi que les retours de produits que vous affectuer suivi par leurs avoirs relatifs à chaque fin du mois.",
 }) => {
-  /*
-   * Using gtag like this because we only want to use Google Analytics when Main Landing Page is rendered
-   * Remove this part and the the gtag script inside public/index.html if you dont need google analytics
-   */
+  
   window.gtag("js", new Date());
   window.gtag("config", "UA-45799926-9");
 
@@ -117,13 +114,10 @@ export default ({
               <NavLink target="_blank" href="https://smart-bs.com.tn">
                 Smart-BS
               </NavLink>
-              <NavLink target="_blank" href="https://twitter.com/owaiswiz">
-                Administration
-              </NavLink>
               <div tw="md:hidden flex-100 h-0"></div>
               <PrimaryNavLink
                 style={{ borderRadius: "50px" }}
-                href="/components/innerPages/LoginPage"
+                href="/components/LoginPage"
               >
                 Se Connecter
               </PrimaryNavLink>

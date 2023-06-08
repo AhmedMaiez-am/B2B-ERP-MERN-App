@@ -80,15 +80,15 @@ export default ({
   };
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
-      <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
-      <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
-      <NavLink href="/components/blocks/Hero/ArticlesAvoir">Avoirs</NavLink>
-      <NavLink href="/components/blocks/Hero/ListeArticles" tw="lg:ml-12!">
+      <NavLink href="/components/ListeCommandes">Commandes</NavLink>
+      <NavLink href="/components/Panier">Panier</NavLink>
+      <NavLink href="/components/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/ArticlesAvoir">Avoirs</NavLink>
+      <NavLink href="/components/ListeArticles" tw="lg:ml-12!">
         Articles
       </NavLink>
       <PrimaryLinkChat
-      href ="/components/blocks/Hero/Chat"
+      href ="/components/Chat"
         style={{ borderRadius: "50px" }}
       >
         Chat <ChatOutlinedIcon />

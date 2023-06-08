@@ -95,7 +95,7 @@ const PostList = ({
     localStorage.setItem('NoAvoir', No);
 
     // Navigate to the second component
-    history.push('/components/blocks/Hero/ArticlesAvoir');
+    history.push('/components/ArticlesAvoir');
   };
 
   return (

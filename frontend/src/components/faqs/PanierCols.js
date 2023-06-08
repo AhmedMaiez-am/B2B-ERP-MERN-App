@@ -242,7 +242,7 @@ const handleButtonClickAddCommande = async () => {
     localStorage.removeItem('panier');
 
     // Programmatically redirect to another component
-    history.push('/components/blocks/Hero/Commande');
+    history.push('/components/Commande');
 
   } catch (error) {
     console.error('Error:', error);

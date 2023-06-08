@@ -90,14 +90,14 @@ const StyledModal = styled(ReactModalAdapter)`
 export default () => {
   const navLinks = [
     <NavLinks key={1}>
-      <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
-      <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
-      <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
-      <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
-      <NavLink href="/components/blocks/Hero/Avoirs">Avoirs</NavLink>
+      <NavLink href="/components/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/ListeCommandes">Commandes</NavLink>
+      <NavLink href="/components/Panier">Panier</NavLink>
+      <NavLink href="/components/ListeArticles">Articles</NavLink>
+      <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/blocks/Hero/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
       <PrimaryLink href="/#">Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
@@ -233,7 +233,7 @@ const exportToPDF = () => {
                 <div>{factureData1.map((facture, index) => facture.No)}</div>
               )}
             </Heading>
-            <PrimaryAction as="a" href="/components/blocks/Hero/ListeFactures">
+            <PrimaryAction as="a" href="/components/ListeFactures">
               Liste des factures
             </PrimaryAction>
           </Content>

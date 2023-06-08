@@ -120,7 +120,7 @@ const PostList = ({
     localStorage.setItem("RetourArticle", JSON.stringify([ligne]));
 
     // Navigate to the second component
-    history.push("/components/blocks/Hero/ComfirmAvoir");
+    history.push("/components/ComfirmAvoir");
   };
 
   //pass all lines to avoir
@@ -128,7 +128,7 @@ const PostList = ({
     const allLigne = ligneArticleAvoir.map((ligne) => ligne);
     setSelectedLigneNos(allLigne);
     localStorage.setItem("RetourArticle", JSON.stringify(allLigne));
-    history.push("/components/blocks/Hero/ComfirmAvoir");
+    history.push("/components/ComfirmAvoir");
   };
 
   return (

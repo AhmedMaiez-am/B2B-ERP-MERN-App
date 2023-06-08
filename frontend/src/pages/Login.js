@@ -61,7 +61,7 @@ function Login ({
   headingText = "Bienvenue à votre espace de gestion des ressources",
   submitButtonText = "Se Connecter",
   SubmitButtonIcon = LoginIcon,
-  signupUrl = "/components/innerPages/SignupPage",
+  signupUrl = "/components/SignupPage",
 
 }) {
   let history = useHistory();
@@ -97,7 +97,7 @@ function Login ({
       console.log(result);
       localStorage.setItem("user", JSON.stringify(result.data.user));
       localStorage.setItem("token", result.data.token);
-        history.push("/components/blocks/Hero/ListeArticles");
+        history.push("/components/ListeArticles");
       
     } catch (error) {
       setErrors(error.response.data.errors);

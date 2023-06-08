@@ -54,7 +54,7 @@ function Signup({
   headingText = "Bienvenue à votre espace de gestion des ressources",
   submitButtonText = "Créer Compte",
   SubmitButtonIcon = SignUpIcon,
-  signInUrl = "/components/innerPages/LoginPage",
+  signInUrl = "/components/LoginPage",
 }) {
   let history = useHistory();
   const [fromData, setFormData] = useState({
@@ -177,7 +177,7 @@ function Signup({
     try {
       await axios.post("/users/addUser", { ...fromData });
       alert("Compte ajouté avec succés !");
-      history.push("/components/innerPages/LoginPage");
+      history.push("/components/LoginPage");
     } catch (error) {
       console.log(error);
     }

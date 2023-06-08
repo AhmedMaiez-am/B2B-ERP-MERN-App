@@ -16,8 +16,6 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  DialogContent,
-  DialogContentText,
 } from "@material-ui/core";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -120,7 +118,7 @@ export default ({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-   //confirm momtif selection Dialog
+   //confirm motif selection Dialog
    const handleConfirmMotifSelectionDialog = () => {
     setOpen(true);
   };

@@ -74,20 +74,20 @@ export default () => {
   
   const navLinks = [
     <NavLinks key={1}>
-      <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
-      <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
-      <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
-      <NavLink href="/components/blocks/Hero/Avoirs">Avoirs</NavLink>
+      <NavLink href="/components/ListeCommandes">Commandes</NavLink>
+      <NavLink href="/components/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/Panier">Panier</NavLink>
+      <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/blocks/Hero/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
-      <PrimaryLink style={{ borderRadius: "50px" }} href="/components/innerPages/LoginPage" onClick={handleLogout}>Se Déconnecter</PrimaryLink>
+      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+      <PrimaryLink style={{ borderRadius: "50px" }} href="/components/LoginPage" onClick={handleLogout}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
   
   const history = useHistory();
   const handleButtonClick = () => {
-    history.push('/components/blocks/Hero/Panier');
+    history.push('/components/Panier');
   };
   return (
     <div>

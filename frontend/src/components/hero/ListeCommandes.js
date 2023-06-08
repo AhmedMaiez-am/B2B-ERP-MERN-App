@@ -82,13 +82,13 @@ export default ({
   );
   const navLinks = [
     <NavLinks key={1}>
-      <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
-      <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
-      <NavLink href="/components/blocks/Hero/ListeFactures">Factures</NavLink>
-      <NavLink href="/components/blocks/Hero/Avoirs">Avoirs</NavLink>
+      <NavLink href="/components/ListeArticles">Articles</NavLink>
+      <NavLink href="/components/Panier">Panier</NavLink>
+      <NavLink href="/components/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/Avoirs">Avoirs</NavLink>
       <PrimaryLinkChat
         style={{ borderRadius: "50px" }}
-        href="/components/blocks/Hero/Chat"
+        href="/components/Chat"
       >
         Chat <ChatOutlinedIcon />
       </PrimaryLinkChat>&nbsp;
@@ -138,7 +138,7 @@ export default ({
     localStorage.setItem("No", No);
 
     // Navigate to the second component
-    history.push("/components/blocks/Hero/DetailsCommande");
+    history.push("/components/DetailsCommande");
   };
 
   // Empty cart
@@ -410,7 +410,7 @@ export default ({
           </Button>
           <Button
             onClick={handleDeleteCart}
-            href="/components/blocks/Hero/ListeCommandes"
+            href="/components/ListeCommandes"
             variant="contained"
             color="secondary"
             style={{

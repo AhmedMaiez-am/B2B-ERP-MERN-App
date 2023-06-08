@@ -74,7 +74,7 @@ const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
 export default ({
   description = "Consulter la liste complète des articles passés en commande, vérifier leurs quatités et prix afin de valider votre commande  ",
   primaryButtonText = "Panier",
-  primaryButtonUrl = "/components/blocks/Hero/Panier",
+  primaryButtonUrl = "/components/Panier",
   imageCss = null,
   imageDecoratorBlob = false,
 }) => {
@@ -510,7 +510,7 @@ export default ({
           </Button>
           <Button
             onClick={() => handleDeleteCart()}
-            href="/components/blocks/Hero/ListeCommandes"
+            href="/components/ListeCommandes"
             variant="contained"
             color="secondary"
             style={{

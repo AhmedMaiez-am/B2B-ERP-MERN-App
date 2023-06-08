@@ -39,10 +39,11 @@ export default () => {
             <LogoText>Smart-BS</LogoText>
           </LogoContainer>
           <LinksContainer>
-            <Link href="/components/blocks/Hero/ListeArticles">Articles</Link>
-            <Link href="/components/blocks/Hero/ListeCommandes">Commandes</Link>
-            <Link href="/components/blocks/Hero/Panier">Panier</Link>
-            <Link href="/components/blocks/Hero/ListeFactures">Factures</Link>
+            <Link href="/components/ListeArticles">Articles</Link>
+            <Link href="/components/ListeCommandes">Commandes</Link>
+            <Link href="/components/Panier">Panier</Link>
+            <Link href="/components/ListeFactures">Factures</Link>
+            <Link href="/components/Avoirs">Avoirs</Link>
           </LinksContainer>
           <SocialLinksContainer>
             <SocialLink href="https://facebook.com">

@@ -68,14 +68,14 @@ export default ({
   
   navLinks = [
     <NavLinks key={1}>
-      <NavLink href="/components/blocks/Hero/ListeCommandes">Commandes</NavLink>
-      <NavLink href="/components/blocks/Hero/Panier">Panier</NavLink>
-      <NavLink href="/components/blocks/Hero/ListeArticles">Articles</NavLink>
-      <NavLink href="/components/blocks/Hero/Avoirs">Avoirs</NavLink>
+      <NavLink href="/components/ListeCommandes">Commandes</NavLink>
+      <NavLink href="/components/Panier">Panier</NavLink>
+      <NavLink href="/components/ListeArticles">Articles</NavLink>
+      <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/blocks/Hero/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
-    <PrimaryLink style={{ borderRadius: "50px" }} href="/components/innerPages/LoginPage">Se Déconnecter</PrimaryLink>
+    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+    <PrimaryLink style={{ borderRadius: "50px" }} href="/components/LoginPage">Se Déconnecter</PrimaryLink>
   </NavLinks>
   ],
   heading = (
@@ -87,9 +87,9 @@ export default ({
     </>
   ),
   description = "Veuillez trouvez ci-dessous la liste des commandes validés par le fournisseur. Si vous voulez passer une nouvelle commande ou vérifier vos commandes existantes :",
-  primaryActionUrl = "/components/blocks/Hero/ListeArticles",
+  primaryActionUrl = "/components/ListeArticles",
   primaryActionText = "Articles",
-  secondaryActionUrl = "/components/blocks/Hero/ListeCommandes",
+  secondaryActionUrl = "/components/ListeCommandes",
   secondaryActionText = "Commandes",
 }) => {
   const [factureData, setFactureData] = React.useState(null);
@@ -117,7 +117,7 @@ export default ({
     localStorage.setItem('NoFacture', No);
 
     // Navigate to the second component
-    history.push('/components/blocks/Hero/DetailsFacture');
+    history.push('/components/DetailsFacture');
   };
   return (
     <>

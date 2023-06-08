@@ -90,7 +90,7 @@ export default ({
   heading = "Votre panier d'articles",
   description = "Consulter votre panier afin de vérifier les informations nécessaires pour accéder à finaliser votre commande, si vous voulez ajouter d'autres articles : ",
   primaryButtonText = "Articles",
-  primaryButtonUrl = "/components/blocks/Hero/ListeArticles",
+  primaryButtonUrl = "/components/ListeArticles",
   watchVideoButtonText = "Consulter Panier",
   imageSrc = DesignIllustration,
   imageCss = null,
