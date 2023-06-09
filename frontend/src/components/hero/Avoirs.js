@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import { Container, ContentWithPaddingXl } from "components/misc/Layouts";
 import tw from "twin.macro";
@@ -9,6 +9,7 @@ import Footer from "components/footers/MainFooter.js";
 import { SectionHeading } from "components/misc/Headings";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+
 
 
 const HeadingRow = tw.div`flex`;
@@ -68,7 +69,6 @@ const PostList = ({
     },
   ],
 }) => {
-  const [visible, setVisible] = useState(7);
   const [factureData, setFactureData] = React.useState(null);
 
   //get the list of all commandes validés (facture enregistrées) assigned to the connected user
@@ -108,7 +108,7 @@ const PostList = ({
               <Heading>{headingText}</Heading>
             </HeadingRow>
             <Posts>
-              {posts.slice(0, visible).map((post, index) => (
+              {posts.map((post, index) => (
                 <PostContainer key={index} featured={post.featured}>
                   <Post className="group">
                     <Image imageSrc={post.imageSrc} />

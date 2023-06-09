@@ -83,7 +83,7 @@ export default ({
       <NavLink href="/components/ListeCommandes">Commandes</NavLink>
       <NavLink href="/components/Panier">Panier</NavLink>
       <NavLink href="/components/ListeFactures">Factures</NavLink>
-      <NavLink href="/components/ArticlesAvoir">Avoirs</NavLink>
+      <NavLink href="/components/Avoirs">Avoirs</NavLink>
       <NavLink href="/components/ListeArticles" tw="lg:ml-12!">
         Articles
       </NavLink>

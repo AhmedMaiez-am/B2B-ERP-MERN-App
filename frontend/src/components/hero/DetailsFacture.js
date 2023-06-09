@@ -188,7 +188,6 @@ const exportToPDF = () => {
 
   // Get the table dimensions
   const tableWidth = table.offsetWidth;
-  const tableHeight = table.offsetHeight;
 
   // Set the initial position for rendering the table
   let x = 10;

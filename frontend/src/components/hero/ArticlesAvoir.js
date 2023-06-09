@@ -83,7 +83,6 @@ const PostList = ({
     },
   ],
 }) => {
-  const [visible, setVisible] = useState(7);
   const [ligneArticleAvoir, setLigneArticleAvoir] = React.useState(null);
   const [selectedLigneNos, setSelectedLigneNos] = useState([]);
   const [open, setOpen] = React.useState(false);
@@ -141,7 +140,7 @@ const PostList = ({
               <Heading>{headingText}</Heading>
             </HeadingRow>
             <Posts>
-              {posts.slice(0, visible).map((post, index) => (
+              {posts.map((post, index) => (
                 <PostContainer key={index} featured={post.featured}>
                   <Post className="group">
                     <Image imageSrc={post.imageSrc} />
@@ -172,22 +171,22 @@ const PostList = ({
             </Posts>
             <br />
             <br />
-            <div class="policy-container">
-              <div class="policy-table">
-                <div class="headings">
-                  <span class="heading">N° Facture</span>
-                  <span class="heading">N° Article</span>
-                  <span class="heading">Description</span>
-                  <span class="heading">Code Magasin</span>
-                  <span class="heading">Code Unité</span>
-                  <span class="heading">Prix Unitaire HT</span>
-                  <span class="heading">Montant Ligne HT</span>
-                  <span class="heading">Quantité</span>
-                  <span class="heading">Action</span>
+            <div className="policy-container">
+              <div className="policy-table">
+                <div className="headings">
+                  <span className="heading">N° Facture</span>
+                  <span className="heading">N° Article</span>
+                  <span className="heading">Description</span>
+                  <span className="heading">Code Magasin</span>
+                  <span className="heading">Code Unité</span>
+                  <span className="heading">Prix Unitaire HT</span>
+                  <span className="heading">Montant Ligne HT</span>
+                  <span className="heading">Quantité</span>
+                  <span className="heading">Retourner</span>
                 </div>
                 {ligneArticleAvoir &&
                   ligneArticleAvoir.map((ligne, index) => (
-                    <div key={index} class="policy">
+                    <div key={index} className="policy">
                       <span>{ligne.Document_No}</span>
                       <span>{ligne.No}</span>
                       <span>{ligne.Description}</span>

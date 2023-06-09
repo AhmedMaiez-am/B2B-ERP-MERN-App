@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import { Container, ContentWithPaddingXl } from "components/misc/Layouts";
 import tw from "twin.macro";
@@ -67,7 +67,6 @@ const PostList = ({
     },
   ],
 }) => {
-  const [visible, setVisible] = useState(7);
 
 
   return (
@@ -80,7 +79,7 @@ const PostList = ({
               <Heading>{headingText}</Heading>
             </HeadingRow>
             <Posts>
-              {posts.slice(0, visible).map((post, index) => (
+              {posts.map((post, index) => (
                 <PostContainer key={index} featured={post.featured}>
                   <Post className="group">
                     <Image imageSrc={post.imageSrc} />

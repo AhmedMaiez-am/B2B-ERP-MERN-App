@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 
@@ -20,6 +20,7 @@ import Avoirs from "components/hero/Avoirs";
 import ArticlesAvoir from "components/hero/ArticlesAvoir.js";
 import ComfirmAvoir from "components/hero/ConfirmAvoir.js";
 import MotifAvoir from "components/hero/MotifAvoir.js";
+import Loading from "components/hero/Loading.js";
 
 
 import LandingPageFooter from "components/footers/LandingPageFooter.js";
@@ -114,6 +115,18 @@ export const components = {
 
 export default () => {
   const { name } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false); 
+    }, 1500); 
+  }, []);
+
+  
+  if (isLoading) {
+    return <Loading />;
+  }
 
   try {
     const Component = components[name].component;
@@ -131,3 +144,4 @@ export default () => {
     return <div>Error: Component Not Found</div>;
   }
 };
+
