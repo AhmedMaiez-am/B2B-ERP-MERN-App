@@ -9,8 +9,7 @@ import Footer from "components/footers/MainFooter.js";
 import { SectionHeading } from "components/misc/Headings";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
-
+import { Button } from "@material-ui/core";
 
 const HeadingRow = tw.div`flex`;
 const Heading = tw(SectionHeading)`text-gray-900`;
@@ -88,14 +87,18 @@ const PostList = ({
     sendConnectedUserData();
   }, []);
 
-
   const history = useHistory();
   const handleDetailsClick1 = (No) => {
     // Store No in localStorage
-    localStorage.setItem('NoAvoir', No);
+    localStorage.setItem("NoAvoir", No);
 
     // Navigate to the second component
-    history.push('/components/ArticlesAvoir');
+    history.push("/components/ArticlesAvoir");
+  };
+
+  const handleSavedAvoirsRedirect = () => {
+    // Navigate to the saved avoirs component
+    history.push("/components/SavedAvoirs");
   };
 
   return (
@@ -117,7 +120,28 @@ const PostList = ({
                       <CreationDate>{getCurrentDate()}</CreationDate>
                       <Title>{post.title}</Title>
                       {post.featured && post.description && (
-                        <Description>{post.description}</Description>
+                        <Description>
+                          {post.description} <br />
+                          Vous pouvez consulter la liste de vos avoirs récents
+                          qui ont été validés par le fournisseur :
+                          <Button
+                            variant="outlined"
+                            style={{
+                              borderRadius: "50px",
+                              display: "flex",
+                              alignItems: "center",
+                              padding: "2px 40px",
+                              borderColor: "#8f34eb",
+                              borderWidth: "2px",
+                              whiteSpace: "nowrap",
+                            }}
+                            onClick={() => handleSavedAvoirsRedirect()}
+                          >
+                            <p style={{ color: "#8f34eb" }}>
+                              <strong>Avoirs Validés</strong>
+                            </p>
+                          </Button>
+                        </Description>
                       )}
                     </Info>
                   </Post>
@@ -152,7 +176,12 @@ const PostList = ({
                         </p>
                         <p1>{ligne.Posting_Date}</p1>
                         <br />
-                        <a style={{ borderRadius: "50px" }} onClick={() => handleDetailsClick1(ligne.No)}>Articles</a>
+                        <a
+                          style={{ borderRadius: "50px" }}
+                          onClick={() => handleDetailsClick1(ligne.No)}
+                        >
+                          Articles
+                        </a>
                       </div>
                     </div>
                   </div>

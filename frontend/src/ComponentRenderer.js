@@ -20,6 +20,7 @@ import Avoirs from "components/hero/Avoirs";
 import ArticlesAvoir from "components/hero/ArticlesAvoir.js";
 import ComfirmAvoir from "components/hero/ConfirmAvoir.js";
 import MotifAvoir from "components/hero/MotifAvoir.js";
+import SavedAvoirs from "components/hero/SavedAvoirs.js";
 import Loading from "components/hero/Loading.js";
 
 
@@ -110,6 +111,11 @@ export const components = {
     name: "MainFooter",
     component: MainFooter,
     url: "/components/MainFooter",
+  },
+  SavedAvoirs: {
+    name: "SavedAvoirs",
+    component: SavedAvoirs,
+    url: "/components/SavedAvoirs",
   },
 };
 

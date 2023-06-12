@@ -180,4 +180,115 @@ router.post("/create", async (req, res) => {
   }
 });
 
+
+// Route to get all user saved avoirs data
+router.get("/getAll", async (req, res) => {
+  try {
+    const userNo = req.query.userNo; // userNo is sent as a query parameter
+    const avoirsString = await getAllAvoirsFromBC(userNo);
+    const avoir = JSON.parse(avoirsString);
+    res.json(avoir);
+  } catch (error) {
+    console.error(
+      "Error retrieving commande data from Business Central:",
+      error.message
+    );
+    res
+      .status(500)
+      .send("Error retrieving commande data from Business Central");
+  }
+});
+
+
+async function getAllAvoirsFromBC(userNo) {
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
+  const domain = process.env.DOMAIN;
+  const workstation = process.env.WORKSTATION;
+  const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
+  const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/SavedAvoirs`;
+
+  const options = {
+    url: url,
+    username: username,
+    password: password,
+    workstation: workstation,
+    domain: domain,
+  };
+
+  return new Promise((resolve, reject) => {
+    httpntlm.get(options, (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        try {
+          const avoirs = JSON.parse(res.body).value;
+          const filteredAvoirs = avoirs.filter((av) => av.SellToPhoneNo === userNo);
+          resolve(JSON.stringify(filteredAvoirs));
+        } catch (error) {
+          console.error('Error parsing or filtering avoirs:', error);
+          reject(error);
+        }
+      }
+    });
+  });
+}
+
+
+
+// Route to get lastest lignes Avoir data
+router.get("/getLignes", async (req, res) => {
+  try {
+    const avNo = req.query.avNo; // avNo is sent as a query parameter
+    const lignesAvoirstring = await getLignesAvoirFromBC(avNo);
+    const lignesAvoir = JSON.parse(lignesAvoirstring);
+    res.json(lignesAvoir);
+  } catch (error) {
+    console.error(
+      "Error retrieving Avoir data from Business Central:",
+      error.message
+    );
+    res
+      .status(500)
+      .send("Error retrieving Avoir data from Business Central");
+  }
+});
+
+//get filtered list of lignes Avoirs
+async function getLignesAvoirFromBC(avNo) {
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
+  const domain = process.env.DOMAIN;
+  const workstation = process.env.WORKSTATION;
+  const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
+  const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/LignesSavedAvoirs`;
+
+  const options = {
+    url: url,
+    username: username,
+    password: password,
+    workstation: workstation,
+    domain: domain,
+  };
+
+  return new Promise((resolve, reject) => {
+    httpntlm.get(options, (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        try {
+          const lignesAvoirs = JSON.parse(res.body).value;
+          const filteredLignesAvoirs = lignesAvoirs.filter((fac) => fac.Document_No === avNo);
+          
+          resolve(JSON.stringify(filteredLignesAvoirs));
+        } catch (error) {
+          console.error('Error parsing or filtering Avoirs:', error);
+          reject(error);
+        }
+      }
+    });
+  });
+}
 module.exports = router;

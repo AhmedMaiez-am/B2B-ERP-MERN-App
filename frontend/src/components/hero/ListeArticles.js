@@ -108,7 +108,7 @@ export default () => {
               </LeftColumn>
               <RightColumn>
                 <StyledResponsiveVideoEmbed
-                  url="https://smartbs.webmedia-dev.ovh/wp-content/uploads/2022/04/smart-sbs.mp4?title=0&portrait=0&byline=0&autoplay=1&responsive=1"
+                  url="https://smart-bs.com.tn/wp-content/uploads/2022/04/smart-sbs.mp4"
                   background="transparent"
                 />
               </RightColumn>

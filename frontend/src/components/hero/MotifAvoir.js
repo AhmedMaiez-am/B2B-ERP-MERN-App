@@ -186,13 +186,11 @@ export default ({
     };
 
     try {
-      // Send data to the crate entete avoir
+      // Send data to the create entete avoir
       await axios.post("/avoir/create", dataToSend);
-
-      // alert("Retour effectué avec succès !");
-      // history.push("/components/innerPages/ListCitoyenPage");
+       alert("Retour effectué avec succès !");
+       history.push("/components/SavedAvoirs");
     } catch (error) {
-      // Handle error
       console.error(error);
     }
   };
