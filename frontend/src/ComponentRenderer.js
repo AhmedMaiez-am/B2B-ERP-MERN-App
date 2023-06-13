@@ -21,6 +21,8 @@ import ArticlesAvoir from "components/hero/ArticlesAvoir.js";
 import ComfirmAvoir from "components/hero/ConfirmAvoir.js";
 import MotifAvoir from "components/hero/MotifAvoir.js";
 import SavedAvoirs from "components/hero/SavedAvoirs.js";
+import AdminClients from "components/tables/AdminClients";
+import DetailsClient from "components/hero/DetailsClient";
 import Loading from "components/hero/Loading.js";
 
 
@@ -117,6 +119,16 @@ export const components = {
     component: SavedAvoirs,
     url: "/components/SavedAvoirs",
   },
+  AdminClients: {
+    name: "AdminClients",
+    component: AdminClients,
+    url: "/components/AdminClients",
+  },
+  DetailsClient: {
+    name: "DetailsClient",
+    component: DetailsClient,
+    url: "/components/DetailsClient",
+  },
 };
 
 export default () => {
@@ -126,7 +138,7 @@ export default () => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false); 
-    }, 1500); 
+    }, 500); 
   }, []);
 
   

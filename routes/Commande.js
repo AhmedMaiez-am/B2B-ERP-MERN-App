@@ -168,7 +168,7 @@ async function deleteCommandeFromBC(commandeNo, commandeType) {
 router.delete("/delete1", async (req, res) => {
   try {
     const commandeData = req.body; // Access the JSON array sent in the request body
-    const firstCommande = commandeData[0]; // Assuming you want to access the first element in the array
+    const firstCommande = commandeData[0];
     const commandeNo = firstCommande.No; 
     const commandeType = firstCommande.Document_Type;
     

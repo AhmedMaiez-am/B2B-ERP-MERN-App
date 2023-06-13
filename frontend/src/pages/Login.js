@@ -106,7 +106,6 @@ function Login ({
 
 
 return (
-  <AnimationRevealPage>
     <Container>
       <Content>
         <MainContainer>
@@ -186,7 +185,6 @@ return (
         </IllustrationContainer>
       </Content>
     </Container>
-  </AnimationRevealPage>
 );
 }
 Login.propTypes = {

@@ -9,6 +9,7 @@ const enteteRouter = require("./routes/EnteteVenteRoutes");
 const commandeRouter = require("./routes/Commande");
 const factureRouter = require("./routes/Factures");
 const avoirRouter = require("./routes/AvoirRoutes");
+const clientRouter = require ("./routes/ClientsRoutes");
 const StripeRouter = require("./routes/Stripe");
 const { Server } = require("socket.io");
 
@@ -46,6 +47,7 @@ app.use("/enteteVentes", enteteRouter);
 app.use("/commande", commandeRouter);
 app.use("/facture", factureRouter);
 app.use("/avoir", avoirRouter);
+app.use("/clients", clientRouter);
 app.use("/api/stripe", StripeRouter);
 
 app.get("*", (req, res) => {

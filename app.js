@@ -12,6 +12,7 @@ var enteteRouter = require("./routes/EnteteVenteRoutes");
 var commandeRouter = require("./routes/Commande");
 var factureRouter = require("./routes/Factures");
 var avoirRouter = require ("./routes/AvoirRoutes");
+var clientRouter = require ("./routes/ClientsRoutes");
 var StripeRouter = require("./routes/Stripe");
 
 var app = express();
@@ -58,6 +59,7 @@ app.use("/enteteVentes", enteteRouter);
 app.use("/commande", commandeRouter);
 app.use("/facture", factureRouter);
 app.use("/avoir", avoirRouter);
+app.use("/clients", clientRouter);
 app.use("/api/stripe", StripeRouter);
 
 // catch 404 and forward to error handler
