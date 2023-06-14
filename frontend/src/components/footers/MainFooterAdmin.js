@@ -41,6 +41,7 @@ export default () => {
           <LinksContainer>
             <Link href="/components/AdminClients">Clients</Link>
             <Link href="/components/SignupPage">Ajouter Client</Link>
+            <Link href="/components/DemandesComptes">Demandes</Link>
           </LinksContainer>
           <SocialLinksContainer>
             <SocialLink href="https://facebook.com">

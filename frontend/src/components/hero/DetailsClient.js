@@ -47,7 +47,6 @@ export default ({textOnLeft = false}) => {
     
         fetchCommandeData();
       }, []);
-console.log(clientData);
 const clients = clientData.length > 0
 ? [
     { key: clientData[0].No, value: "Référence:" },

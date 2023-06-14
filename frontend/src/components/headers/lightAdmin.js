@@ -79,6 +79,7 @@ export default ({
     <NavLinks key={1}>
       <NavLink href="/components/AdminClients">Clients</NavLink>
       <NavLink href="/components/SignupPage">Ajouter Client</NavLink>
+      <NavLink href="/components/DemandesComptes">Demandes</NavLink>
       <PrimaryLinkChat
       href ="/components/Chat"
         style={{ borderRadius: "50px" }}

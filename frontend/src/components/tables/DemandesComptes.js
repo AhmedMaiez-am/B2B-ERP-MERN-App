@@ -4,10 +4,9 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import Header from "../headers/lightAdmin.js";
 import Footer from "../footers/MainFooterAdmin.js";
 import axios from "axios";
-import LoupeOutlinedIcon from "@mui/icons-material/LoupeOutlined";
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import PlaylistAddCheckCircleOutlinedIcon from '@mui/icons-material/PlaylistAddCheckCircleOutlined';
+import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import FolderDeleteOutlinedIcon from "@mui/icons-material/FolderDeleteOutlined";
@@ -21,7 +20,6 @@ import {
 } from "@material-ui/core";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { useHistory } from "react-router-dom";
 
 const CenteredContainer = styled.div`
   display: flex;
@@ -58,7 +56,7 @@ export default () => {
   React.useEffect(() => {
     const fetchClientsData = async () => {
       try {
-        const response = await axios.get("/clients/getAll");
+        const response = await axios.get("/userReq/userRequests");
         setClientData(response.data); // Store the avoirs response data
       } catch (error) {
         console.error("Error:", error);
@@ -68,21 +66,21 @@ export default () => {
     fetchClientsData();
   }, []);
 
-  //emptyClientDialog
-  const handleDeleteClientDialog = (ligne) => {
+  //delete request
+  const handleDeleteClientDialog = async (ligne) => {
     setSelectedLigne(ligne);
     setOpen(true);
   };
   //empty client dialog
   const handleDialogClose = () => {
     setSelectedLigne(null);
-    setOpen(false);
+    setOpen(false); 
   };
-  // Delete client
+  // Delete request
   const handleDeleteClient = async () => {
     if (selectedLigne) {
       try {
-        const response = await axios.delete("/clients/delete", {
+        const response = await axios.delete("/userReq/delete", {
           data: [selectedLigne],
         });
         window.location.reload();
@@ -92,14 +90,20 @@ export default () => {
     }
   };
 
-
-  const history = useHistory();
-  const handleDetailsClick = (No) => {
-    // Store No in localStorage
-    localStorage.setItem("NoClient", No);
-    // Navigate to the second component
-    history.push("/components/DetailsClient");
-  };
+    // Validate request
+    const handleValidateClick = async (ligne) => {
+      setSelectedLigne(ligne);
+      if (selectedLigne) {
+        try {
+          const response = await axios.post("/userReq/validate", {
+            data: [selectedLigne],
+          });
+          window.location.reload();
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    };
 
   return (
     <>
@@ -107,14 +111,14 @@ export default () => {
       <br />
       <br />
       <br />
-      <h1>Liste des clients</h1>
+      <h1>Liste des demandes de comptes</h1>
       <h2>
-        Consulter et gérer les clients, ci vous voulez enregistrer un nouveau
-        client :{" "}
+        Consulter et gérer les demandes de création des compte, ci vous voulez consulter et gérer la liste des clients existants :
+        {" "}
       </h2>
       <CenteredContainer>
         <Button
-          href="/components/SignupPage"
+          href="/components/AdminClients"
           variant="contained"
           color="inherit"
           style={{
@@ -124,28 +128,8 @@ export default () => {
           }}
         >
           {" "}
-          <PersonAddAltOutlinedIcon /> &nbsp;
-          <strong>Nouveau Client</strong>
-        </Button>
-      </CenteredContainer>
-      <br/>
-        <h2>
-        Consulter et gérer les demandes de création de comptes :{" "}
-      </h2>
-      <CenteredContainer>
-        <Button
-          href="/components/DemandesComptes"
-          variant="contained"
-          color="inherit"
-          style={{
-            backgroundColor: "#25bac2",
-            color: "#FFF",
-            borderRadius: "50px",
-          }}
-        >
-          {" "}
-          <PlaylistAddCheckCircleOutlinedIcon /> &nbsp;
-          <strong>Demandes</strong>
+          <ListAltOutlinedIcon /> &nbsp;
+          <strong>Clients</strong>
         </Button>
       </CenteredContainer>
       <br />
@@ -158,7 +142,6 @@ export default () => {
               <th>N° Téléphone</th>
               <th className="email-column">E-Mail</th>
               <th>Adresse</th>
-              <th>Solde Ventes</th>
               <th>Groupe Marché</th>
               <th>Groupe Marché TVA</th>
               <th>Groupe Client</th>
@@ -175,26 +158,25 @@ export default () => {
             {ClientData &&
               ClientData.map((ligne, index) => (
                 <tr>
-                  <td>{ligne.No}</td>
-                  <td>{ligne.Name}</td>
-                  <td>{ligne.Phone_No}</td>
-                  <td className="email-column">{ligne.E_Mail}</td>
-                  <td>{ligne.Address}</td>
-                  <td>{ligne.TotalSales2}</td>
-                  <td>{ligne.Gen_Bus_Posting_Group}</td>
-                  <td>{ligne.VAT_Bus_Posting_Group}</td>
-                  <td>{ligne.Customer_Posting_Group}</td>
-                  <td>{ligne.Payment_Terms_Code}</td>
-                  <td>{ligne.Payment_Method_Code}</td>
+                  <td>{ligne.no}</td>
+                  <td>{ligne.name}</td>
+                  <td>{ligne.tel}</td>
+                  <td className="email-column">{ligne.email}</td>
+                  <td>{ligne.address}</td>
+                  <td>{ligne.genBusGroup}</td>
+                  <td>{ligne.codeTVA}</td>
+                  <td>{ligne.customerGroup}</td>
+                  <td>{ligne.paymentTerm}</td>
+                  <td>{ligne.paymentCode}</td>
                   <td>
-                    <Tooltip title="Détails">
+                    <Tooltip title="Valider">
                       <IconButton
                         variant="outlined"
                         color="primary"
-                        style={{ color: "#44ecf2" }}
-                        onClick={() => handleDetailsClick(ligne.No)}
+                        style={{ color: "#4df244" }}
+                        onClick={() => handleValidateClick(ligne)}
                       >
-                        <LoupeOutlinedIcon />
+                        <CheckCircleOutlinedIcon />
                       </IconButton>
                     </Tooltip>
                     &nbsp;
@@ -219,7 +201,7 @@ export default () => {
         {`
 h1 {
   font-size: 30px;
-  color: #11f218;
+  color: #11e7f2;
   text-transform: uppercase;
   font-weight: 500;
   text-align: center;
@@ -322,14 +304,16 @@ body {
           }}
         >
           <FolderDeleteOutlinedIcon /> &nbsp;
-          {"Confirmer la suppression du client"}
+          {"Confirmer le refus de la demande"}
         </DialogTitle>
         <DialogContent style={{ borderRadius: "20px" }}>
           <DialogContentText
             id="alert-dialog-description"
             style={{ color: "#4F4F4F" }}
           >
-            Voulez vous supprimer ce client, il n'aura plus l'accés au plateforme.
+            Voulez vous refuser cette demande, l'utilisateur {ClientData !== null && (
+                      <div><strong>{ClientData.map((client, index) => client.name)}</strong></div>
+                    )} n'aura pas l'accés au plateforme.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -347,7 +331,6 @@ body {
           </Button>
           <Button
             onClick={handleDeleteClient}
-            href="/components/AdminClients"
             variant="contained"
             color="secondary"
             style={{
@@ -356,7 +339,7 @@ body {
               borderRadius: "50px",
             }}
           >
-            <strong>Supprimer</strong>
+            <strong>Refuser</strong>
           </Button>
         </DialogActions>
       </Dialog>

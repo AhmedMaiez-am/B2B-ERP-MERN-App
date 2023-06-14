@@ -23,6 +23,8 @@ import MotifAvoir from "components/hero/MotifAvoir.js";
 import SavedAvoirs from "components/hero/SavedAvoirs.js";
 import AdminClients from "components/tables/AdminClients";
 import DetailsClient from "components/hero/DetailsClient";
+import AccountRequest from "pages/AccountRequest";
+import DemandesComptes from "components/tables/DemandesComptes";
 import Loading from "components/hero/Loading.js";
 
 
@@ -128,6 +130,16 @@ export const components = {
     name: "DetailsClient",
     component: DetailsClient,
     url: "/components/DetailsClient",
+  },
+  AccountRequest: {
+    name: "AccountRequest",
+    component: AccountRequest,
+    url: "/components/AccountRequest",
+  },
+  DemandesComptes: {
+    name: "DemandesComptes",
+    component: DemandesComptes,
+    url: "/components/DemandesComptes",
   },
 };
 

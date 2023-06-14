@@ -13,6 +13,7 @@ var commandeRouter = require("./routes/Commande");
 var factureRouter = require("./routes/Factures");
 var avoirRouter = require ("./routes/AvoirRoutes");
 var clientRouter = require ("./routes/ClientsRoutes");
+var userRequestRouter = require("./routes/UserRequest");
 var StripeRouter = require("./routes/Stripe");
 
 var app = express();
@@ -60,6 +61,7 @@ app.use("/commande", commandeRouter);
 app.use("/facture", factureRouter);
 app.use("/avoir", avoirRouter);
 app.use("/clients", clientRouter);
+app.use("/userReq", userRequestRouter);
 app.use("/api/stripe", StripeRouter);
 
 // catch 404 and forward to error handler

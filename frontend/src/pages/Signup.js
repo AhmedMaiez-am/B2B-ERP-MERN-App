@@ -16,12 +16,12 @@ import { useHistory } from "react-router-dom";
 const Container = tw(
   ContainerBase
 )`min-h-screen bg-gradient-to-t from-primary-300 to-primary-900 text-white font-medium flex justify-center -m-8`;
-const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-[#060254] text-gray-100 shadow sm:rounded-lg flex justify-center flex-1`;
+const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-[#060254] text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
 const MainContainer = tw.div`lg:w-1/2 xl:w-5/12 p-6 sm:p-12`;
 const LogoLink = tw.a``;
 const LogoImage = tw.img`h-12 mx-auto`;
 const MainContent = tw.div`mt-12 flex flex-col items-center`;
-const Heading = tw.h1`text-2xl xl:text-3xl font-extrabold`;
+const Heading = tw.h1`text-2xl xl:text-3xl font-extrabold text-center text-gray-100`;
 const FormContainer = tw.div`w-full flex-1 mt-8`;
 
 const DividerTextContainer = tw.div`my-12 border-b text-center relative`;
@@ -46,12 +46,12 @@ const IllustrationImage = styled.div`
   ${(props) => `background-image: url("${props.imageSrc}");`}
   ${tw`m-12 xl:m-16 w-full max-w-lg bg-contain bg-center bg-no-repeat`}
 `;
-const PlaceholderLabel = tw.label`text-sm font-medium text-gray-600 mt-3`;
+const PlaceholderLabel = tw.label`text-sm font-medium text-gray-500 mt-3`;
 function Signup({
   logoLinkUrl = "#",
   illustrationImageSrc = illustration,
   headingText = "Bienvenue à votre espace de gestion des ressources",
-  submitButtonText = "Créer Compte",
+  submitButtonText = "Ajouter Compte",
   SubmitButtonIcon = SignUpIcon,
   signInUrl = "/components/LoginPage",
 }) {
@@ -193,7 +193,7 @@ function Signup({
               <Heading>{headingText}</Heading>
               <FormContainer>
                 <DividerTextContainer>
-                  <DividerText>Créer votre compte maintenant</DividerText>
+                  <DividerText>Veuillez remplir le formulaire afin d'ajouter un nouveau compte utilisateur</DividerText>
                 </DividerTextContainer>
                 <Form onSubmit={(e) => onsubmit(e)}>
                   <PlaceholderLabel htmlFor="no">No° :</PlaceholderLabel>
