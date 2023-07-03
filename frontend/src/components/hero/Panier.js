@@ -5,9 +5,9 @@ import tw from "twin.macro";
 import { css } from "styled-components/macro";
 
 import PanierCols from "components/faqs/PanierCols.js";
-import Footer from "components/footers/LandingPageFooter";
+import Footer from "components/footers/MainFooter.js";
 import Header from "../headers/light.js";
-import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
+import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import { SectionHeading as HeadingTitle } from "../misc/Headings.js";
 import ReactModalAdapter from "../../helpers/ReactModalAdapter.js";
 
@@ -56,25 +56,31 @@ const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
 
 const StyledModal = styled(ReactModalAdapter)`
   &.mainHeroModal__overlay {
-    ${tw`fixed inset-0 z-50`}
+    ${tw`fixed inset-0 z-50 bg-transparent backdrop-blur-md`}
+    backdrop-filter: blur(8px); /* Standard syntax */
+    --webkit-backdrop-filter: blur(8px); /* Vendor-specific syntax */
   }
   &.mainHeroModal__content {
-    ${tw`xl:mx-auto m-4 sm:m-16 max-w-screen-xl absolute inset-0 flex justify-center items-center rounded-lg bg-gray-200 outline-none`}
+    ${tw`xl:mx-auto m-4 sm:m-16 max-w-screen-xl absolute inset-0 flex justify-center items-center rounded-lg outline-none`}
+    background-color: rgba(255, 255, 255, 0.8); /* Add transparency to the background */
   }
   .content {
-    ${tw`w-full lg:p-16 overflow-y-auto  max-h-[80vh]`}
+    ${tw`w-full lg:p-16 overflow-y-auto max-h-[80vh]`}
   }
 `;
 
 const StyledModal1 = styled(ReactModalAdapter)`
   &.mainHeroModal__overlay {
-    ${tw`fixed inset-0 z-50`}
+    ${tw`fixed inset-0 z-50 bg-transparent backdrop-blur-md`}
+    backdrop-filter: blur(8px); /* Standard syntax */
+    --webkit-backdrop-filter: blur(8px); /* Vendor-specific syntax */
   }
   &.mainHeroModal__content {
-    ${tw`xl:mx-auto m-4 sm:m-16 max-w-screen-xl absolute inset-0 flex justify-center items-center rounded-lg bg-red-100 outline-none`}
+    ${tw`xl:mx-auto m-4 sm:m-16 max-w-screen-xl absolute inset-0 flex justify-center items-center rounded-lg outline-none`}
+    background-color: rgba(255, 255, 255, 0.8); /* Add transparency to the background */
   }
   .content {
-    ${tw`w-full lg:p-16 overflow-y-auto  max-h-[80vh]`}
+    ${tw`w-full lg:p-16 overflow-y-auto max-h-[80vh]`}
   }
 `;
 
@@ -84,7 +90,7 @@ export default ({
   heading = "Votre panier d'articles",
   description = "Consulter votre panier afin de vérifier les informations nécessaires pour accéder à finaliser votre commande, si vous voulez ajouter d'autres articles : ",
   primaryButtonText = "Articles",
-  primaryButtonUrl = "/components/blocks/Hero/ListeArticles",
+  primaryButtonUrl = "/components/ListeArticles",
   watchVideoButtonText = "Consulter Panier",
   imageSrc = DesignIllustration,
   imageCss = null,
@@ -101,7 +107,6 @@ export default ({
     setData(panier || []);
   }, []);
 
-
   return (
     <>
       <Header />
@@ -111,7 +116,11 @@ export default ({
             <Heading>{heading}</Heading>
             <Paragraph>{description}</Paragraph>
             <Actions>
-              <PrimaryButton style={{ borderRadius: "50px" }} as="a" href={primaryButtonUrl}>
+              <PrimaryButton
+                style={{ borderRadius: "50px" }}
+                as="a"
+                href={primaryButtonUrl}
+              >
                 {primaryButtonText}
               </PrimaryButton>
               <WatchVideoButton onClick={toggleModal}>
@@ -131,67 +140,81 @@ export default ({
         </TwoColumn>
         <DecoratorBlob1 />
         <div>
-      {data.length > 0 ? (
-        <>
-        <StyledModal
-          closeTimeoutMS={300}
-          className="mainHeroModal"
-          isOpen={modalIsOpen}
-          onRequestClose={toggleModal}
-          shouldCloseOnOverlayClick={true}
-        >
-          <CloseModalButton onClick={toggleModal}>
-            <CloseIcon tw="w-6 h-6" />
-          </CloseModalButton>
-          <div className="content">
-            <Container1>
-              <SingleColumn>
-                <HeadingInfoContainer>
-                  <HeadingTitle>Panier</HeadingTitle>
-                  <HeadingDescription>
-                    Vous trouver ici les informations relatives aux articles que
-                    vous avez ajouté dans votre panier
-                  </HeadingDescription>
-                </HeadingInfoContainer>
-              </SingleColumn>
-              <PanierCols/>
-            </Container1>
-          </div>
-        </StyledModal>
-         </>
-         ) : (
-           <>
-           <StyledModal1
-          closeTimeoutMS={300}
-          className="mainHeroModal"
-          isOpen={modalIsOpen}
-          onRequestClose={toggleModal}
-          shouldCloseOnOverlayClick={true}
-        >
-          <CloseModalButton onClick={toggleModal}>
-            <CloseIcon tw="w-6 h-6" />
-          </CloseModalButton>
-          <div className="content">
-            <Container1>
-              <SingleColumn>
-                <HeadingInfoContainer>
-                  <HeadingTitle>Panier Vide</HeadingTitle>
-                  <HeadingDescription>
-                    Votre panier ne contient pas d'articles, veuillez sélectionner des articles de la liste des articles afin de visualiser leurs détails et confirmer votre choix.
-                  </HeadingDescription><br/><br/>
-                  <PrimaryButton1 style={{ borderRadius: "50px" }} as="a" href={primaryButtonUrl}>
-                {primaryButtonText}
-              </PrimaryButton1>
-                </HeadingInfoContainer>
-              </SingleColumn>
-            </Container1>
-          </div>
-        </StyledModal1>
-         </>
-         )}
-       </div>
+          {data.length > 0 ? (
+            <>
+              <StyledModal
+                closeTimeoutMS={300}
+                className="mainHeroModal"
+                isOpen={modalIsOpen}
+                onRequestClose={toggleModal}
+                shouldCloseOnOverlayClick={true}
+              >
+                <CloseModalButton onClick={toggleModal}>
+                  <CloseIcon tw="w-6 h-6" />
+                </CloseModalButton>
+                <div className="content">
+                  <Container1>
+                    <SingleColumn>
+                      <HeadingInfoContainer>
+                        <HeadingTitle>Panier</HeadingTitle>
+                        <HeadingDescription>
+                          Vous trouver ici les informations relatives aux
+                          articles que vous avez ajouté dans votre panier
+                        </HeadingDescription>
+                      </HeadingInfoContainer>
+                    </SingleColumn>
+                    <PanierCols />
+                  </Container1>
+                </div>
+              </StyledModal>
+            </>
+          ) : (
+            <>
+              <StyledModal1
+                closeTimeoutMS={300}
+                className="mainHeroModal"
+                isOpen={modalIsOpen}
+                onRequestClose={toggleModal}
+                shouldCloseOnOverlayClick={true}
+              >
+                <CloseModalButton onClick={toggleModal}>
+                  <CloseIcon tw="w-6 h-6" />
+                </CloseModalButton>
+                <div className="content">
+                  <Container1>
+                    <SingleColumn>
+                      <HeadingInfoContainer>
+                        <HeadingTitle>Panier Vide</HeadingTitle>
+                        <HeadingDescription>
+                          Votre panier ne contient pas d'articles, veuillez
+                          sélectionner des articles de la liste des articles
+                          afin de visualiser leurs détails et confirmer votre
+                          choix.
+                        </HeadingDescription>
+                        <br />
+                        <br />
+                        <PrimaryButton1
+                          style={{ borderRadius: "50px" }}
+                          as="a"
+                          href={primaryButtonUrl}
+                        >
+                          {primaryButtonText}
+                        </PrimaryButton1>
+                      </HeadingInfoContainer>
+                    </SingleColumn>
+                  </Container1>
+                </div>
+              </StyledModal1>
+            </>
+          )}
+        </div>
       </Container>
-      <Footer/>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Footer />
     </>
   );
 };

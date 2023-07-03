@@ -19,10 +19,7 @@ export default function App() {
     <Provider store={store}>
     <Router>
       <Switch>
-        <Route path="/components/:type/:subtype/:name">
-          <ComponentRenderer />
-        </Route>
-        <Route path="/components/:type/:name">
+        <Route path="/components/:name">
           <ComponentRenderer />
         </Route>
         <Route path="/ForgetPassword">

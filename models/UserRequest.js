@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const UserSchema = new mongoose.Schema({
+const UserRequestSchema = new mongoose.Schema({
   no: String,
   name: String,
   email: String,
@@ -14,4 +14,4 @@ const UserSchema = new mongoose.Schema({
   paymentTerm: String,
   paymentCode: String
 });
-module.exports = User = mongoose.model("user", UserSchema);
+module.exports = UserRequest = mongoose.model("userRequest", UserRequestSchema);

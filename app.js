@@ -8,6 +8,13 @@ var articlesRouter = require("./routes/ArticleRoutes");
 var config = require("./db/config.json");
 
 var usersRouter = require("./routes/users");
+var enteteRouter = require("./routes/EnteteVenteRoutes");
+var commandeRouter = require("./routes/Commande");
+var factureRouter = require("./routes/Factures");
+var avoirRouter = require ("./routes/AvoirRoutes");
+var clientRouter = require ("./routes/ClientsRoutes");
+var userRequestRouter = require("./routes/UserRequest");
+var StripeRouter = require("./routes/Stripe");
 
 var app = express();
 app.use(
@@ -21,16 +28,12 @@ var mongoose = require("mongoose");
 //mongo config
 const connect = mongoose.connect(
   config.mongo.uri,
-
   function (err, db) {
     if (err) {
       throw err;
     }
   }
 );
-
-
-
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -53,6 +56,13 @@ app.use(function (req, res, next) {
 
 app.use("/users", usersRouter);
 app.use("/articles", articlesRouter);
+app.use("/enteteVentes", enteteRouter);
+app.use("/commande", commandeRouter);
+app.use("/facture", factureRouter);
+app.use("/avoir", avoirRouter);
+app.use("/clients", clientRouter);
+app.use("/userReq", userRequestRouter);
+app.use("/api/stripe", StripeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -2,7 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import Footer from "components/footers/LandingPageFooter";
+import Footer from "components/footers/MainFooter.js";
 import ArticlesTable from "components/tables/Articles";
 import { useHistory } from 'react-router-dom';
 import Header, {
@@ -12,8 +12,12 @@ import Header, {
   LogoLink,
   NavToggle,
   DesktopNavLinks,
+  PrimaryLinkChat,
 } from "../headers/light.js";
 import ResponsiveVideoEmbed from "../../helpers/ResponsiveVideoEmbed.js";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+
+
 const StyledHeader = styled(Header)`
   ${tw`pt-8 max-w-none`}
   ${DesktopNavLinks} ${NavLink}, ${LogoLink} {
@@ -70,19 +74,20 @@ export default () => {
   
   const navLinks = [
     <NavLinks key={1}>
-      <NavLink href="#">Commandes</NavLink>
-      <NavLink href="#">Factures et Bandes de livraison</NavLink>
-      <NavLink href="#">Retours et Avoirs</NavLink>
-      <NavLink href="#">Administration</NavLink>
+      <NavLink href="/components/ListeCommandes">Commandes</NavLink>
+      <NavLink href="/components/ListeFactures">Factures</NavLink>
+      <NavLink href="/components/Panier">Panier</NavLink>
+      <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLink style={{ borderRadius: "50px" }} href="/components/innerPages/LoginPage" onClick={handleLogout}>Se Déconnecter</PrimaryLink>
+      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+      <PrimaryLink style={{ borderRadius: "50px" }} href="/components/LoginPage" onClick={handleLogout}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
   
   const history = useHistory();
   const handleButtonClick = () => {
-    history.push('/components/blocks/Hero/Panier');
+    history.push('/components/Panier');
   };
   return (
     <div>
@@ -103,7 +108,7 @@ export default () => {
               </LeftColumn>
               <RightColumn>
                 <StyledResponsiveVideoEmbed
-                  url="https://smartbs.webmedia-dev.ovh/wp-content/uploads/2022/04/smart-sbs.mp4?title=0&portrait=0&byline=0&autoplay=1&responsive=1"
+                  url="https://smart-bs.com.tn/wp-content/uploads/2022/04/smart-sbs.mp4"
                   background="transparent"
                 />
               </RightColumn>

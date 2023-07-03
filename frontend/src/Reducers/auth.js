@@ -12,11 +12,10 @@ import {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: true,
-    user: null,
+    user: localStorage.getItem('user'),
   };
   export default function (state = initialState, action) {
     const { type, payload } = action;
-  
     switch (type) {
       case REGISTER_SUCCESS:
       case LOGIN_SUCCESS:
@@ -31,10 +30,10 @@ import {
           user: payload.user,
         };
       case USER_LOADED:
-        // localStorage.setItem('token', payload.token);
+        localStorage.setItem('token', payload.token);
         return {
           ...state,
-          // ...payload,
+          ...payload,
           isAuthenticated: true,
           loading: false,
           user: payload,

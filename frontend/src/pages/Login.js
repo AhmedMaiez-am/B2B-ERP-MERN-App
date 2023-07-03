@@ -1,5 +1,4 @@
 import React, { useState } from "react"; 
-import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import { Container as ContainerBase } from "components/misc/Layouts";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -31,7 +30,7 @@ const LogoImage = tw.img`h-12 mx-auto`;
 
 const MainContent = tw.div`mt-12 flex flex-col items-center`;
 
-const Heading = tw.h1`text-2xl xl:text-3xl font-extrabold`;
+const Heading = tw.h1`text-2xl xl:text-3xl font-extrabold text-center`;
 
 const FormContainer = tw.div`w-full flex-1 mt-8`;
 
@@ -61,7 +60,7 @@ function Login ({
   headingText = "Bienvenue à votre espace de gestion des ressources",
   submitButtonText = "Se Connecter",
   SubmitButtonIcon = LoginIcon,
-  signupUrl = "/components/innerPages/SignupPage",
+  signupUrl = "/components/AccountRequest",
 
 }) {
   let history = useHistory();
@@ -97,7 +96,7 @@ function Login ({
       console.log(result);
       localStorage.setItem("user", JSON.stringify(result.data.user));
       localStorage.setItem("token", result.data.token);
-        history.push("/components/blocks/Hero/ListeArticles");
+        history.push("/components/ListeArticles");
       
     } catch (error) {
       setErrors(error.response.data.errors);
@@ -106,7 +105,6 @@ function Login ({
 
 
 return (
-  <AnimationRevealPage>
     <Container>
       <Content>
         <MainContainer>
@@ -173,9 +171,9 @@ return (
                   </Link>
               </p>
               <p tw="mt-8 text-sm text-gray-600 text-center">
-                Vous n'avez pas de compte ?{" "}
+                Vous n'avez pas de compte ? Envoyer votre{" "}
                 <a href={signupUrl} tw="border-b border-gray-500 border-dotted">
-                  Créer un compte
+                  demande de création
                 </a> maintenant
               </p>
             </FormContainer>
@@ -186,7 +184,6 @@ return (
         </IllustrationContainer>
       </Content>
     </Container>
-  </AnimationRevealPage>
 );
 }
 Login.propTypes = {
