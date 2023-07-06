@@ -29,8 +29,9 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import axios from "axios";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
+const Form = tw.form`mx-auto max-w-xs`;
 const Column = tw.div`flex flex-col items-center`;
 
 const FAQSContainer = tw.dl`mt-12 max-w-4xl relative`;
@@ -200,335 +201,410 @@ export default () => {
 
   //search variables
   const [filteredResults, setFilteredResults] = useState([]);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
 
   ///////Filter list by search value//////////////
   const searchItems = (searchValue) => {
-    setSearchInput(searchValue)
-    if (searchInput !== '') {
-        const filteredData = data.filter((item) => {
-            return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
-        })
-        setFilteredResults(filteredData)
+    setSearchInput(searchValue);
+    if (searchInput !== "") {
+      const filteredData = data.filter((item) => {
+        return Object.values(item)
+          .join("")
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+      setFilteredResults(filteredData);
+    } else {
+      setFilteredResults(data);
     }
-    else{
-        setFilteredResults(data)
+  };
+  // Function to handle the button click event
+  const handleButtonClickAddCommande = async () => {
+    try {
+      // Retrieve cart items from localStorage
+      const articles = JSON.parse(localStorage.getItem("panier"));
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      // Create a new array with updated article objects
+      const updatedArticles = articles.map((article, index) => {
+        // Retrieve the input value for the corresponding article
+        const inputValue = inputValues[index]?.value || "";
+
+        // Create a new article object with the quantity property
+        const updatedArticle = {
+          ...article,
+          quantity: parseInt(inputValue),
+        };
+
+        return updatedArticle;
+      });
+      // Make a POST request to your server's "/add" endpoint using Axios
+      const response = await axios.post("/enteteVentes/add", {
+        articles: updatedArticles,
+        user,
+      });
+      console.log(response.data); // Display the response from the server
+      // Delete "panier" from localStorage
+      localStorage.removeItem("panier");
+
+      // Programmatically redirect to another component
+      history.push("/components/Commande");
+    } catch (error) {
+      console.error("Error:", error);
     }
-}
-// Function to handle the button click event
-const handleButtonClickAddCommande = async () => {
-  try {
-    // Retrieve cart items from localStorage
-    const articles = JSON.parse(localStorage.getItem('panier'));
-    const user = JSON.parse(localStorage.getItem('user'));
+  };
 
-    // Create a new array with updated article objects
-    const updatedArticles = articles.map((article, index) => {
-      // Retrieve the input value for the corresponding article
-      const inputValue = inputValues[index]?.value || '';
-
-      // Create a new article object with the quantity property
-      const updatedArticle = {
-        ...article,
-        quantity: parseInt(inputValue),
-      };
-
-      return updatedArticle;
-    });
-    // Make a POST request to your server's "/add" endpoint using Axios
-    const response = await axios.post('/enteteVentes/add', { articles: updatedArticles, user });
-    console.log(response.data); // Display the response from the server
-    // Delete "panier" from localStorage
-    localStorage.removeItem('panier');
-
-    // Programmatically redirect to another component
-    history.push('/components/Commande');
-
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-
-
-/////////////////////////////////////////////////
+  /////////////////////////////////////////////////
 
   return (
     <Container>
       <ContentWithPaddingXl>
         <Column>
           <FAQSContainer>
-          <Actions1>
-              <input type="text" placeholder="Chercher un article" 
-              onChange={(e) => searchItems(e.target.value)}/>
+            <Actions1>
+              <input
+                type="text"
+                placeholder="Chercher un article"
+                onChange={(e) => searchItems(e.target.value)}
+              />
             </Actions1>
-            {searchInput.length > 1 ? (
-              filteredResults.map((item, index) => {
-                return (
-                  <FAQ key={index} className="group">
-                  <Question
-                    onClick={handleClick(index)}
-                    open={activeQuestionIndex === index}
-                  >
-                    <QuestionText>
-                      <Q>Description de l'article:</Q> {item.description}
-                    </QuestionText>
-                    <QuestionToggleIcon
-                      variants={{
-                        collapsed: { rotate: 0 },
-                        open: { rotate: -180 },
-                      }}
-                      initial="collapsed"
-                      animate={
-                        activeQuestionIndex === index ? "open" : "collapsed"
-                      }
-                      transition={{
-                        duration: 0.02,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                    >
-                      <ChevronDownIcon />
-                    </QuestionToggleIcon>
-                  </Question>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du fournisseur:</P> {item.numFrounisseur}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du gamme:</P> {item.numGamme}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Prix Unitaire:</P> {item.prixUni}
-                  </Answer>
-                  <Actions>
-                    <input
-                      type="number"
-                      placeholder="Quantité désirée"
-                      value={inputValues[index]?.value || ""}
-                      onChange={(event) => {
-                        setInputValues((prevInputValues) => {
-                          const newInputValues = [...prevInputValues];
-                          newInputValues[index] = {
-                            value: event.target.value,
-                          };
-                          return newInputValues;
-                        });
-                      }}
-                    />
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick1(index, inputValues);
-                      }}
-                    >
-                      <InventoryOutlinedIcon /> Vérifier Stock
-                    </button>
-                  </Actions>
-                  <Tooltip title="Retirer l'article du panier">
-                    <IconButton
-                      variant="outlined"
-                      color="error"
-                      style={{ color: "#c2111b" }}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick(index);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </FAQ>
-                )
-              })
-            ) : (
-              faqs.map((faq, index) => {
-                return (
-                  <FAQ key={index} className="group">
-                  <Question
-                    onClick={handleClick(index)}
-                    open={activeQuestionIndex === index}
-                  >
-                    <QuestionText>
-                      <Q>Description de l'article:</Q> {faq.description}
-                    </QuestionText>
-                    <QuestionToggleIcon
-                      variants={{
-                        collapsed: { rotate: 0 },
-                        open: { rotate: -180 },
-                      }}
-                      initial="collapsed"
-                      animate={
-                        activeQuestionIndex === index ? "open" : "collapsed"
-                      }
-                      transition={{
-                        duration: 0.02,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                    >
-                      <ChevronDownIcon />
-                    </QuestionToggleIcon>
-                  </Question>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du fournisseur:</P> {faq.numFrounisseur}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du gamme:</P> {faq.numGamme}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Prix Unitaire:</P> {faq.prixUni}
-                  </Answer>
-                  <Actions>
-                    <input
-                      type="number"
-                      placeholder="Quantité désirée"
-                      value={inputValues[index]?.value || ""}
-                      onChange={(event) => {
-                        setInputValues((prevInputValues) => {
-                          const newInputValues = [...prevInputValues];
-                          newInputValues[index] = {
-                            value: event.target.value,
-                          };
-                          return newInputValues;
-                        });
-                      }}
-                    />
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick1(index, inputValues);
-                      }}
-                    >
-                      <InventoryOutlinedIcon /> Vérifier Stock
-                    </button>
-                  </Actions>
-                  <Tooltip title="Retirer l'article du panier">
-                    <IconButton
-                      variant="outlined"
-                      color="error"
-                      style={{ color: "#c2111b" }}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick(index);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </FAQ>
-              )})
-            )}
+            {searchInput.length > 1
+              ? filteredResults.map((item, index) => {
+                  return (
+                    <FAQ key={index} className="group">
+                      <Question
+                        onClick={handleClick(index)}
+                        open={activeQuestionIndex === index}
+                      >
+                        <QuestionText>
+                          <Q>Description de l'article:</Q> {item.description}
+                        </QuestionText>
+                        <QuestionToggleIcon
+                          variants={{
+                            collapsed: { rotate: 0 },
+                            open: { rotate: -180 },
+                          }}
+                          initial="collapsed"
+                          animate={
+                            activeQuestionIndex === index ? "open" : "collapsed"
+                          }
+                          transition={{
+                            duration: 0.02,
+                            ease: [0.04, 0.62, 0.23, 0.98],
+                          }}
+                        >
+                          <ChevronDownIcon />
+                        </QuestionToggleIcon>
+                      </Question>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du fournisseur:</P> {item.numFrounisseur}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du gamme:</P> {item.numGamme}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Prix Unitaire:</P> {item.prixUni}
+                      </Answer>
+                      <br />
+                      <P>Sélectionner un magasin: </P>
+                      <select
+                        tw="text-gray-900 w-40 py-2 rounded-lg font-medium bg-blue-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2 mb-4 first:mt-0"
+                        className="magasin"
+                        name="magasin"
+                      >
+                        <option value="" disabled selected>
+                          Choisir un magasin
+                        </option>
+                        <option className="" value="ARGENTE">
+                          Argente
+                        </option>
+                        <option className="" value="BLAN">
+                          Blanc
+                        </option>
+                        <option className="" value="BLEU">
+                          Bleu
+                        </option>
+                        <option className="" value="JAUNE">
+                          Jaune
+                        </option>
+                        <option className="" value="ROUGE">
+                          Rouge
+                        </option>
+                        <option className="" value="VERT">
+                          Vert
+                        </option>
+                      </select>
+                      <Actions>
+                        <input
+                          type="number"
+                          placeholder="Quantité désirée"
+                          value={inputValues[index]?.value || ""}
+                          onChange={(event) => {
+                            setInputValues((prevInputValues) => {
+                              const newInputValues = [...prevInputValues];
+                              newInputValues[index] = {
+                                value: event.target.value,
+                              };
+                              return newInputValues;
+                            });
+                          }}
+                        />
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick1(index, inputValues);
+                          }}
+                        >
+                          <InventoryOutlinedIcon /> Vérifier Stock
+                        </button>
+                      </Actions>
+                      <Tooltip title="Retirer l'article du panier">
+                        <IconButton
+                          variant="outlined"
+                          color="error"
+                          style={{ color: "#c2111b" }}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick(index);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </FAQ>
+                  );
+                })
+              : faqs.map((faq, index) => {
+                  return (
+                    <FAQ key={index} className="group">
+                      <Question
+                        onClick={handleClick(index)}
+                        open={activeQuestionIndex === index}
+                      >
+                        <QuestionText>
+                          <Q>Description de l'article:</Q> {faq.description}
+                        </QuestionText>
+                        <QuestionToggleIcon
+                          variants={{
+                            collapsed: { rotate: 0 },
+                            open: { rotate: -180 },
+                          }}
+                          initial="collapsed"
+                          animate={
+                            activeQuestionIndex === index ? "open" : "collapsed"
+                          }
+                          transition={{
+                            duration: 0.02,
+                            ease: [0.04, 0.62, 0.23, 0.98],
+                          }}
+                        >
+                          <ChevronDownIcon />
+                        </QuestionToggleIcon>
+                      </Question>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du fournisseur:</P> {faq.numFrounisseur}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du gamme:</P> {faq.numGamme}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Prix Unitaire:</P> {faq.prixUni}
+                      </Answer>
+                      <br />
+                      <P>Sélectionner un magasin: </P>
+                      <select
+                        tw="text-gray-900 w-40 py-2 rounded-lg font-medium bg-blue-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2 mb-4 first:mt-0"
+                        className="magasin"
+                        name="magasin"
+                      >
+                        <option value="" disabled selected>
+                          Choisir un magasin
+                        </option>
+                        <option className="" value="ARGENTE">
+                          Argente
+                        </option>
+                        <option className="" value="BLAN">
+                          Blanc
+                        </option>
+                        <option className="" value="BLEU">
+                          Bleu
+                        </option>
+                        <option className="" value="JAUNE">
+                          Jaune
+                        </option>
+                        <option className="" value="ROUGE">
+                          Rouge
+                        </option>
+                        <option className="" value="VERT">
+                          Vert
+                        </option>
+                      </select>
+                      <Actions>
+                        <input
+                          type="number"
+                          placeholder="Quantité désirée"
+                          value={inputValues[index]?.value || ""}
+                          onChange={(event) => {
+                            setInputValues((prevInputValues) => {
+                              const newInputValues = [...prevInputValues];
+                              newInputValues[index] = {
+                                value: event.target.value,
+                              };
+                              return newInputValues;
+                            });
+                          }}
+                        />
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick1(index, inputValues);
+                          }}
+                        >
+                          <InventoryOutlinedIcon /> Vérifier Stock
+                        </button>
+                      </Actions>
+                      <Tooltip title="Retirer l'article du panier">
+                        <IconButton
+                          variant="outlined"
+                          color="error"
+                          style={{ color: "#c2111b" }}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick(index);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </FAQ>
+                  );
+                })}
             <HeadingTitle>
               <>
                 Prix Total: <span tw="text-primary-500">{cartTotalPrice}</span>{" "}

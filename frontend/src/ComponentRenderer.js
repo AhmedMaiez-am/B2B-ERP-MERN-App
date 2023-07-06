@@ -26,11 +26,17 @@ import DetailsClient from "components/hero/DetailsClient";
 import AccountRequest from "pages/AccountRequest";
 import DemandesComptes from "components/tables/DemandesComptes";
 import Loading from "components/hero/Loading.js";
+import PanierCols from "components/faqs/PanierCols";
 
 
 import LandingPageFooter from "components/footers/LandingPageFooter.js";
 
 export const components = {
+  PanierCols: {
+    name: "PanierCols",
+    component: PanierCols,
+    url: "/components/PanierCols",
+  },
   ArticlesAvoir: {
     name: "ArticlesAvoir",
     component: ArticlesAvoir,

@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const http = require("http");
 const httpntlm = require("httpntlm");
 const xml2js = require("xml2js");
 
+
+//Envoyer le magasin, l'article et la quantité saisie à la fonction du CodeUnit pour tester la disponnibilité de stock
 async function getStockCheckFunction() {
+  // Authentification au Business Central
   const username = process.env.USERNAME;
   const password = process.env.PASSWORD;
   const domain = process.env.DOMAIN;
@@ -14,6 +16,7 @@ async function getStockCheckFunction() {
 
   console.log("Making SOAP request...");
 
+  // Configurer les options de la requête SOAP
   const authOptions = {
     url: url,
     username: username,
@@ -21,16 +24,16 @@ async function getStockCheckFunction() {
     domain: domain,
     workstation: workstation,
     body: `<?xml version="1.0" encoding="utf-8"?>
-  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:microsoft-dynamics-schemas/codeunit/StockCheck">
-    <soap:Header/>
-    <soap:Body>
-      <urn:GetInventory>
-        <urn:itemNo>LS-75</urn:itemNo>
-        <urn:location>BLEU</urn:location>
-        <urn:qte>190</urn:qte>
-      </urn:GetInventory>
-    </soap:Body>
-  </soap:Envelope>`,
+      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:microsoft-dynamics-schemas/codeunit/StockCheck">
+        <soap:Header/>
+        <soap:Body>
+          <urn:GetInventory>
+            <urn:itemNo>LS-75</urn:itemNo>
+            <urn:location>BLEU</urn:location>
+            <urn:qte>190</urn:qte>
+          </urn:GetInventory>
+        </soap:Body>
+      </soap:Envelope>`,
     headers: {
       "Content-Type": "text/xml;charset=UTF-8",
       SOAPAction: "urn:microsoft-dynamics-schemas/codeunit/StockCheck:GetInventory",
@@ -38,6 +41,7 @@ async function getStockCheckFunction() {
   };
 
   const response = await new Promise((resolve, reject) => {
+    // Envoyer la requête SOAP avec httpntlm
     httpntlm.post(authOptions, (error, res) => {
       if (error) {
         reject(error);
@@ -48,9 +52,8 @@ async function getStockCheckFunction() {
   });
 
   console.log("SOAP request completed successfully.");
-  console.log("SOAP response:", response);
 
-  // Parse the SOAP response XML
+  // Extraire the réponse SOAP
   const parser = new xml2js.Parser();
   const parsedResponse = await new Promise((resolve, reject) => {
     parser.parseString(response, (error, result) => {
@@ -62,17 +65,15 @@ async function getStockCheckFunction() {
     });
   });
 
-  console.log("Parsed SOAP response:", parsedResponse);
 
-  // Extract the inventory value from the parsed response
+  // Extraire la valeur de retour de la fonction du CodeUnit
   const inventory =
-  parsedResponse["Soap:Envelope"]["Soap:Body"][0]["GetInventory_Result"][0]["return_value"][0];
-
+    parsedResponse["Soap:Envelope"]["Soap:Body"][0]["GetInventory_Result"][0]["return_value"][0];
 
   return inventory;
 }
 
-router.get("/test", async (req, res) => {
+router.get("/getInventory", async (req, res) => {
   try {
     console.log("Calling GetInventory...");
     const inventory = await getStockCheckFunction();
@@ -84,9 +85,7 @@ router.get("/test", async (req, res) => {
       "Error retrieving function from Business Central's CodeUnit:",
       error.message
     );
-    res
-      .status(500)
-      .send("Error retrieving function from Business Central's CodeUnit.");
+    res.status(500).send("Error retrieving function from Business Central's CodeUnit.");
   }
 });
 
