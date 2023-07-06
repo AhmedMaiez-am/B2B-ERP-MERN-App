@@ -12,6 +12,7 @@ const avoirRouter = require("./routes/AvoirRoutes");
 const clientRouter = require ("./routes/ClientsRoutes");
 const userRequestRouter = require (".//routes/UserRequest");
 const StripeRouter = require("./routes/Stripe");
+const StockCheckRouter = require("./routes/StockCheck");
 const { Server } = require("socket.io");
 
 app.use(cors());
@@ -51,6 +52,7 @@ app.use("/avoir", avoirRouter);
 app.use("/clients", clientRouter);
 app.use("/userReq", userRequestRouter);
 app.use("/api/stripe", StripeRouter);
+app.use("/stocks", StockCheckRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));

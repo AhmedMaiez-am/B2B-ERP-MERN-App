@@ -10,7 +10,7 @@ async function getArticlesFromBC() {
   const domain = process.env.DOMAIN;
   const workstation = process.env.WORKSTATION;
   const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
-  const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ItemListec`;
+  const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/Listedesarticles`;
 
   const options = {
     url: url,
@@ -65,14 +65,14 @@ router.get("/insert", async (req, res) => {
     const parsedJson = JSON.parse(articlesString);
     const articles = parsedJson.value; // Extract the array of articles from the 'value' property
     const articleDocs = articles.map((article) => {
-      const isAvailable = article.Stocks > 0 ? "Disponible" : "Epuisé";
+      const isAvailable = article.InventoryField > 0 ? "Disponible" : "Epuisé";
       return {
-        num: article.NO,
+        num: article.No,
         description: article.Description,
-        stocks: article.Stocks,
-        numGamme: article.N_x00B0__gamme,
-        prixUni: article.Prix_Unitaire,
-        numFrounisseur: article.N_x00B0__Fournisseur,
+        stocks: article.InventoryField,
+        numGamme: article.Routing_No,
+        prixUni: article.Unit_Price,
+        numFrounisseur: article.Vendor_No,
         isAvailable: isAvailable
       };
     });
