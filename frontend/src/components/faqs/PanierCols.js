@@ -26,6 +26,7 @@ import SyncProblemOutlinedIcon from "@mui/icons-material/SyncProblemOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import axios from "axios";
@@ -89,7 +90,13 @@ export default () => {
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
   const [open4, setOpen4] = React.useState(false);
+  const [open5, setOpen5] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [newMagasin, setNewMagasin] = useState(null);
+  const [maxQtePerLocationText, setMaxQtePerLocationText] = useState("");
+  const [maxQtePerLocationNumber, setMaxQtePerLocationNumber] = useState(0);
+
+
   const [data, setData] = React.useState([]);
   const history = useHistory();
 
@@ -116,7 +123,7 @@ export default () => {
   //populate faqs with data from local storage to pass it into return
   const faqs = data.map((panier) => {
     return {
-      id: panier.num,
+      id: panier.id,
       description: panier.description,
       numFrounisseur: panier.numFrounisseur,
       numGamme: panier.numGamme,
@@ -171,15 +178,8 @@ export default () => {
     setInputValues([]);
   };
   //confirm unavailable article delete
-  const handleDialogClose1 = (confirmDelete) => {
+  const handleDialogClose1 = () => {
     setOpen1(false);
-    if (confirmDelete) {
-      // Delete the object from local storage and refresh the page
-      const panier = JSON.parse(localStorage.getItem("panier")) || [];
-      panier.splice(deleteIndex, 1);
-      localStorage.setItem("panier", JSON.stringify(panier));
-      window.location.reload();
-    }
   };
 
   //confirm unavailable article delete
@@ -195,6 +195,24 @@ export default () => {
   //empty cart dialog
   const handleDialogClose4 = () => {
     setOpen4(false);
+  };
+
+  //max quantity by location
+  const handleDialogClose5 = () => {
+    setOpen5(false);
+  };
+
+  //quantité disponible dans un autre magasin modal
+  const handleOpenQteDispoAutreMagasin = (newMagasin) => {
+    setOpen1(true);
+    console.log(newMagasin);
+  };
+
+  //quantité maximale disponible par magasin
+  const handleOpenMaxQtePerLocation = (text, number) => {
+    setOpen5(true);
+    setMaxQtePerLocationText(text);
+    setMaxQtePerLocationNumber(parseInt(number));
   };
 
   const [inputValues, setInputValues] = useState([]);
@@ -252,6 +270,43 @@ export default () => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  // Stock check button handle
+  const handleStockCheck = (faq, magasin, quantity) => {
+    // Prepare the request data
+    const requestData = {
+      articleId: faq.id,
+      magasin,
+      quantity,
+    };
+
+    // Make the API call
+    axios
+      .post("/stocks/getInventory", requestData)
+      .then((response) => {
+        const { inventory, magasinValide, maxQtePerLocation } = response.data;
+        if (inventory) {
+          // Option 1: Stock validé dans le magasin choisi
+          setOpen2(true);
+        } else if (magasinValide) {
+          // Option 2: Stock disponible dans un autre magasin
+          setNewMagasin(magasinValide);
+          handleOpenQteDispoAutreMagasin(newMagasin);
+        } else if (maxQtePerLocation) {
+          // Option 3: Quantité saisie n'est pas disponible + Proposition du max quantité disponbible
+          const maxQtePerLocationString = response.data.maxQtePerLocation;
+          const [text, number] = maxQtePerLocationString.split(" - ");
+          handleOpenMaxQtePerLocation(text, number);
+        } else {
+          // Handle any other response options here if needed
+          console.log("Unknown stock check response:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Stock check error:", error);
+        // Handle the error case
+      });
   };
 
   /////////////////////////////////////////////////
@@ -381,7 +436,7 @@ export default () => {
                         <option className="" value="ARGENTE">
                           Argente
                         </option>
-                        <option className="" value="BLAN">
+                        <option className="" value="BLANC">
                           Blanc
                         </option>
                         <option className="" value="BLEU">
@@ -415,7 +470,10 @@ export default () => {
                         <button
                           onClick={(event) => {
                             event.stopPropagation();
-                            handleDeleteClick1(index, inputValues);
+                            const selectedMagasin =
+                              document.querySelector(".magasin").value;
+                            const quantity = inputValues[index]?.value || "";
+                            handleStockCheck(item, selectedMagasin, quantity);
                           }}
                         >
                           <InventoryOutlinedIcon /> Vérifier Stock
@@ -549,7 +607,7 @@ export default () => {
                         <option className="" value="ARGENTE">
                           Argente
                         </option>
-                        <option className="" value="BLAN">
+                        <option className="" value="BLANC">
                           Blanc
                         </option>
                         <option className="" value="BLEU">
@@ -583,7 +641,10 @@ export default () => {
                         <button
                           onClick={(event) => {
                             event.stopPropagation();
-                            handleDeleteClick1(index, inputValues);
+                            const selectedMagasin =
+                              document.querySelector(".magasin").value;
+                            const quantity = inputValues[index]?.value || "";
+                            handleStockCheck(faq, selectedMagasin, quantity);
                           }}
                         >
                           <InventoryOutlinedIcon /> Vérifier Stock
@@ -680,7 +741,7 @@ export default () => {
         </DialogActions>
       </Dialog>
 
-      {/* verfiy stock and delete if unavailable dialog  */}
+      {/* quantity available in another location dialog */}
       <Dialog
         fullScreen={fullScreen}
         open={open1}
@@ -691,22 +752,23 @@ export default () => {
         <DialogTitle
           id="alert-dialog-title"
           style={{
-            backgroundColor: "#FDE7E9",
-            color: "#9B2C2C",
+            backgroundColor: "#e7e8fd",
+            color: "#2c2c9b",
             fontWeight: "bold",
             fontSize: "1.25rem",
             borderRadius: "10px 10px 0px 0px",
             padding: "1rem",
           }}
         >
-          <BlockOutlinedIcon />
+          <InfoOutlinedIcon />
           &nbsp;
-          {"Article n'est plus disponible dans le stock"}
+          {"Quantité insérée n'est pas disponible"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Cet article n'est plus disponible dans le stock, voulez-vous le
-            supprimer de votre panier ?
+            La quantité insérée pour cet article n'est plus disponible dans le
+            magasin choisi, elle est disponible dans le magasin{" "}
+            <strong>{newMagasin}</strong><br/>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -720,19 +782,52 @@ export default () => {
               borderRadius: "50px",
             }}
           >
-            Changer Quantité
+            Changer Choix
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* max quantity available by location */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={open5}
+        onClose={() => handleDialogClose5(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{
+            backgroundColor: "#fdfde7",
+            color: "#9b972c",
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1rem",
+          }}
+        >
+          <InfoOutlinedIcon />
+          &nbsp;
+          {"Quantité insérée n'est pas disponible dans tous les magasins"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            La quantité saisie n'est pas disponible. La quantité maximale de cet article est
+            disponible dans le magasin <strong>{maxQtePerLocationText}</strong> est de{" "}
+            <strong>{maxQtePerLocationNumber}</strong>.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <Button
-            onClick={() => handleDialogClose1(true)}
+            onClick={() => handleDialogClose5(false)}
             variant="outlined"
-            color="secondary"
             style={{
-              backgroundColor: "#a04348",
+              backgroundColor: "#a06b43",
               color: "#FFFFFF",
               borderRadius: "50px",
             }}
           >
-            Suprrimer
+            Changer Choix
           </Button>
         </DialogActions>
       </Dialog>
