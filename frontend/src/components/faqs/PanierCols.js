@@ -767,7 +767,7 @@ export default () => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             La quantité insérée pour cet article n'est plus disponible dans le
-            magasin choisi, elle est disponible dans le magasin{" "}
+            magasin choisi, elle est disponible dans le{"(s)"} magasin{" "}
             <strong>{newMagasin}</strong><br/>
           </DialogContentText>
         </DialogContent>
@@ -813,7 +813,7 @@ export default () => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             La quantité saisie n'est pas disponible. La quantité maximale de cet article est
-            disponible dans le magasin <strong>{maxQtePerLocationText}</strong> est de{" "}
+            disponible dans le magasin <strong>{maxQtePerLocationText}</strong> contenant{" "}
             <strong>{maxQtePerLocationNumber}</strong>.
           </DialogContentText>
         </DialogContent>
