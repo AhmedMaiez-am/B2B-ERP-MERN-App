@@ -154,11 +154,11 @@ const PostList = ({
                   <div className="card">
                     <div className="box">
                       <div className="content">
-                        <h2>N° commande</h2>
+                        <h2>N° facture</h2>
                         <br />
                         <br />
                         <br />
-                        <h3>{ligne.Order_No}</h3>
+                        <h3>{ligne.No}</h3>
                         <p>
                           <strong>Propriétaire</strong>
                         </p>

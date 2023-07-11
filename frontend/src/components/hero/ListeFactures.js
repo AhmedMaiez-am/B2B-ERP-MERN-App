@@ -40,11 +40,12 @@ const NavLink = tw(NavLinkBase)`
 
 const Container = tw.div`relative -mx-8 -mt-8`;
 const TwoColumn = tw.div`flex flex-col lg:flex-row bg-gradient-to-t from-transparent to-blue-200`;
-const LeftColumn = tw.div`ml-8 mr-6 xl:pl-10 py-8`;
+const LeftColumn = tw.div`ml-32 mr-6 xl:pl-10 py-8`;
 const RightColumn = styled.div`
   background-image: url("https://bookipi.com/wp-content/uploads/2021/04/invoice_free_invoicemaker-1024x1024.png");
-  ${tw`bg-transparent bg-cover bg-center xl:ml-24 h-96 lg:h-auto lg:w-1/2 lg:flex-1`}
+  ${tw`bg-transparent bg-cover bg-center xl:ml-12 h-80 lg:h-auto lg:w-1/3 lg:flex-1`}
 `;
+
 
 const Content = tw.div`mt-24 lg:mt-24 lg:mb-24 flex flex-col sm:items-center lg:items-stretch`;
 const Heading = tw.h1`text-3xl sm:text-5xl md:text-6xl lg:text-5xl font-black leading-none`;
