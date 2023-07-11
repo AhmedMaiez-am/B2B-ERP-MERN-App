@@ -71,7 +71,7 @@ export default ({
   heading = "Liste des commandes",
   description = "Veuillez trouvez ci-dessous la liste complète de vos commandes, ainsi que les informations relatives à leurs entêtes et status, ci vous voulez passer une nouvelle commande :",
   primaryButtonText = "Articles",
-  primaryButtonUrl = "/components/blocks/Hero/ListeArticles",
+  primaryButtonUrl = "/components/ListeArticles",
   imageSrc = serverIllustrationImageSrc,
 }) => {
   const logoLink = (
@@ -80,6 +80,10 @@ export default ({
       Smart Business Solutions
     </LogoLink>
   );
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/components/LoginPage";
+  }
   const navLinks = [
     <NavLinks key={1}>
       <NavLink href="/components/ListeArticles">Articles</NavLink>
@@ -97,10 +101,7 @@ export default ({
       </PrimaryLink>
     </NavLinks>,
   ];
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = "/components/LoginPage";
-  }
+
   const [selectedLigne, setSelectedLigne] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();

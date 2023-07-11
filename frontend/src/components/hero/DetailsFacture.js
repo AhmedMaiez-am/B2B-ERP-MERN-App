@@ -88,6 +88,10 @@ const StyledModal = styled(ReactModalAdapter)`
 `;
 
 export default () => {
+  const clearLocalStorageAndRedirect = () => {
+    localStorage.clear();
+    window.location.href = "/components/LoginPage";
+  };
   const navLinks = [
     <NavLinks key={1}>
       <NavLink href="/components/ListeFactures">Factures</NavLink>
@@ -125,12 +129,7 @@ export default () => {
     handleToken(paymentAmount, token);
   };
   //
-
-  const clearLocalStorageAndRedirect = () => {
-    localStorage.clear();
-    window.location.href = "/components/LoginPage";
-  };
-  
+ 
   React.useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
   }, []);
