@@ -92,12 +92,15 @@ export default ({
       >
         Chat <ChatOutlinedIcon />
       </PrimaryLinkChat>&nbsp;
-      <PrimaryLink style={{ borderRadius: "50px" }} href="#">
+      <PrimaryLink style={{ borderRadius: "50px" }}  onClick={handleLogout}>
         Se Déconnecter
       </PrimaryLink>
     </NavLinks>,
   ];
-
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/components/LoginPage";
+  }
   const [selectedLigne, setSelectedLigne] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();

@@ -98,7 +98,7 @@ export default () => {
     </NavLinks>,
     <NavLinks key={2}>
       <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
-      <PrimaryLink href="/#">Se Déconnecter</PrimaryLink>
+      <PrimaryLink  onClick={clearLocalStorageAndRedirect}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
   const [user, setUser] = React.useState([]);
@@ -126,6 +126,11 @@ export default () => {
   };
   //
 
+  const clearLocalStorageAndRedirect = () => {
+    localStorage.clear();
+    window.location.href = "/components/LoginPage";
+  };
+  
   React.useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
   }, []);

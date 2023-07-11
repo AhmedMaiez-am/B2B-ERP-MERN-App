@@ -70,6 +70,7 @@ const StyledResponsiveVideoEmbed = styled(ResponsiveVideoEmbed)`
 export default () => {
   const handleLogout = () => {
     localStorage.clear();
+    window.location.href = "/components/LoginPage";
   }
   
   const navLinks = [
@@ -81,7 +82,7 @@ export default () => {
     </NavLinks>,
     <NavLinks key={2}>
       <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
-      <PrimaryLink style={{ borderRadius: "50px" }} href="/components/LoginPage" onClick={handleLogout}>Se Déconnecter</PrimaryLink>
+      <PrimaryLink style={{ borderRadius: "50px" }} onClick={handleLogout}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
   

@@ -65,19 +65,7 @@ const Actions = styled.div`
 `;
 
 export default ({
-  
-  navLinks = [
-    <NavLinks key={1}>
-      <NavLink href="/components/ListeCommandes">Commandes</NavLink>
-      <NavLink href="/components/Panier">Panier</NavLink>
-      <NavLink href="/components/ListeArticles">Articles</NavLink>
-      <NavLink href="/components/Avoirs">Avoirs</NavLink>
-    </NavLinks>,
-    <NavLinks key={2}>
-    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
-    <PrimaryLink style={{ borderRadius: "50px" }} href="/components/LoginPage">Se Déconnecter</PrimaryLink>
-  </NavLinks>
-  ],
+
   heading = (
     <>
       Liste des
@@ -93,7 +81,23 @@ export default ({
   secondaryActionText = "Commandes",
 }) => {
   const [factureData, setFactureData] = React.useState(null);
-
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/components/LoginPage";
+  }
+  const navLinks = [
+    <NavLinks key={1}>
+      <NavLink href="/components/ListeCommandes">Commandes</NavLink>
+      <NavLink href="/components/Panier">Panier</NavLink>
+      <NavLink href="/components/ListeArticles">Articles</NavLink>
+      <NavLink href="/components/Avoirs">Avoirs</NavLink>
+    </NavLinks>,
+    <NavLinks key={2}>
+    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+    <PrimaryLink style={{ borderRadius: "50px" }} onClick={handleLogout}>Se Déconnecter</PrimaryLink>
+  </NavLinks>
+  ];
+  
   //get the list of all facture assigned to the connected user
   React.useEffect(() => {
     const sendConnectedUserData = async () => {
