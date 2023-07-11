@@ -86,7 +86,7 @@ export default () => {
     },
     {
       field: "stocks",
-      headerName: "Quantité Stock",
+      headerName: "Total Stock",
       headerClassName: "header-style",
       type: "number",
       width: 140,
