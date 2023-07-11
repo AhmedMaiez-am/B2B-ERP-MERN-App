@@ -44,7 +44,7 @@ export default () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: response } = await axios.get("/articles/get");
+        const { data: response } = await axios.get("/articles");
         setData(response);
       } catch (error) {
         console.log(error);
@@ -52,7 +52,6 @@ export default () => {
     };
     fetchData();
   }, []);
-
   const columns = [
     {
       field: "id",

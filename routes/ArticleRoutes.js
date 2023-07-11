@@ -36,8 +36,21 @@ async function getArticlesFromBC() {
 router.get("/", async (req, res) => {
   try {
     const articlesString = await getArticlesFromBC();
-    const articles = JSON.parse(articlesString);
-    res.json(articles);
+    const parsedJson = JSON.parse(articlesString);
+    const articles = parsedJson.value;
+    const articleDocs = articles.map((article) => {
+      const isAvailable = article.InventoryField > 0 ? "Disponible" : "Epuisé";
+      return {
+        num: article.No,
+        description: article.Description,
+        stocks: article.InventoryField,
+        numGamme: article.Routing_No,
+        prixUni: article.Unit_Price,
+        numFrounisseur: article.Vendor_No,
+        isAvailable: isAvailable
+      };
+    });
+    res.json(articleDocs);
   } catch (error) {
     console.error(
       "Error retrieving articles data from Business Central:",
