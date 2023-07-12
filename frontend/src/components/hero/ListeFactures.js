@@ -84,6 +84,7 @@ export default ({
   const [factureData, setFactureData] = React.useState(null);
   const handleLogout = () => {
     localStorage.clear();
+    sessionStorage.clear();
     window.location.href = "/components/LoginPage";
   }
   const navLinks = [
@@ -103,7 +104,7 @@ export default ({
   React.useEffect(() => {
     const sendConnectedUserData = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(sessionStorage.getItem("user"));
         const response = await axios.get("/facture/getAll", {
           params: { userNo: user.tel },
         });
@@ -118,8 +119,8 @@ export default ({
 
   const history = useHistory();
   const handleDetailsClick = (No) => {
-    // Store No in localStorage
-    localStorage.setItem('NoFacture', No);
+    // Store No in sessionStorage
+    sessionStorage.setItem('NoFacture', No);
 
     // Navigate to the second component
     history.push('/components/DetailsFacture');

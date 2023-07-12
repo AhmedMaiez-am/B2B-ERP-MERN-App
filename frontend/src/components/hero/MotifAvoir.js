@@ -129,15 +129,15 @@ export default ({
   ////////////get RetourArticle///////
   const [RetourArticle, setRetourArticle] = useState(
     (() => {
-      const retourArticle = JSON.parse(localStorage.getItem("RetourArticle"));
+      const retourArticle = JSON.parse(sessionStorage.getItem("RetourArticle"));
       return Array.isArray(retourArticle) ? retourArticle : [retourArticle];
     })() || []
   );
 
   /////////////////
   useEffect(() => {
-    // Update RetourArticle state whenever the value in localStorage changes
-    setRetourArticle(JSON.parse(localStorage.getItem("RetourArticle")));
+    // Update RetourArticle state whenever the value in sessionStorage changes
+    setRetourArticle(JSON.parse(sessionStorage.getItem("RetourArticle")));
   }, []);
   const defaultPlans = RetourArticle.map((retourArticle) => ({
     Description: retourArticle.Description,
@@ -153,7 +153,7 @@ export default ({
     Reason_Code: "", // Initialize with an empty value
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(sessionStorage.getItem("user"));
 
   const handleChange = (e) => {
     setFormData((prevFormData) => ({

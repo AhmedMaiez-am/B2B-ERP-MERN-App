@@ -69,7 +69,7 @@ const getCurrentDate = () => {
   return currentDate.toLocaleDateString("fr-FR", options);
 };
 
-const NoAvoir = localStorage.getItem("NoAvoir");
+const NoAvoir = sessionStorage.getItem("NoAvoir");
 const PostList = ({
   headingText = "Articles",
   posts = [
@@ -115,8 +115,8 @@ const PostList = ({
 
   const history = useHistory();
   const handleReturnArticle = (ligne) => {
-    // Store No in localStorage
-    localStorage.setItem("RetourArticle", JSON.stringify([ligne]));
+    // Store No in sessionStorage
+    sessionStorage.setItem("RetourArticle", JSON.stringify([ligne]));
 
     // Navigate to the second component
     history.push("/components/ComfirmAvoir");
@@ -126,7 +126,7 @@ const PostList = ({
   const handleSelectAll = () => {
     const allLigne = ligneArticleAvoir.map((ligne) => ligne);
     setSelectedLigneNos(allLigne);
-    localStorage.setItem("RetourArticle", JSON.stringify(allLigne));
+    sessionStorage.setItem("RetourArticle", JSON.stringify(allLigne));
     history.push("/components/ComfirmAvoir");
   };
 

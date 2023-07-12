@@ -103,7 +103,7 @@ export default ({
 
   //Retrieve cart from local Storage
   React.useEffect(() => {
-    const panier = JSON.parse(localStorage.getItem("panier"));
+    const panier = JSON.parse(sessionStorage.getItem("panier"));
     setData(panier || []);
   }, []);
 

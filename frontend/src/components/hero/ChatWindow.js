@@ -128,7 +128,22 @@ const Button = styled.button`
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState([]);
-  const connectedUser = JSON.parse(localStorage.getItem("user"));
+  const [connectedUsers, setConnectedUsers] = useState([]);
+
+  useEffect(() => {
+    const storedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
+    setConnectedUsers(storedUsers);
+  }, []);
+
+  const getCurrentUser = () => {
+    const userJson = sessionStorage.getItem("user");
+    if (userJson) {
+      return JSON.parse(userJson);
+    }
+    return null; // No active user
+  };
+
+  const connectedUser = getCurrentUser();
 
   useEffect(() => {
     const socket = io(); // Connect to the same server host and port
@@ -145,8 +160,6 @@ const ChatWindow = () => {
     setInputMessage("");
   };
 
-
-  //Listen to server-side message
   useEffect(() => {
     const socket = io(); // Connect to the same server host and port
 
@@ -173,7 +186,9 @@ const ChatWindow = () => {
       <LeftBarContainer>
         <LeftBarHeader>Utilisateurs connectés</LeftBarHeader>
         <UserNameContainer>
-          <UserName>{connectedUser && connectedUser.name}</UserName>
+          {connectedUsers.map((user, index) => (
+            <UserName key={index}>{user.name}</UserName>
+          ))}
         </UserNameContainer>
       </LeftBarContainer>
       <ChatContent>

@@ -82,9 +82,17 @@ export default ({
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const getCurrentUser = () => {
+    const userJson = sessionStorage.getItem("user");
+    if (userJson) {
+      return JSON.parse(userJson);
+    }
+    return null; // No active user
+  };
 
+  const connectedUser = getCurrentUser();
   React.useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
+    setUser(connectedUser);
   }, []);
   //emptyCartDialog
   const handleDeleteCartDialog = () => {
@@ -101,7 +109,7 @@ export default ({
   React.useEffect(() => {
     const fetchCommandeData = async () => {
       try {
-        const No = localStorage.getItem("No");
+        const No = sessionStorage.getItem("No");
         const response = await axios.get("/commande/details", {
           params: { No },
         });

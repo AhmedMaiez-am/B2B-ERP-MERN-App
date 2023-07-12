@@ -102,7 +102,7 @@ export default () => {
 
   //Retrieve cart from local Storage
   React.useEffect(() => {
-    const panier = JSON.parse(localStorage.getItem("panier"));
+    const panier = JSON.parse(sessionStorage.getItem("panier"));
     setData(panier || []);
   }, []);
 
@@ -117,7 +117,7 @@ export default () => {
   };
   //empty cart
   const handleDeleteCart = () => {
-    localStorage.removeItem("panier");
+    sessionStorage.removeItem("panier");
     window.location.reload();
   };
   //populate faqs with data from local storage to pass it into return
@@ -155,9 +155,9 @@ export default () => {
 
     if (confirmDelete) {
       // Delete the object from local storage and refresh the page
-      const panier = JSON.parse(localStorage.getItem("panier")) || [];
+      const panier = JSON.parse(sessionStorage.getItem("panier")) || [];
       panier.splice(deleteIndex, 1);
-      localStorage.setItem("panier", JSON.stringify(panier));
+      sessionStorage.setItem("panier", JSON.stringify(panier));
       window.location.reload();
     }
   };
@@ -236,12 +236,20 @@ export default () => {
       setFilteredResults(data);
     }
   };
+  const getCurrentUser = () => {
+    const userJson = sessionStorage.getItem("user");
+    if (userJson) {
+      return JSON.parse(userJson);
+    }
+    return null; // No active user
+  };
+
   // Function to handle the button click event
   const handleButtonClickAddCommande = async () => {
     try {
-      // Retrieve cart items from localStorage
-      const articles = JSON.parse(localStorage.getItem("panier"));
-      const user = JSON.parse(localStorage.getItem("user"));
+      // Retrieve cart items from sessionStorage
+      const articles = JSON.parse(sessionStorage.getItem("panier"));
+      const user = getCurrentUser();
 
       // Create a new array with updated article objects
       const updatedArticles = articles.map((article, index) => {
@@ -262,8 +270,8 @@ export default () => {
         user,
       });
       console.log(response.data); // Display the response from the server
-      // Delete "panier" from localStorage
-      localStorage.removeItem("panier");
+      // Delete "panier" from sessionStorage
+      sessionStorage.removeItem("panier");
 
       // Programmatically redirect to another component
       history.push("/components/Commande");

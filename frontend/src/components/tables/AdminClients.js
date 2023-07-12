@@ -95,8 +95,8 @@ export default () => {
 
   const history = useHistory();
   const handleDetailsClick = (No) => {
-    // Store No in localStorage
-    localStorage.setItem("NoClient", No);
+    // Store No in sessionStorage
+    sessionStorage.setItem("NoClient", No);
     // Navigate to the second component
     history.push("/components/DetailsClient");
   };

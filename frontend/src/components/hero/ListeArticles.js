@@ -70,6 +70,7 @@ const StyledResponsiveVideoEmbed = styled(ResponsiveVideoEmbed)`
 export default () => {
   const handleLogout = () => {
     localStorage.clear();
+    sessionStorage.clear();
     window.location.href = "/components/LoginPage";
   }
   

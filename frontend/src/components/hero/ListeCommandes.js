@@ -82,6 +82,7 @@ export default ({
   );
   const handleLogout = () => {
     localStorage.clear();
+    sessionStorage.clear();
     window.location.href = "/components/LoginPage";
   }
   const navLinks = [
@@ -123,7 +124,7 @@ export default ({
   React.useEffect(() => {
     const sendConnectedUserData = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(sessionStorage.getItem("user"));
         const response = await axios.get("/commande/getAll", {
           params: { userNo: user.no },
         });
@@ -138,8 +139,8 @@ export default ({
 
   const history = useHistory();
   const handleDetailsClick = (No) => {
-    // Store No in localStorage
-    localStorage.setItem("No", No);
+    // Store No in sessionStorage
+    sessionStorage.setItem("No", No);
 
     // Navigate to the second component
     history.push("/components/DetailsCommande");

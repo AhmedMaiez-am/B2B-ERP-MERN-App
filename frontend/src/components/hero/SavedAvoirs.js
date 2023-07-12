@@ -102,7 +102,7 @@ const PostList = ({
   React.useEffect(() => {
     const fetchAvoirsData = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(sessionStorage.getItem("user"));
         const response = await axios.get("/avoir/getAll", {
           params: { userNo: user.tel },
         });
