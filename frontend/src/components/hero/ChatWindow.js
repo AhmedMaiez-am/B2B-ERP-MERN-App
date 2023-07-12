@@ -11,6 +11,7 @@ const ChatContainer = styled.div`
   display: flex;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 `;
 
 const LeftBarContainer = styled.div`
@@ -29,19 +30,24 @@ const LeftBarHeader = styled.h3`
   text-align: center;
   color: #333;
   background-color: #e0e0e0;
+  font-size: 13px;
+  text-transform: uppercase;
 `;
 
 const UserName = styled.h3`
   margin: 0;
   padding: 8px;
-  color: ${({ active }) => (active ? "#fff" : "#333")};
-  background-color: ${({ active }) => (active ? "#26b2d1" : "#f0f0f0")};
+  color: #333;
+  background-color: #7ae3fa;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition-property: background-color, color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
 
   &:hover {
-    background-color: ${({ active }) => (active ? "#26b2d1" : "#e0e0e0")};
+    background-color: #45a1bb;
+    color: #fff;
   }
 
   & + & {
@@ -49,9 +55,11 @@ const UserName = styled.h3`
   }
 `;
 
+
 const UserNameContainer = styled.div`
   padding: 8px;
   background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
 `;
 
 const UserNameList = styled.div`
@@ -72,12 +80,7 @@ const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 397px;
-  background: rgb(34, 193, 195);
-  background: linear-gradient(
-    0deg,
-    rgba(34, 193, 195, 0) 39%,
-    rgba(47, 224, 83, 0.4248074229691877) 100%
-  );
+  background-color: #f9f9f9;
 `;
 
 const fadeIn = keyframes`
@@ -92,7 +95,7 @@ const fadeIn = keyframes`
 `;
 
 const Message = styled.div`
-  background-color: #f0f0f0;
+  background-color: #fff;
   padding: 8px;
   margin-bottom: 8px;
   border-radius: 16px;
@@ -108,9 +111,6 @@ const InputContainer = styled.div`
   margin-top: 8px;
   margin-bottom: 8px;
   padding: 0 16px;
-  & {
-    id: "input-container";
-  }
 `;
 
 const Input = styled.input`
@@ -118,18 +118,19 @@ const Input = styled.input`
   border: none;
   border-radius: 24px;
   padding: 10px 14px;
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
   font-size: 16px;
   outline: none;
+  transition: box-shadow 0.3s ease;
+
   &:focus {
-    border-color: cyan;
-    box-shadow: 0 0 0 2px cyan;
+    box-shadow: 0 0 0 2px #26b2d1;
   }
 `;
 
 const Button = styled.button`
   background-color: #26b2d1;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 24px;
   padding: 10px 16px;
@@ -137,6 +138,8 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 16px;
   outline: none;
+  transition: background-color 0.3s ease;
+
   &:hover {
     background-color: #45a049;
   }
@@ -147,30 +150,31 @@ const ChatWindow = () => {
   const [inputMessage, setInputMessage] = useState([]);
   const [connectedUsers, setConnectedUsers] = useState([]);
 
-useEffect(() => {
-  const storedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
-  const currentUser = getCurrentUser();
+  useEffect(() => {
+    const storedUsers =
+      JSON.parse(localStorage.getItem("connectedUsers")) || [];
+    const currentUser = getCurrentUser();
 
-  if (currentUser) {
-    // Exclude the current user from the stored users
-    const filteredUsers = storedUsers.filter(
-      (user) => user._id !== currentUser._id
-    );
-    setConnectedUsers(filteredUsers);
-  } else {
-    setConnectedUsers(storedUsers);
-  }
-}, []);
+    if (currentUser) {
+      // Exclude the current user from the stored users
+      const filteredUsers = storedUsers.filter(
+        (user) => user._id !== currentUser._id
+      );
+      setConnectedUsers(filteredUsers);
+    } else {
+      setConnectedUsers(storedUsers);
+    }
+  }, []);
 
-const getCurrentUser = () => {
-  const userJson = sessionStorage.getItem("user");
-  if (userJson) {
-    return JSON.parse(userJson);
-  }
-  return null; // No active user
-};
+  const getCurrentUser = () => {
+    const userJson = sessionStorage.getItem("user");
+    if (userJson) {
+      return JSON.parse(userJson);
+    }
+    return null; // No active user
+  };
 
-const connectedUser = getCurrentUser();
+  const connectedUser = getCurrentUser();
 
   useEffect(() => {
     const socket = io(); // Connect to the same server host and port
@@ -215,9 +219,7 @@ const connectedUser = getCurrentUser();
         <UserNameContainer>
           <UserNameList>
             {connectedUsers.map((user, index) => (
-              <UserName key={index} active={user.id === connectedUser?.id}>
-                {user.name}
-              </UserName>
+              <UserName key={index}>{user.name}</UserName>
             ))}
           </UserNameList>
         </UserNameContainer>
@@ -238,7 +240,7 @@ const connectedUser = getCurrentUser();
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
+            placeholder="Tapez un message..."
           />
           <Button onClick={sendMessage}>
             Send <SendOutlinedIcon />
