@@ -19,26 +19,44 @@ const LeftBarContainer = styled.div`
   flex-direction: column;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const LeftBarHeader = styled.h3`
   padding: 8px;
   margin: 0;
   text-align: center;
-  color: #fff;
-  text-decoration: underline;
-  background-color: #2fe053;
-`;
-
-const UserNameContainer = styled.div`
-  padding: 8px;
-  background-color: transparent;
-  border-bottom: 1px solid #ccc;
+  color: #333;
+  background-color: #e0e0e0;
 `;
 
 const UserName = styled.h3`
   margin: 0;
+  padding: 8px;
+  color: ${({ active }) => (active ? "#fff" : "#333")};
+  background-color: ${({ active }) => (active ? "#26b2d1" : "#f0f0f0")};
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: ${({ active }) => (active ? "#26b2d1" : "#e0e0e0")};
+  }
+
+  & + & {
+    margin-top: 4px;
+  }
+`;
+
+const UserNameContainer = styled.div`
+  padding: 8px;
+  background-color: #fff;
+`;
+
+const UserNameList = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const ChatContent = styled.div`
@@ -124,26 +142,35 @@ const Button = styled.button`
   }
 `;
 
-
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState([]);
   const [connectedUsers, setConnectedUsers] = useState([]);
 
-  useEffect(() => {
-    const storedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
+useEffect(() => {
+  const storedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    // Exclude the current user from the stored users
+    const filteredUsers = storedUsers.filter(
+      (user) => user._id !== currentUser._id
+    );
+    setConnectedUsers(filteredUsers);
+  } else {
     setConnectedUsers(storedUsers);
-  }, []);
+  }
+}, []);
 
-  const getCurrentUser = () => {
-    const userJson = sessionStorage.getItem("user");
-    if (userJson) {
-      return JSON.parse(userJson);
-    }
-    return null; // No active user
-  };
+const getCurrentUser = () => {
+  const userJson = sessionStorage.getItem("user");
+  if (userJson) {
+    return JSON.parse(userJson);
+  }
+  return null; // No active user
+};
 
-  const connectedUser = getCurrentUser();
+const connectedUser = getCurrentUser();
 
   useEffect(() => {
     const socket = io(); // Connect to the same server host and port
@@ -186,9 +213,13 @@ const ChatWindow = () => {
       <LeftBarContainer>
         <LeftBarHeader>Utilisateurs connectés</LeftBarHeader>
         <UserNameContainer>
-          {connectedUsers.map((user, index) => (
-            <UserName key={index}>{user.name}</UserName>
-          ))}
+          <UserNameList>
+            {connectedUsers.map((user, index) => (
+              <UserName key={index} active={user.id === connectedUser?.id}>
+                {user.name}
+              </UserName>
+            ))}
+          </UserNameList>
         </UserNameContainer>
       </LeftBarContainer>
       <ChatContent>
