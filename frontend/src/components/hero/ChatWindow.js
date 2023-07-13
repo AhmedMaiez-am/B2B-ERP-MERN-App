@@ -152,7 +152,7 @@ const ChatWindow = () => {
 
   useEffect(() => {
     const storedUsers =
-      JSON.parse(localStorage.getItem("connectedUsers")) || [];
+      JSON.parse(sessionStorage.getItem("connectedUsers")) || [];
     const currentUser = getCurrentUser();
 
     if (currentUser) {
