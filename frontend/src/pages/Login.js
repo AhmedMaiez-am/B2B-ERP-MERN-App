@@ -96,13 +96,13 @@ function Login ({
       console.log(result);
   
       // Retrieve existing connected users from local storage or initialize an empty array
-      const connectedUsers = JSON.parse(sessionStorage.getItem("connectedUsers")) || [];
+      const connectedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
   
       // Add the current user to the array of connected users
       connectedUsers.push(result.data.user);
   
       // Update the array of connected users in local storage
-      sessionStorage.setItem("connectedUsers", JSON.stringify(connectedUsers));
+      localStorage.setItem("connectedUsers", JSON.stringify(connectedUsers));
   
       // Store the user object in the session storage
       sessionStorage.setItem("user", JSON.stringify(result.data.user));
