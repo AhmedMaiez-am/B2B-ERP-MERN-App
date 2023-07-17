@@ -14,7 +14,6 @@ import DetailsFacture from "components/hero/DetailsFacture.js";
 import ListeCommandes from "components/hero/ListeCommandes.js";
 import DetailsCommande from "components/hero/DetailsCommande.js";
 import MainFooter from "components/footers/MainFooter";
-import ChatWindow from "components/hero/ChatWindow.js";
 import Chat from "components/hero/Chat.js";
 import Avoirs from "components/hero/Avoirs";
 import ArticlesAvoir from "components/hero/ArticlesAvoir.js";
@@ -27,11 +26,17 @@ import AccountRequest from "pages/AccountRequest";
 import DemandesComptes from "components/tables/DemandesComptes";
 import Loading from "components/hero/Loading.js";
 import PanierCols from "components/faqs/PanierCols";
+import ChatsPage from "components/hero/ChatsPage";
 
 
 import LandingPageFooter from "components/footers/LandingPageFooter.js";
 
 export const components = {
+  ChatsPage: {
+    name: "ChatsPage",
+    component: ChatsPage,
+    url: "/components/ChatsPage",
+  },
   PanierCols: {
     name: "PanierCols",
     component: PanierCols,
@@ -86,11 +91,6 @@ export const components = {
     name: "Details commandes",
     component: DetailsCommande,
     url: "/components/DetailsCommande",
-  },
-  ChatWindow: {
-    name: "Chat Window",
-    component: ChatWindow,
-    url: "/components/ChatWindow",
   },
   Chat: {
     name: "Chat",

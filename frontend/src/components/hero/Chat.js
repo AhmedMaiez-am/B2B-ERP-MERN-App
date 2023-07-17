@@ -4,9 +4,10 @@ import tw from "twin.macro";
 //eslint-disable-next-line
 import { css } from "styled-components/macro";
 
-import ChatWindow from "./ChatWindow.js";
+
 import Footer from "components/footers/MainFooter.js";
 import Header from "../headers/light.js";
+import ChatsPage from "./ChatsPage.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "../../images/dot-pattern.svg";
 const Container = tw.div`relative`;
@@ -46,7 +47,6 @@ export default ({
           <LeftColumn>
             <Heading>{heading}</Heading>
             <Paragraph>{description}</Paragraph>
-            <ChatWindow/>
           </LeftColumn>
           <RightColumn>
             <IllustrationContainer>
@@ -55,6 +55,7 @@ export default ({
             </IllustrationContainer>
           </RightColumn>
         </TwoColumn>
+        <ChatsPage/>
         <DecoratorBlob1 />
       </Container>
       <br />

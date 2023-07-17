@@ -13,7 +13,6 @@ const clientRouter = require ("./routes/ClientsRoutes");
 const userRequestRouter = require (".//routes/UserRequest");
 const StripeRouter = require("./routes/Stripe");
 const StockCheckRouter = require("./routes/StockCheck");
-const { Server } = require("socket.io");
 
 app.use(cors());
 app.use(express.json());
@@ -60,23 +59,8 @@ app.get("*", (req, res) => {
 
 // Start server
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3006", 
-    methods: ["GET", "POST"],
-  },
-});
+
 
 server.listen(PORT, (err) => {
   err ? console.log(err) : console.log(`Server is Running on PORT ${PORT}`);
-});
-
-io.on("connection", (socket) => {
-  socket.on("chat message", (message) => {
-    io.emit("chat message", message);
-  });
-
-  socket.on("disconnect", () => {
-    // Handle disconnect event
-  });
 });
