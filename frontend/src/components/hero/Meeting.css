@@ -10,8 +10,8 @@
   gap: 15px;
   height: 100%;
   width: 100%;
-  background-color: #f9f9f9; /* Light background color */
-  color: #333; /* Dark text color */
+  background-color: #f9f9f9;
+  color: #333;
   padding: 20px;
 }
 
@@ -19,9 +19,8 @@
 .meeting-container {
   height: 100%;
   width: 100%;
-  background-color: #f9f9f9; /* Light background color */
-  color: #333; /* Dark text color */
-  /* Add any additional styles specific to the Meeting component here */
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 /* Optional: Override styles for the video__call inside the meeting-container */
