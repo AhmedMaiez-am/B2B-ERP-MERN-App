@@ -27,11 +27,17 @@ import DemandesComptes from "components/tables/DemandesComptes";
 import Loading from "components/hero/Loading.js";
 import PanierCols from "components/faqs/PanierCols";
 import ChatsPage from "components/hero/ChatsPage";
+import Meeting from "components/hero/MeetingContainer";
 
 
 import LandingPageFooter from "components/footers/LandingPageFooter.js";
 
 export const components = {
+  Meeting: {
+    name: "Meeting",
+    component: Meeting,
+    url: "/components/Meeting",
+  },
   ChatsPage: {
     name: "ChatsPage",
     component: ChatsPage,
