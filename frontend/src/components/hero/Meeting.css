@@ -1,0 +1,29 @@
+/* Import the video-react-sdk styles */
+@import '@stream-io/video-react-sdk/dist/css/styles.css';
+
+/* Additional styles for the Meeting component */
+.video__call {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  height: 100%;
+  width: 100%;
+  background-color: #f9f9f9;
+  color: #333;
+  padding: 20px;
+}
+
+/* Main container for the Meeting component */
+.meeting-container {
+  height: 100%;
+  width: 100%;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Optional: Override styles for the video__call inside the meeting-container */
+.meeting-container .video__call {
+  /* Update styles if needed */
+}

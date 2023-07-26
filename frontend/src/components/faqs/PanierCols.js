@@ -26,11 +26,13 @@ import SyncProblemOutlinedIcon from "@mui/icons-material/SyncProblemOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import axios from "axios";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
+const Form = tw.form`mx-auto max-w-xs`;
 const Column = tw.div`flex flex-col items-center`;
 
 const FAQSContainer = tw.dl`mt-12 max-w-4xl relative`;
@@ -88,13 +90,19 @@ export default () => {
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
   const [open4, setOpen4] = React.useState(false);
+  const [open5, setOpen5] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [newMagasin, setNewMagasin] = useState(null);
+  const [maxQtePerLocationText, setMaxQtePerLocationText] = useState("");
+  const [maxQtePerLocationNumber, setMaxQtePerLocationNumber] = useState(0);
+
+
   const [data, setData] = React.useState([]);
   const history = useHistory();
 
   //Retrieve cart from local Storage
   React.useEffect(() => {
-    const panier = JSON.parse(localStorage.getItem("panier"));
+    const panier = JSON.parse(sessionStorage.getItem("panier"));
     setData(panier || []);
   }, []);
 
@@ -109,13 +117,13 @@ export default () => {
   };
   //empty cart
   const handleDeleteCart = () => {
-    localStorage.removeItem("panier");
+    sessionStorage.removeItem("panier");
     window.location.reload();
   };
   //populate faqs with data from local storage to pass it into return
   const faqs = data.map((panier) => {
     return {
-      id: panier.num,
+      id: panier.id,
       description: panier.description,
       numFrounisseur: panier.numFrounisseur,
       numGamme: panier.numGamme,
@@ -147,9 +155,9 @@ export default () => {
 
     if (confirmDelete) {
       // Delete the object from local storage and refresh the page
-      const panier = JSON.parse(localStorage.getItem("panier")) || [];
+      const panier = JSON.parse(sessionStorage.getItem("panier")) || [];
       panier.splice(deleteIndex, 1);
-      localStorage.setItem("panier", JSON.stringify(panier));
+      sessionStorage.setItem("panier", JSON.stringify(panier));
       window.location.reload();
     }
   };
@@ -170,15 +178,8 @@ export default () => {
     setInputValues([]);
   };
   //confirm unavailable article delete
-  const handleDialogClose1 = (confirmDelete) => {
+  const handleDialogClose1 = () => {
     setOpen1(false);
-    if (confirmDelete) {
-      // Delete the object from local storage and refresh the page
-      const panier = JSON.parse(localStorage.getItem("panier")) || [];
-      panier.splice(deleteIndex, 1);
-      localStorage.setItem("panier", JSON.stringify(panier));
-      window.location.reload();
-    }
   };
 
   //confirm unavailable article delete
@@ -196,339 +197,483 @@ export default () => {
     setOpen4(false);
   };
 
+  //max quantity by location
+  const handleDialogClose5 = () => {
+    setOpen5(false);
+  };
+
+  //quantité disponible dans un autre magasin modal
+  const handleOpenQteDispoAutreMagasin = (newMagasin) => {
+    setOpen1(true);
+    console.log(newMagasin);
+  };
+
+  //quantité maximale disponible par magasin
+  const handleOpenMaxQtePerLocation = (text, number) => {
+    setOpen5(true);
+    setMaxQtePerLocationText(text);
+    setMaxQtePerLocationNumber(parseInt(number));
+  };
+
   const [inputValues, setInputValues] = useState([]);
 
   //search variables
   const [filteredResults, setFilteredResults] = useState([]);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
 
   ///////Filter list by search value//////////////
   const searchItems = (searchValue) => {
-    setSearchInput(searchValue)
-    if (searchInput !== '') {
-        const filteredData = data.filter((item) => {
-            return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
-        })
-        setFilteredResults(filteredData)
+    setSearchInput(searchValue);
+    if (searchInput !== "") {
+      const filteredData = data.filter((item) => {
+        return Object.values(item)
+          .join("")
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+      setFilteredResults(filteredData);
+    } else {
+      setFilteredResults(data);
     }
-    else{
-        setFilteredResults(data)
+  };
+  const getCurrentUser = () => {
+    const userJson = sessionStorage.getItem("user");
+    if (userJson) {
+      return JSON.parse(userJson);
     }
-}
-// Function to handle the button click event
-const handleButtonClickAddCommande = async () => {
-  try {
-    // Retrieve cart items from localStorage
-    const articles = JSON.parse(localStorage.getItem('panier'));
-    const user = JSON.parse(localStorage.getItem('user'));
+    return null; // No active user
+  };
 
-    // Create a new array with updated article objects
-    const updatedArticles = articles.map((article, index) => {
-      // Retrieve the input value for the corresponding article
-      const inputValue = inputValues[index]?.value || '';
+  // Function to handle the button click event
+  const handleButtonClickAddCommande = async () => {
+    try {
+      // Retrieve cart items from sessionStorage
+      const articles = JSON.parse(sessionStorage.getItem("panier"));
+      const user = getCurrentUser();
 
-      // Create a new article object with the quantity property
-      const updatedArticle = {
-        ...article,
-        quantity: parseInt(inputValue),
-      };
+      // Create a new array with updated article objects
+      const updatedArticles = articles.map((article, index) => {
+        // Retrieve the input value for the corresponding article
+        const inputValue = inputValues[index]?.value || "";
 
-      return updatedArticle;
-    });
-    // Make a POST request to your server's "/add" endpoint using Axios
-    const response = await axios.post('/enteteVentes/add', { articles: updatedArticles, user });
-    console.log(response.data); // Display the response from the server
-    // Delete "panier" from localStorage
-    localStorage.removeItem('panier');
+        // Create a new article object with the quantity property
+        const updatedArticle = {
+          ...article,
+          quantity: parseInt(inputValue),
+        };
 
-    // Programmatically redirect to another component
-    history.push('/components/Commande');
+        return updatedArticle;
+      });
+      // Make a POST request to your server's "/add" endpoint using Axios
+      const response = await axios.post("/enteteVentes/add", {
+        articles: updatedArticles,
+        user,
+      });
+      console.log(response.data); // Display the response from the server
+      // Delete "panier" from sessionStorage
+      sessionStorage.removeItem("panier");
 
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
+      // Programmatically redirect to another component
+      history.push("/components/Commande");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
+  // Stock check button handle
+  const handleStockCheck = (faq, magasin, quantity) => {
+    // Prepare the request data
+    const requestData = {
+      articleId: faq.id,
+      magasin,
+      quantity,
+    };
 
-/////////////////////////////////////////////////
+    // Make the API call
+    axios
+      .post("/stocks/getInventory", requestData)
+      .then((response) => {
+        const { inventory, magasinValide, maxQtePerLocation } = response.data;
+        if (inventory) {
+          // Option 1: Stock validé dans le magasin choisi
+          setOpen2(true);
+        } else if (magasinValide) {
+          // Option 2: Stock disponible dans un autre magasin
+          setNewMagasin(magasinValide);
+          handleOpenQteDispoAutreMagasin(newMagasin);
+        } else if (maxQtePerLocation) {
+          // Option 3: Quantité saisie n'est pas disponible + Proposition du max quantité disponbible
+          const maxQtePerLocationString = response.data.maxQtePerLocation;
+          const [text, number] = maxQtePerLocationString.split(" - ");
+          handleOpenMaxQtePerLocation(text, number);
+        } else {
+          // Handle any other response options here if needed
+          console.log("Unknown stock check response:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Stock check error:", error);
+        // Handle the error case
+      });
+  };
+
+  /////////////////////////////////////////////////
 
   return (
     <Container>
       <ContentWithPaddingXl>
         <Column>
           <FAQSContainer>
-          <Actions1>
-              <input type="text" placeholder="Chercher un article" 
-              onChange={(e) => searchItems(e.target.value)}/>
+            <Actions1>
+              <input
+                type="text"
+                placeholder="Chercher un article"
+                onChange={(e) => searchItems(e.target.value)}
+              />
             </Actions1>
-            {searchInput.length > 1 ? (
-              filteredResults.map((item, index) => {
-                return (
-                  <FAQ key={index} className="group">
-                  <Question
-                    onClick={handleClick(index)}
-                    open={activeQuestionIndex === index}
-                  >
-                    <QuestionText>
-                      <Q>Description de l'article:</Q> {item.description}
-                    </QuestionText>
-                    <QuestionToggleIcon
-                      variants={{
-                        collapsed: { rotate: 0 },
-                        open: { rotate: -180 },
-                      }}
-                      initial="collapsed"
-                      animate={
-                        activeQuestionIndex === index ? "open" : "collapsed"
-                      }
-                      transition={{
-                        duration: 0.02,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                    >
-                      <ChevronDownIcon />
-                    </QuestionToggleIcon>
-                  </Question>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du fournisseur:</P> {item.numFrounisseur}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du gamme:</P> {item.numGamme}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Prix Unitaire:</P> {item.prixUni}
-                  </Answer>
-                  <Actions>
-                    <input
-                      type="number"
-                      placeholder="Quantité désirée"
-                      value={inputValues[index]?.value || ""}
-                      onChange={(event) => {
-                        setInputValues((prevInputValues) => {
-                          const newInputValues = [...prevInputValues];
-                          newInputValues[index] = {
-                            value: event.target.value,
-                          };
-                          return newInputValues;
-                        });
-                      }}
-                    />
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick1(index, inputValues);
-                      }}
-                    >
-                      <InventoryOutlinedIcon /> Vérifier Stock
-                    </button>
-                  </Actions>
-                  <Tooltip title="Retirer l'article du panier">
-                    <IconButton
-                      variant="outlined"
-                      color="error"
-                      style={{ color: "#c2111b" }}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick(index);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </FAQ>
-                )
-              })
-            ) : (
-              faqs.map((faq, index) => {
-                return (
-                  <FAQ key={index} className="group">
-                  <Question
-                    onClick={handleClick(index)}
-                    open={activeQuestionIndex === index}
-                  >
-                    <QuestionText>
-                      <Q>Description de l'article:</Q> {faq.description}
-                    </QuestionText>
-                    <QuestionToggleIcon
-                      variants={{
-                        collapsed: { rotate: 0 },
-                        open: { rotate: -180 },
-                      }}
-                      initial="collapsed"
-                      animate={
-                        activeQuestionIndex === index ? "open" : "collapsed"
-                      }
-                      transition={{
-                        duration: 0.02,
-                        ease: [0.04, 0.62, 0.23, 0.98],
-                      }}
-                    >
-                      <ChevronDownIcon />
-                    </QuestionToggleIcon>
-                  </Question>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du fournisseur:</P> {faq.numFrounisseur}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Numéro du gamme:</P> {faq.numGamme}
-                  </Answer>
-                  <Answer
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        height: "auto",
-                        marginTop: "16px",
-                      },
-                      collapsed: {
-                        opacity: 0,
-                        height: 0,
-                        marginTop: "0px",
-                      },
-                    }}
-                    initial="collapsed"
-                    animate={activeQuestionIndex === index ? "open" : "collapsed"}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
-                  >
-                    <P>Prix Unitaire:</P> {faq.prixUni}
-                  </Answer>
-                  <Actions>
-                    <input
-                      type="number"
-                      placeholder="Quantité désirée"
-                      value={inputValues[index]?.value || ""}
-                      onChange={(event) => {
-                        setInputValues((prevInputValues) => {
-                          const newInputValues = [...prevInputValues];
-                          newInputValues[index] = {
-                            value: event.target.value,
-                          };
-                          return newInputValues;
-                        });
-                      }}
-                    />
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick1(index, inputValues);
-                      }}
-                    >
-                      <InventoryOutlinedIcon /> Vérifier Stock
-                    </button>
-                  </Actions>
-                  <Tooltip title="Retirer l'article du panier">
-                    <IconButton
-                      variant="outlined"
-                      color="error"
-                      style={{ color: "#c2111b" }}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteClick(index);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </FAQ>
-              )})
-            )}
+            {searchInput.length > 1
+              ? filteredResults.map((item, index) => {
+                  return (
+                    <FAQ key={index} className="group">
+                      <Question
+                        onClick={handleClick(index)}
+                        open={activeQuestionIndex === index}
+                      >
+                        <QuestionText>
+                          <Q>Description de l'article:</Q> {item.description}
+                        </QuestionText>
+                        <QuestionToggleIcon
+                          variants={{
+                            collapsed: { rotate: 0 },
+                            open: { rotate: -180 },
+                          }}
+                          initial="collapsed"
+                          animate={
+                            activeQuestionIndex === index ? "open" : "collapsed"
+                          }
+                          transition={{
+                            duration: 0.02,
+                            ease: [0.04, 0.62, 0.23, 0.98],
+                          }}
+                        >
+                          <ChevronDownIcon />
+                        </QuestionToggleIcon>
+                      </Question>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du fournisseur:</P> {item.numFrounisseur}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du gamme:</P> {item.numGamme}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Prix Unitaire:</P> {item.prixUni}
+                      </Answer>
+                      <br />
+                      <P>Sélectionner un magasin: </P>
+                      <select
+                        tw="text-gray-900 w-40 py-2 rounded-lg font-medium bg-blue-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2 mb-4 first:mt-0"
+                        className="magasin"
+                        name="magasin"
+                      >
+                        <option value="" disabled selected>
+                          Choisir un magasin
+                        </option>
+                        <option className="" value="ARGENTE">
+                          Argente
+                        </option>
+                        <option className="" value="BLANC">
+                          Blanc
+                        </option>
+                        <option className="" value="BLEU">
+                          Bleu
+                        </option>
+                        <option className="" value="JAUNE">
+                          Jaune
+                        </option>
+                        <option className="" value="ROUGE">
+                          Rouge
+                        </option>
+                        <option className="" value="VERT">
+                          Vert
+                        </option>
+                      </select>
+                      <Actions>
+                        <input
+                          type="number"
+                          placeholder="Quantité désirée"
+                          value={inputValues[index]?.value || ""}
+                          onChange={(event) => {
+                            setInputValues((prevInputValues) => {
+                              const newInputValues = [...prevInputValues];
+                              newInputValues[index] = {
+                                value: event.target.value,
+                              };
+                              return newInputValues;
+                            });
+                          }}
+                        />
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            const selectedMagasin =
+                              document.querySelector(".magasin").value;
+                            const quantity = inputValues[index]?.value || "";
+                            handleStockCheck(item, selectedMagasin, quantity);
+                          }}
+                        >
+                          <InventoryOutlinedIcon /> Vérifier Stock
+                        </button>
+                      </Actions>
+                      <Tooltip title="Retirer l'article du panier">
+                        <IconButton
+                          variant="outlined"
+                          color="error"
+                          style={{ color: "#c2111b" }}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick(index);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </FAQ>
+                  );
+                })
+              : faqs.map((faq, index) => {
+                  return (
+                    <FAQ key={index} className="group">
+                      <Question
+                        onClick={handleClick(index)}
+                        open={activeQuestionIndex === index}
+                      >
+                        <QuestionText>
+                          <Q>Description de l'article:</Q> {faq.description}
+                        </QuestionText>
+                        <QuestionToggleIcon
+                          variants={{
+                            collapsed: { rotate: 0 },
+                            open: { rotate: -180 },
+                          }}
+                          initial="collapsed"
+                          animate={
+                            activeQuestionIndex === index ? "open" : "collapsed"
+                          }
+                          transition={{
+                            duration: 0.02,
+                            ease: [0.04, 0.62, 0.23, 0.98],
+                          }}
+                        >
+                          <ChevronDownIcon />
+                        </QuestionToggleIcon>
+                      </Question>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du fournisseur:</P> {faq.numFrounisseur}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Numéro du gamme:</P> {faq.numGamme}
+                      </Answer>
+                      <Answer
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: "auto",
+                            marginTop: "16px",
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                            marginTop: "0px",
+                          },
+                        }}
+                        initial="collapsed"
+                        animate={
+                          activeQuestionIndex === index ? "open" : "collapsed"
+                        }
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                      >
+                        <P>Prix Unitaire:</P> {faq.prixUni}
+                      </Answer>
+                      <br />
+                      <P>Sélectionner un magasin: </P>
+                      <select
+                        tw="text-gray-900 w-40 py-2 rounded-lg font-medium bg-blue-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2 mb-4 first:mt-0"
+                        className="magasin"
+                        name="magasin"
+                      >
+                        <option value="" disabled selected>
+                          Choisir un magasin
+                        </option>
+                        <option className="" value="ARGENTE">
+                          Argente
+                        </option>
+                        <option className="" value="BLANC">
+                          Blanc
+                        </option>
+                        <option className="" value="BLEU">
+                          Bleu
+                        </option>
+                        <option className="" value="JAUNE">
+                          Jaune
+                        </option>
+                        <option className="" value="ROUGE">
+                          Rouge
+                        </option>
+                        <option className="" value="VERT">
+                          Vert
+                        </option>
+                      </select>
+                      <Actions>
+                        <input
+                          type="number"
+                          placeholder="Quantité désirée"
+                          value={inputValues[index]?.value || ""}
+                          onChange={(event) => {
+                            setInputValues((prevInputValues) => {
+                              const newInputValues = [...prevInputValues];
+                              newInputValues[index] = {
+                                value: event.target.value,
+                              };
+                              return newInputValues;
+                            });
+                          }}
+                        />
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            const selectedMagasin =
+                              document.querySelector(".magasin").value;
+                            const quantity = inputValues[index]?.value || "";
+                            handleStockCheck(faq, selectedMagasin, quantity);
+                          }}
+                        >
+                          <InventoryOutlinedIcon /> Vérifier Stock
+                        </button>
+                      </Actions>
+                      <Tooltip title="Retirer l'article du panier">
+                        <IconButton
+                          variant="outlined"
+                          color="error"
+                          style={{ color: "#c2111b" }}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDeleteClick(index);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </FAQ>
+                  );
+                })}
             <HeadingTitle>
               <>
                 Prix Total: <span tw="text-primary-500">{cartTotalPrice}</span>{" "}
@@ -604,7 +749,7 @@ const handleButtonClickAddCommande = async () => {
         </DialogActions>
       </Dialog>
 
-      {/* verfiy stock and delete if unavailable dialog  */}
+      {/* quantity available in another location dialog */}
       <Dialog
         fullScreen={fullScreen}
         open={open1}
@@ -615,22 +760,23 @@ const handleButtonClickAddCommande = async () => {
         <DialogTitle
           id="alert-dialog-title"
           style={{
-            backgroundColor: "#FDE7E9",
-            color: "#9B2C2C",
+            backgroundColor: "#e7e8fd",
+            color: "#2c2c9b",
             fontWeight: "bold",
             fontSize: "1.25rem",
             borderRadius: "10px 10px 0px 0px",
             padding: "1rem",
           }}
         >
-          <BlockOutlinedIcon />
+          <InfoOutlinedIcon />
           &nbsp;
-          {"Article n'est plus disponible dans le stock"}
+          {"Quantité insérée n'est pas disponible"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Cet article n'est plus disponible dans le stock, voulez-vous le
-            supprimer de votre panier ?
+            La quantité insérée pour cet article n'est plus disponible dans le
+            magasin choisi, elle est disponible dans le{"(s)"} magasin{" "}
+            <strong>{newMagasin}</strong><br/>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -644,19 +790,52 @@ const handleButtonClickAddCommande = async () => {
               borderRadius: "50px",
             }}
           >
-            Changer Quantité
+            Changer Choix
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* max quantity available by location */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={open5}
+        onClose={() => handleDialogClose5(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{
+            backgroundColor: "#fdfde7",
+            color: "#9b972c",
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1rem",
+          }}
+        >
+          <InfoOutlinedIcon />
+          &nbsp;
+          {"Quantité insérée n'est pas disponible dans tous les magasins"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            La quantité saisie n'est pas disponible. La quantité maximale de cet article est
+            disponible dans le magasin <strong>{maxQtePerLocationText}</strong> contenant{" "}
+            <strong>{maxQtePerLocationNumber}</strong>.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <Button
-            onClick={() => handleDialogClose1(true)}
+            onClick={() => handleDialogClose5(false)}
             variant="outlined"
-            color="secondary"
             style={{
-              backgroundColor: "#a04348",
+              backgroundColor: "#a06b43",
               color: "#FFFFFF",
               borderRadius: "50px",
             }}
           >
-            Suprrimer
+            Changer Choix
           </Button>
         </DialogActions>
       </Dialog>

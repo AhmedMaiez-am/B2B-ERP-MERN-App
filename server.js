@@ -12,7 +12,7 @@ const avoirRouter = require("./routes/AvoirRoutes");
 const clientRouter = require ("./routes/ClientsRoutes");
 const userRequestRouter = require (".//routes/UserRequest");
 const StripeRouter = require("./routes/Stripe");
-const { Server } = require("socket.io");
+const StockCheckRouter = require("./routes/StockCheck");
 
 app.use(cors());
 app.use(express.json());
@@ -51,6 +51,7 @@ app.use("/avoir", avoirRouter);
 app.use("/clients", clientRouter);
 app.use("/userReq", userRequestRouter);
 app.use("/api/stripe", StripeRouter);
+app.use("/stocks", StockCheckRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
@@ -58,23 +59,8 @@ app.get("*", (req, res) => {
 
 // Start server
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3006", 
-    methods: ["GET", "POST"],
-  },
-});
+
 
 server.listen(PORT, (err) => {
   err ? console.log(err) : console.log(`Server is Running on PORT ${PORT}`);
-});
-
-io.on("connection", (socket) => {
-  socket.on("chat message", (message) => {
-    io.emit("chat message", message);
-  });
-
-  socket.on("disconnect", () => {
-    // Handle disconnect event
-  });
 });

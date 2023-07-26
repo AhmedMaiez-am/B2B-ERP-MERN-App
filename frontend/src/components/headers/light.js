@@ -76,7 +76,8 @@ export default ({
 }) => {
   const clearLocalStorageAndRedirect = () => {
     localStorage.clear();
-    window.location.href = "/components/innerPages/LoginPage";
+    sessionStorage.clear();
+    window.location.href = "/components/LoginPage";
   };
   const defaultLinks = [
     <NavLinks key={1}>

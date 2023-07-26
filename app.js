@@ -15,6 +15,7 @@ var avoirRouter = require ("./routes/AvoirRoutes");
 var clientRouter = require ("./routes/ClientsRoutes");
 var userRequestRouter = require("./routes/UserRequest");
 var StripeRouter = require("./routes/Stripe");
+var StockCheckRouter = require("./routes/StockCheck");
 
 var app = express();
 app.use(
@@ -63,6 +64,7 @@ app.use("/avoir", avoirRouter);
 app.use("/clients", clientRouter);
 app.use("/userReq", userRequestRouter);
 app.use("/api/stripe", StripeRouter);
+app.use("/stocks", StockCheckRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

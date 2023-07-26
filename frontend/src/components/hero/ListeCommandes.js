@@ -71,7 +71,7 @@ export default ({
   heading = "Liste des commandes",
   description = "Veuillez trouvez ci-dessous la liste complète de vos commandes, ainsi que les informations relatives à leurs entêtes et status, ci vous voulez passer une nouvelle commande :",
   primaryButtonText = "Articles",
-  primaryButtonUrl = "/components/blocks/Hero/ListeArticles",
+  primaryButtonUrl = "/components/ListeArticles",
   imageSrc = serverIllustrationImageSrc,
 }) => {
   const logoLink = (
@@ -80,6 +80,11 @@ export default ({
       Smart Business Solutions
     </LogoLink>
   );
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "/components/LoginPage";
+  }
   const navLinks = [
     <NavLinks key={1}>
       <NavLink href="/components/ListeArticles">Articles</NavLink>
@@ -92,7 +97,7 @@ export default ({
       >
         Chat <ChatOutlinedIcon />
       </PrimaryLinkChat>&nbsp;
-      <PrimaryLink style={{ borderRadius: "50px" }} href="#">
+      <PrimaryLink style={{ borderRadius: "50px" }}  onClick={handleLogout}>
         Se Déconnecter
       </PrimaryLink>
     </NavLinks>,
@@ -119,7 +124,7 @@ export default ({
   React.useEffect(() => {
     const sendConnectedUserData = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(sessionStorage.getItem("user"));
         const response = await axios.get("/commande/getAll", {
           params: { userNo: user.no },
         });
@@ -134,8 +139,8 @@ export default ({
 
   const history = useHistory();
   const handleDetailsClick = (No) => {
-    // Store No in localStorage
-    localStorage.setItem("No", No);
+    // Store No in sessionStorage
+    sessionStorage.setItem("No", No);
 
     // Navigate to the second component
     history.push("/components/DetailsCommande");

@@ -44,7 +44,7 @@ export default () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: response } = await axios.get("/articles/get");
+        const { data: response } = await axios.get("/articles");
         setData(response);
       } catch (error) {
         console.log(error);
@@ -52,7 +52,6 @@ export default () => {
     };
     fetchData();
   }, []);
-
   const columns = [
     {
       field: "id",
@@ -87,7 +86,7 @@ export default () => {
     },
     {
       field: "stocks",
-      headerName: "Quantité Stock",
+      headerName: "Total Stock",
       headerClassName: "header-style",
       type: "number",
       width: 140,
@@ -138,9 +137,9 @@ export default () => {
   }));
 
   function handleAddToCart() {
-    const cartItems = JSON.parse(localStorage.getItem("panier")) || [];
+    const cartItems = JSON.parse(sessionStorage.getItem("panier")) || [];
     cartItems.push(selectedRow);
-    localStorage.setItem("panier", JSON.stringify(cartItems));
+    sessionStorage.setItem("panier", JSON.stringify(cartItems));
     setSnackbarMessage(
       `Article "${selectedRow.description}" ajouté au panier avec succés !`
     );

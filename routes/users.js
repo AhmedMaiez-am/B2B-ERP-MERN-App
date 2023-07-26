@@ -8,6 +8,7 @@ const { check, validationResult } = require("express-validator");
 const SecretCode = require("../models/SecretCode");
 const nodemailer = require("nodemailer");
 const salt = bcrypt.genSaltSync(10);
+const axios = require("axios");
 
 async function SendMail(user, code) {
   // Create a SMTP transporter object
@@ -132,13 +133,11 @@ router.post(
     check("codeLivraison", "Veuillez sélectionner le code de livraison")
       .not()
       .isEmpty(),
-    check("codeTVA", "Veuillez sélectionner le code TVA")
+    check("codeTVA", "Veuillez sélectionner le code TVA").not().isEmpty(),
+    check("paymentTerm", "Veuillez sélectionner le terme de paiement")
       .not()
       .isEmpty(),
-      check("paymentTerm", "Veuillez sélectionner le terme de paiement")
-      .not()
-      .isEmpty(),
-      check("paymentCode", "Veuillez sélectionner le code de paiement")
+    check("paymentCode", "Veuillez sélectionner le code de paiement")
       .not()
       .isEmpty(),
   ],
@@ -161,7 +160,7 @@ router.post(
         codeLivraison,
         codeTVA,
         paymentTerm,
-        paymentCode
+        paymentCode,
       } = req.body;
 
       let user = await User.findOne({ email });
@@ -184,7 +183,7 @@ router.post(
         codeLivraison,
         codeTVA,
         paymentTerm,
-        paymentCode
+        paymentCode,
       });
       const salt = await bcrypt.genSalt(10);
 
@@ -352,12 +351,37 @@ router.post("/addUser", async (req, res, next) => {
       codeLivraison: req.body.codeLivraison,
       codeTVA: req.body.codeTVA,
       paymentTerm: req.body.paymentTerm,
-      paymentCode: req.body.paymentCode
+      paymentCode: req.body.paymentCode,
     });
     // Hash password
     const hashedpassword = bcrypt.hashSync(newUser.password, salt);
     newUser.password = hashedpassword;
     await newUser.save();
+
+    // Create a new user in ChatEngine using the username and password from the newly created user
+    const chatEngineUser = {
+      username: req.body.name, // Use the 'no' field as the username for ChatEngine
+      secret: req.body.tel, // Use the 'password' field as the secret for ChatEngine
+    };
+
+    const chatEngineConfig = {
+      method: "post",
+      url: "https://api.chatengine.io/users/",
+      headers: {
+        "PRIVATE-KEY": "dd5c075f-9b51-49fc-9be5-f0418aca3de2", // Replace with your ChatEngine private key
+      },
+      data: chatEngineUser,
+    };
+
+    try {
+      // Send the new user data to ChatEngine
+      await axios(chatEngineConfig);
+    } catch (error) {
+      console.error("Error creating user in ChatEngine:", error);
+      res.status(500).send("Error creating user in ChatEngine");
+      return;
+    }
+
     try {
       //insert new client to business central
       const BC_user = {
@@ -372,7 +396,7 @@ router.post("/addUser", async (req, res, next) => {
         Shipment_Method_Code: req.body.codeLivraison,
         VAT_Bus_Posting_Group: req.body.codeTVA,
         Payment_Terms_Code: req.body.paymentTerm,
-        Payment_Method_Code: req.body.paymentCode
+        Payment_Method_Code: req.body.paymentCode,
       };
       const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
       const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ficheclient`;

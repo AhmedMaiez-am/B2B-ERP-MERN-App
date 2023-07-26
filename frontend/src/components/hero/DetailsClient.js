@@ -35,7 +35,7 @@ export default ({textOnLeft = false}) => {
     React.useEffect(() => {
         const fetchCommandeData = async () => {
           try {
-            const No = localStorage.getItem("NoClient");
+            const No = sessionStorage.getItem("NoClient");
             const response = await axios.get("/clients/details", {
               params: { No },
             });

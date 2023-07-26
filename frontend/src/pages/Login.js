@@ -94,14 +94,26 @@ function Login ({
     try {
       const result = await axios.post("/users", { email, password });
       console.log(result);
-      localStorage.setItem("user", JSON.stringify(result.data.user));
-      localStorage.setItem("token", result.data.token);
-        history.push("/components/ListeArticles");
-      
+  
+      // Retrieve existing connected users from local storage or initialize an empty array
+      const connectedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
+  
+      // Add the current user to the array of connected users
+      connectedUsers.push(result.data.user);
+  
+      // Update the array of connected users in local storage
+      localStorage.setItem("connectedUsers", JSON.stringify(connectedUsers));
+  
+      // Store the user object in the session storage
+      sessionStorage.setItem("user", JSON.stringify(result.data.user));
+      sessionStorage.setItem("token", result.data.token);
+  
+      history.push("/components/ListeArticles");
     } catch (error) {
       setErrors(error.response.data.errors);
     }
   };
+  
 
 
 return (

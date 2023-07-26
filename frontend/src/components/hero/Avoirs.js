@@ -69,12 +69,19 @@ const PostList = ({
   ],
 }) => {
   const [factureData, setFactureData] = React.useState(null);
+  const getCurrentUser = () => {
+    const userJson = sessionStorage.getItem("user");
+    if (userJson) {
+      return JSON.parse(userJson);
+    }
+    return null; // No active user
+  };
 
   //get the list of all commandes validés (facture enregistrées) assigned to the connected user
   React.useEffect(() => {
     const sendConnectedUserData = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = getCurrentUser();
         const response = await axios.get("/facture/getAll", {
           params: { userNo: user.tel },
         });
@@ -89,8 +96,8 @@ const PostList = ({
 
   const history = useHistory();
   const handleDetailsClick1 = (No) => {
-    // Store No in localStorage
-    localStorage.setItem("NoAvoir", No);
+    // Store No in sessionStorage
+    sessionStorage.setItem("NoAvoir", No);
 
     // Navigate to the second component
     history.push("/components/ArticlesAvoir");
@@ -154,11 +161,11 @@ const PostList = ({
                   <div className="card">
                     <div className="box">
                       <div className="content">
-                        <h2>N° commande</h2>
+                        <h2>N° facture</h2>
                         <br />
                         <br />
                         <br />
-                        <h3>{ligne.Order_No}</h3>
+                        <h3>{ligne.No}</h3>
                         <p>
                           <strong>Propriétaire</strong>
                         </p>

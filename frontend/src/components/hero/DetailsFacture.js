@@ -88,6 +88,11 @@ const StyledModal = styled(ReactModalAdapter)`
 `;
 
 export default () => {
+  const clearLocalStorageAndRedirect = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "/components/LoginPage";
+  };
   const navLinks = [
     <NavLinks key={1}>
       <NavLink href="/components/ListeFactures">Factures</NavLink>
@@ -98,7 +103,7 @@ export default () => {
     </NavLinks>,
     <NavLinks key={2}>
       <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
-      <PrimaryLink href="/#">Se Déconnecter</PrimaryLink>
+      <PrimaryLink  onClick={clearLocalStorageAndRedirect}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
   const [user, setUser] = React.useState([]);
@@ -110,7 +115,7 @@ export default () => {
   const toggleModal = () => setModalIsOpen(!modalIsOpen);
 
   //payment function
-  const paymentAmount = localStorage.getItem("Amount");
+  const paymentAmount = sessionStorage.getItem("Amount");
   const handleToken = (paymentAmount, token) => {
     try {
       axios.post("http:/localhost:5000/api/stripe/pay", {
@@ -125,15 +130,23 @@ export default () => {
     handleToken(paymentAmount, token);
   };
   //
+  const getCurrentUser = () => {
+    const userJson = sessionStorage.getItem("user");
+    if (userJson) {
+      return JSON.parse(userJson);
+    }
+    return null; // No active user
+  };
 
+  const connectedUser = getCurrentUser();
   React.useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
+    setUser(connectedUser);
   }, []);
 
   React.useEffect(() => {
     const fetchFactureData = async () => {
       try {
-        const No = localStorage.getItem("NoFacture");
+        const No = sessionStorage.getItem("NoFacture");
         const response = await axios.get("/facture/details", {
           params: { No },
         });
@@ -152,7 +165,7 @@ export default () => {
 
   //payment button handling
   const handlePayClick = (Amount) => {
-    localStorage.setItem("Amount", Amount);
+    sessionStorage.setItem("Amount", Amount);
   };
 
 

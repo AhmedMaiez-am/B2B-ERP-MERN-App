@@ -102,7 +102,7 @@ const PostList = ({
   React.useEffect(() => {
     const fetchAvoirsData = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(sessionStorage.getItem("user"));
         const response = await axios.get("/avoir/getAll", {
           params: { userNo: user.tel },
         });
@@ -146,9 +146,7 @@ const PostList = ({
                       <CreationDate>{getCurrentDate()}</CreationDate>
                       <Title>{post.title}</Title>
                       {post.featured && post.description && (
-                        <Description>
-                          {post.description}
-                        </Description>
+                        <Description>{post.description}</Description>
                       )}
                     </Info>
                   </Post>
@@ -167,7 +165,9 @@ const PostList = ({
                   <span className="heading">
                     &nbsp;&nbsp;&nbsp;&nbsp;Date de demande
                   </span>
-                  <span className="heading">&nbsp;&nbsp;&nbsp;&nbsp;Adresse Livraison</span>
+                  <span className="heading">
+                    &nbsp;&nbsp;&nbsp;&nbsp;Adresse Livraison
+                  </span>
                   <span className="heading">N° contact</span>
                   <span className="heading">Articles</span>
                 </div>
@@ -219,8 +219,11 @@ const PostList = ({
                   <HeadingDescription>
                     Vous trouver ici la liste des articles validés pour votre
                     avoir numéro :
-                    {SavedAvoirs !== null && (
-                      <div>{SavedAvoirs.map((avoir, index) => avoir.No)}</div>
+                    {ligneAvoirsData !== null && (
+                      <div>
+                        {ligneAvoirsData.length > 0 &&
+                          ligneAvoirsData[0].Document_No}
+                      </div>
                     )}
                   </HeadingDescription>
                 </HeadingInfoContainer>

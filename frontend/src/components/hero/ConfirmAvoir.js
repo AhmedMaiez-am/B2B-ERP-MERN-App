@@ -52,7 +52,7 @@ const getCurrentDate = () => {
   return currentDate.toLocaleDateString("fr-FR", options);
 };
 
-const NoAvoir = localStorage.getItem("NoAvoir");
+const NoAvoir = sessionStorage.getItem("NoAvoir");
 const PostList = ({
   headingText = "Articles",
   posts = [
