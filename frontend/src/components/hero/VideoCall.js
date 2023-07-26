@@ -10,9 +10,11 @@ import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "./Meeting.css";
 import { useEffect, useState } from "react";
 import { Button } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 
 function VideoCall() {
+  const history = useHistory();
     const apiKey = "hd8szvscpxvd";
     const ConnectedUser = JSON.parse(sessionStorage.getItem("user"));
     const user_id = ConnectedUser?.name || ""; // Use an empty string if user_id is not available
@@ -71,7 +73,11 @@ function VideoCall() {
         <StreamCall call={call}>
           <StreamTheme className="video__call">
             <PaginatedGridLayout />
-            <CallControls />
+            <CallControls
+              onLeave={() => {
+                history.push("/components/Chat");
+              }}
+            />
           </StreamTheme>
         </StreamCall>
       </StreamVideo>
