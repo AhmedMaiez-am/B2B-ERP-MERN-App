@@ -207,7 +207,6 @@ function UpdateProfile({
       // Handle the success response or any other logic if needed.
     } catch (error) {
       console.log(error);
-      // Handle errors if needed.
     }
   };
   
