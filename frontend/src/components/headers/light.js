@@ -10,7 +10,8 @@ import logo from "../../images/logo.png";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
+import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
 
 const Header = tw.header`
   flex justify-between items-center
@@ -92,7 +93,7 @@ export default ({
       href ="/components/Chat"
         style={{ borderRadius: "50px" }}
       >
-        Chat <ChatOutlinedIcon />
+      <InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/>
       </PrimaryLinkChat>
       <PrimaryLink
         style={{ borderRadius: "50px" }}

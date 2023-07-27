@@ -11,7 +11,8 @@ import Header, {
 import Footer from "components/footers/MainFooter.js";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
+import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
 
 const StyledHeader = styled(Header)`
   ${tw`justify-between`}
@@ -95,7 +96,7 @@ export default ({
       <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat>
     <PrimaryLink style={{ borderRadius: "50px" }} onClick={handleLogout}>Se Déconnecter</PrimaryLink>
   </NavLinks>
   ];

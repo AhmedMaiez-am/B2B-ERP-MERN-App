@@ -92,12 +92,12 @@ export default ({
   window.gtag("config", "UA-45799926-9");
 
   features = features || [
-    `Consulter vos stocks`,
-    `Passer vos commandes`,
-    `Générer vos factures`,
-    "Générer vos bandes de livraison",
-    "Gérer les droits d'accés",
-    "Gérer vos retours et avoirs",
+    `Consulter les quantité en stock`,
+    `Gérer vos paniers`,
+    `Gérer vos commandes`,
+    "Gérer vos factures",
+    "Gérer vos avoirs",
+    "Intéragir en temps réel",
   ];
 
   return (

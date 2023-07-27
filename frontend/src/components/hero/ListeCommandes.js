@@ -24,7 +24,8 @@ import { useHistory } from "react-router-dom";
 import Footer from "components/footers/MainFooter.js";
 import FolderDeleteOutlinedIcon from "@mui/icons-material/FolderDeleteOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
+import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
 
 import {
   Button,
@@ -95,7 +96,7 @@ export default ({
         style={{ borderRadius: "50px" }}
         href="/components/Chat"
       >
-        Chat <ChatOutlinedIcon />
+        <InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/>
       </PrimaryLinkChat>&nbsp;
       <PrimaryLink style={{ borderRadius: "50px" }}  onClick={handleLogout}>
         Se Déconnecter

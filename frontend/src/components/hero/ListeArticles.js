@@ -15,8 +15,8 @@ import Header, {
   PrimaryLinkChat,
 } from "../headers/light.js";
 import ResponsiveVideoEmbed from "../../helpers/ResponsiveVideoEmbed.js";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
-
+import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
+import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
 
 const StyledHeader = styled(Header)`
   ${tw`pt-8 max-w-none`}
@@ -82,7 +82,7 @@ export default () => {
       <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat>
       <PrimaryLink style={{ borderRadius: "50px" }} onClick={handleLogout}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];

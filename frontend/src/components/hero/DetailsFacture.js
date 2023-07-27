@@ -25,8 +25,8 @@ import * as XLSX from "xlsx";
 import Tooltip from "@material-ui/core/Tooltip";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
-
+import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
+import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
 
 
 const Container1 = tw.div`relative`;
@@ -102,7 +102,7 @@ export default () => {
       <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat">Chat <ChatOutlinedIcon/></PrimaryLinkChat>
+      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat>
       <PrimaryLink  onClick={clearLocalStorageAndRedirect}>Se Déconnecter</PrimaryLink>
     </NavLinks>,
   ];
