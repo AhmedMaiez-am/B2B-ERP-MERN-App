@@ -28,11 +28,28 @@ import Loading from "components/hero/Loading.js";
 import PanierCols from "components/faqs/PanierCols";
 import ChatsPage from "components/hero/ChatsPage";
 import Meeting from "components/hero/MeetingContainer";
-
+import Profile from "components/hero/Profile";
+import StatsProfil from "components/hero/StatsProfil";
+import UpdateProfile from "components/hero/UpdateProfile";
 
 import LandingPageFooter from "components/footers/LandingPageFooter.js";
 
 export const components = {
+  UpdateProfile: {
+    name: "UpdateProfile",
+    component: UpdateProfile,
+    url: "/components/UpdateProfile",
+  },
+  StatsProfil: {
+    name: "StatsProfil",
+    component: StatsProfil,
+    url: "/components/StatsProfil",
+  },
+  Profile: {
+    name: "Profile",
+    component: Profile,
+    url: "/components/Profile",
+  },
   Meeting: {
     name: "Meeting",
     component: Meeting,

@@ -446,77 +446,157 @@ router.post("/addUser", async (req, res, next) => {
   }
 });
 
-//get user by id
-router.get("/getUser/:id", async (req, res) => {
-  let id = req.params.id;
-  User.findById(id, function (err, user) {
-    res.json(user);
-  });
+
+// Function to get the existing user from Business Central based on userId
+async function getExistingUser(userId) {
+  try {
+    const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
+    const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ficheclient?$filter=No eq '${userId}'`;
+
+    const options = {
+      url: url,
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      workstation: process.env.WORKSTATION,
+      domain: process.env.DOMAIN,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      json: true,
+    };
+
+    const response = await new Promise((resolve, reject) => {
+      httpntlm.get(options, (err, res) => {
+        if (err) reject(err);
+        else resolve(res);
+      });
+    });
+
+    // Check the response for any errors
+    if (response.statusCode !== 200) {
+      throw new Error("Error getting user from Business Central");
+    }
+
+    // Access the user object directly from the response body
+    const user = JSON.parse(response.body);
+
+    // Check if the user was found
+    if (!user || !user.value || user.value.length === 0) {
+      throw new Error("User not found");
+    }
+
+    // Return the first user in the 'value' array (assuming there is only one user with the given ID)
+    return {
+      user: user.value[0],
+      etag: user.value[0]["@odata.etag"], // Retrieve the ETag value from the user object
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+// Update user
+router.post("/updateUser", async (req, res, next) => {
+  try {
+    let userId = req.body.no; // Extract the user ID from the request body
+    userId = userId.toString();
+    const updatedUser = {
+      No: req.body.no,
+      Name: req.body.name,
+      Address: req.body.address,
+      Phone_No: req.body.tel,
+      E_Mail: req.body.email,
+      Gen_Bus_Posting_Group: req.body.genBusGroup,
+      Customer_Posting_Group: req.body.customerGroup,
+      Location_Code: req.body.code_magasin,
+      Shipment_Method_Code: req.body.codeLivraison,
+      VAT_Bus_Posting_Group: req.body.codeTVA,
+      Payment_Terms_Code: req.body.paymentTerm,
+      Payment_Method_Code: req.body.paymentCode,
+    };
+
+    // Get the existing user and ETag value
+    const { user, etag } = await getExistingUser(userId);
+    if (!user || !etag) {
+      throw new Error("User not found or ETag value not available.");
+    }
+
+    // Update the user in Business Central
+    const encodedCompanyId = encodeURIComponent("CRONUS France S.A.");
+    const url = `http://${process.env.SERVER}:7048/BC210/ODataV4/Company('${encodedCompanyId}')/ficheclient('${userId}')`;
+
+    const options = {
+      url: url,
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      workstation: process.env.WORKSTATION,
+      domain: process.env.DOMAIN,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "If-Match": etag, // Use the retrieved ETag value in the request headers
+      },
+      json: true,
+      body: JSON.stringify(updatedUser),
+    };
+
+    try {
+      // Send the update data to Business Central using 'PATCH' method
+      const response = await new Promise((resolve, reject) => {
+        httpntlm.patch(options, (err, res) => {
+          if (err) reject(err);
+          else resolve(res);
+        });
+      });
+
+      // Check the response for any errors
+      if (response.statusCode !== 200) {
+        console.error(
+          "Error updating user in Business Central:",
+          response.statusCode,
+          response.statusMessage
+        );
+        res.status(500).send("Error updating user in Business Central");
+        return;
+      }
+
+      // Update the user in MongoDB
+      const newMongoUser = {
+        no: updatedUser.No,
+        name: updatedUser.Name,
+        address: updatedUser.Address,
+        tel: updatedUser.Phone_No,
+        email: updatedUser.E_Mail,
+        genBusGroup: updatedUser.Gen_Bus_Posting_Group,
+        customerGroup: updatedUser.Customer_Posting_Group,
+        code_magasin: updatedUser.Location_Code,
+        codeLivraison: updatedUser.Shipment_Method_Code,
+        codeTVA: updatedUser.VAT_Bus_Posting_Group,
+        paymentTerm: updatedUser.Payment_Terms_Code,
+        paymentCode: updatedUser.Payment_Method_Code,
+      };
+      const updatedMongoUser = await User.findOneAndUpdate({ no: userId }, newMongoUser);
+
+      if (!updatedMongoUser) {
+        // Handle the case when the user with the specified 'no' is not found in MongoDB
+        console.error("User not found in MongoDB");
+        res.status(404).send("User not found in MongoDB");
+        return;
+      }
+
+      res.json(newMongoUser);
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Error occurred");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error occurred");
+  }
 });
 
-//update user
-router.post("/updateUser/:id", async (req, res) => {
-  User.findById(req.params.id, function (err, user) {
-    if (!user) res.status(404).send("Utilisateur non trouvé");
-    else user.lastname = req.body.lastname;
-    user.firstname = req.body.firstname;
-    user.email = req.body.email;
-    user.tel = req.body.tel;
-    user.entreprise = req.body.entreprise;
 
-    user.save();
-    res.send({ msg: "Utilisateur modifié" });
-  });
-});
-
-//update lastname
-router.post("/updateLastname/:id", async (req, res) => {
-  User.findById(req.params.id, function (err, user) {
-    if (!user) res.status(404).send("Utilisateur non trouvé");
-    else user.lastname = req.body.lastname;
-    user.save();
-    res.send({ msg: "Nom modifié" });
-  });
-});
-
-//update firstname
-router.post("/updateFirstname/:id", async (req, res) => {
-  User.findById(req.params.id, function (err, user) {
-    if (!user) res.status(404).send("Utilisateur non trouvé");
-    else user.firstname = req.body.firstname;
-    user.save();
-    res.send({ msg: "Prenom modifié" });
-  });
-});
-
-//update email
-router.post("/updateEmail/:id", async (req, res) => {
-  User.findById(req.params.id, function (err, user) {
-    if (!user) res.status(404).send("Utilisateur non trouvé");
-    else user.email = req.body.email;
-    user.save();
-    res.send({ msg: "Email modifié" });
-  });
-});
-
-//update tel
-router.post("/updateTel/:id", async (req, res) => {
-  User.findById(req.params.id, function (err, user) {
-    if (!user) res.status(404).send("Utilisateur non trouvé");
-    else user.tel = req.body.tel;
-    user.save();
-    res.send({ msg: "Tel modifié" });
-  });
-});
-
-//update entreprise
-router.post("/updateEntreprise/:id", async (req, res) => {
-  User.findById(req.params.id, function (err, user) {
-    if (!user) res.status(404).send("Utilisateur non trouvé");
-    else user.entreprise = req.body.entreprise;
-    user.save();
-    res.send({ msg: "Entreprise modifié" });
-  });
-});
 
 module.exports = router;

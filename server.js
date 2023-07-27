@@ -13,6 +13,7 @@ const clientRouter = require ("./routes/ClientsRoutes");
 const userRequestRouter = require (".//routes/UserRequest");
 const StripeRouter = require("./routes/Stripe");
 const StockCheckRouter = require("./routes/StockCheck");
+const StatsRouter = require ("./routes/StatsRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -52,6 +53,7 @@ app.use("/clients", clientRouter);
 app.use("/userReq", userRequestRouter);
 app.use("/api/stripe", StripeRouter);
 app.use("/stocks", StockCheckRouter);
+app.use("/stats", StatsRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
