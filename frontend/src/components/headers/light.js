@@ -12,7 +12,8 @@ import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 
 import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
 import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
-
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Tooltip from "@material-ui/core/Tooltip";
 const Header = tw.header`
   flex justify-between items-center
   max-w-screen-xl mx-auto
@@ -31,16 +32,23 @@ export const NavLink = tw.a`
 
 export const PrimaryLink = tw(NavLink)`
   lg:mx-0
-  px-8 py-3 rounded bg-blue-500 text-gray-100
-  hocus:bg-blue-700 hocus:text-gray-200 focus:shadow-outline
-  border-b-0
+  px-3 py-3 rounded bg-transparent text-blue-500
+  hocus:bg-blue-500 hocus:text-gray-200 focus:shadow-outline
+  border-blue-500
 `;
 
 export const PrimaryLinkChat = tw(NavLink)`
   lg:mx-3
-  px-8 py-3 rounded bg-green-500 text-gray-100
-  hocus:bg-green-700 hocus:text-gray-200 focus:shadow-outline
-  border-b-0
+  px-3 py-3 rounded bg-transparent text-green-500
+  hocus:bg-green-500 hocus:text-gray-200 focus:shadow-outline
+  border-green-500
+`;
+
+export const PrimaryLinkProfile = tw(NavLink)`
+  lg:mx-3
+  px-3 py-3 rounded bg-transparent text-[#45d4d9]
+  hocus:bg-[#45d4d9] hocus:text-gray-200 focus:shadow-outline
+  border-[#45d4d9]
 `;
 
 export const LogoLink = styled(NavLink)`
@@ -89,12 +97,14 @@ export default ({
       <NavLink href="/components/ListeArticles" tw="lg:ml-12!">
         Articles
       </NavLink>
+      <Tooltip title ='Discussions et visioconférences'>
       <PrimaryLinkChat
       href ="/components/Chat"
         style={{ borderRadius: "50px" }}
       >
       <InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/>
       </PrimaryLinkChat>
+      </Tooltip>
       <PrimaryLink
         style={{ borderRadius: "50px" }}
         css={roundedHeaderButton && tw`rounded-full`}
@@ -102,6 +112,14 @@ export default ({
       >
         Se Déconnecter
       </PrimaryLink>
+      <Tooltip title ='Profil'>
+      <PrimaryLinkProfile
+      href ="/components/Profile"
+        style={{ borderRadius: "50px" }}
+      >
+      <AccountCircleOutlinedIcon />
+      </PrimaryLinkProfile>
+      </Tooltip>
     </NavLinks>,
   ];
 

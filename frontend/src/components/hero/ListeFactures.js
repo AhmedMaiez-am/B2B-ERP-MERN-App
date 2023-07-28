@@ -13,7 +13,8 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
 import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
-
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Tooltip from "@material-ui/core/Tooltip";
 const StyledHeader = styled(Header)`
   ${tw`justify-between`}
   ${LogoLink} {
@@ -27,16 +28,16 @@ const NavLink = tw(NavLinkBase)`
 
  const PrimaryLink = tw(NavLink)`
   lg:mx-0
-  px-8 py-3 rounded bg-blue-500 text-gray-100
-  hocus:bg-blue-700 hocus:text-gray-200 focus:shadow-outline
-  border-b-0
+  px-3 py-3 rounded bg-transparent text-blue-500
+  hocus:bg-blue-500 hocus:text-gray-200 focus:shadow-outline
+  border-blue-500
 `;
 
  const PrimaryLinkChat = tw(NavLink)`
   lg:mx-3
-  px-8 py-3 rounded bg-green-500 text-gray-100
-  hocus:bg-green-700 hocus:text-gray-200 focus:shadow-outline
-  border-b-0
+  px-3 py-3 rounded bg-transparent text-green-500
+  hocus:bg-green-500 hocus:text-gray-200 focus:shadow-outline
+  border-green-500
 `;
 
 const Container = tw.div`relative -mx-8 -mt-8`;
@@ -51,7 +52,12 @@ const RightColumn = styled.div`
 const Content = tw.div`mt-24 lg:mt-24 lg:mb-24 flex flex-col sm:items-center lg:items-stretch`;
 const Heading = tw.h1`text-3xl sm:text-5xl md:text-6xl lg:text-5xl font-black leading-none`;
 const Paragraph = tw.p`max-w-md my-8 lg:my-5 lg:my-8 sm:text-lg lg:text-base xl:text-lg leading-loose`;
-
+const PrimaryLinkProfile = tw(NavLink)`
+  lg:mx-3
+  px-3 py-3 rounded bg-transparent text-[#45d4d9]
+  hocus:bg-[#45d4d9] hocus:text-gray-200 focus:shadow-outline
+  border-[#45d4d9]
+`;
 
 const Actions = styled.div`
   ${tw`mb-8 lg:mb-0`}
@@ -96,8 +102,16 @@ export default ({
       <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-    <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat>
+    <Tooltip title ='Discussions et visioconférences'><PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat></Tooltip>
     <PrimaryLink style={{ borderRadius: "50px" }} onClick={handleLogout}>Se Déconnecter</PrimaryLink>
+    <Tooltip title ='Profil'>
+    <PrimaryLinkProfile
+      href ="/components/Profile"
+        style={{ borderRadius: "50px" }}
+      >
+      <AccountCircleOutlinedIcon />
+      </PrimaryLinkProfile>
+      </Tooltip>
   </NavLinks>
   ];
   

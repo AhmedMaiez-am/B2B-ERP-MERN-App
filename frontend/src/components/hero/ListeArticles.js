@@ -17,7 +17,8 @@ import Header, {
 import ResponsiveVideoEmbed from "../../helpers/ResponsiveVideoEmbed.js";
 import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
 import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
-
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Tooltip from "@material-ui/core/Tooltip";
 const StyledHeader = styled(Header)`
   ${tw`pt-8 max-w-none`}
   ${DesktopNavLinks} ${NavLink}, ${LogoLink} {
@@ -38,7 +39,12 @@ const HeroContainer = tw.div`z-20 relative px-4 sm:px-8 max-w-screen-xl mx-auto`
 const TwoColumn = tw.div`pt-24 pb-32 px-4 flex justify-between items-center flex-col lg:flex-row`;
 const LeftColumn = tw.div`flex flex-col items-center lg:block`;
 const RightColumn = tw.div`w-full sm:w-5/6 lg:w-1/2 mt-16 lg:mt-0 lg:pl-8`;
-
+const PrimaryLinkProfile = tw(NavLink)`
+  lg:mx-3
+  px-3 py-3 rounded bg-transparent text-[#45d4d9]
+  hocus:bg-[#45d4d9] hocus:text-gray-200 focus:shadow-outline
+  border-[#45d4d9]
+`;
 const Heading = styled.h1`
   ${tw`text-3xl text-center lg:text-left sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-100 leading-none`}
   span {
@@ -82,8 +88,16 @@ export default () => {
       <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat>
+      <Tooltip title ='Discussions et visioconférences'><PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat></Tooltip>
       <PrimaryLink style={{ borderRadius: "50px" }} onClick={handleLogout}>Se Déconnecter</PrimaryLink>
+      <Tooltip title ='Profil'>
+      <PrimaryLinkProfile
+      href ="/components/Profile"
+        style={{ borderRadius: "50px" }}
+      >
+      <AccountCircleOutlinedIcon />
+      </PrimaryLinkProfile>
+      </Tooltip>
     </NavLinks>,
   ];
   

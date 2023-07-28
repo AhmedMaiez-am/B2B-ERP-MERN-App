@@ -27,7 +27,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
 import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
-
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const Container1 = tw.div`relative`;
 const SingleColumn = tw.div`max-w-screen-xl mx-auto`;
@@ -49,9 +49,9 @@ const StyledHeader = styled(Header)`
 const PrimaryLink = tw(PrimaryLinkBase)`rounded-full`;
 const PrimaryLinkChat = tw(NavLink)`
 lg:mx-3
-px-8 py-3 rounded bg-green-500 text-gray-100
+px-8 py-3 rounded bg-transparent text-green-500
 hocus:bg-green-700 hocus:text-gray-200 focus:shadow-outline
-border-b-0
+border-green-500
 `;
 const Container = styled.div`
   ${tw`relative -mx-8 -mt-8 bg-center bg-cover h-screen min-h-144`}
@@ -86,7 +86,12 @@ const StyledModal = styled(ReactModalAdapter)`
     ${tw`w-full lg:p-16 overflow-y-auto max-h-[80vh]`}
   }
 `;
-
+const PrimaryLinkProfile = tw(NavLink)`
+  lg:mx-3
+  px-3 py-3 rounded bg-transparent text-[#45d4d9]
+  hocus:bg-[#45d4d9] hocus:text-gray-200 focus:shadow-outline
+  border-[#45d4d9]
+`;
 export default () => {
   const clearLocalStorageAndRedirect = () => {
     localStorage.clear();
@@ -102,8 +107,16 @@ export default () => {
       <NavLink href="/components/Avoirs">Avoirs</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat>
+      <Tooltip title ='Discussions et visioconférences'><PrimaryLinkChat style={{ borderRadius: "50px" }} href="/components/Chat"><InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/></PrimaryLinkChat></Tooltip>
       <PrimaryLink  onClick={clearLocalStorageAndRedirect}>Se Déconnecter</PrimaryLink>
+      <Tooltip title ='Profil'>
+      <PrimaryLinkProfile
+      href ="/components/Profile"
+        style={{ borderRadius: "50px" }}
+      >
+      <AccountCircleOutlinedIcon />
+      </PrimaryLinkProfile>
+      </Tooltip>
     </NavLinks>,
   ];
   const [user, setUser] = React.useState([]);

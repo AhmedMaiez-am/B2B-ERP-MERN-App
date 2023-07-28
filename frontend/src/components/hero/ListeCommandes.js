@@ -26,7 +26,8 @@ import FolderDeleteOutlinedIcon from "@mui/icons-material/FolderDeleteOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import VoiceChatOutlinedIcon from '@mui/icons-material/VoiceChatOutlined';
 import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
-
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Tooltip from "@material-ui/core/Tooltip";
 import {
   Button,
   Dialog,
@@ -46,11 +47,17 @@ const NavLink = tw(
 const LogoLink = tw(LogoLinkBase)`text-blue-100 hocus:text-blue-900`;
 const PrimaryLink = tw(
   PrimaryLinkBase
-)`shadow-raised lg:bg-blue-500 lg:hocus:bg-blue-900`;
+)`lg:mx-0
+px-3 py-3 rounded bg-transparent text-gray-200
+hocus:bg-blue-500 hocus:text-gray-200 focus:shadow-outline
+border-blue-500`;
 
 const PrimaryLinkChat = tw(
   PrimaryLinkBase
-)`shadow-raised lg:bg-green-500 lg:hocus:bg-green-900`;
+)`lg:mx-3
+px-3 py-3 rounded bg-transparent text-gray-200
+hocus:bg-green-500 hocus:text-gray-200 focus:shadow-outline
+border-green-500`;
 
 const Container = tw(ContainerBase)`text-blue-900`;
 const Row = tw.div`flex items-center flex-col lg:flex-row`;
@@ -67,7 +74,12 @@ const PrimaryButton = tw(
   PrimaryButtonBase
 )`mt-8 text-sm sm:text-base px-6 py-5 sm:px-10 sm:py-5 bg-blue-400 inline-block hocus:bg-blue-500`;
 const Image = tw.img`w-144 ml-auto`;
-
+const PrimaryLinkProfile = tw(NavLink)`
+  lg:mx-3
+  px-8 py-3 rounded bg-transparent text-gray-200
+  hocus:bg-[#45d4d9] hocus:text-gray-200 focus:shadow-outline
+  border-gray-200
+`;
 export default ({
   heading = "Liste des commandes",
   description = "Veuillez trouvez ci-dessous la liste complète de vos commandes, ainsi que les informations relatives à leurs entêtes et status, ci vous voulez passer une nouvelle commande :",
@@ -92,15 +104,25 @@ export default ({
       <NavLink href="/components/Panier">Panier</NavLink>
       <NavLink href="/components/ListeFactures">Factures</NavLink>
       <NavLink href="/components/Avoirs">Avoirs</NavLink>
+      <Tooltip title ='Discussions et visioconférences'>
       <PrimaryLinkChat
         style={{ borderRadius: "50px" }}
         href="/components/Chat"
       >
         <InsertCommentOutlinedIcon /> - <VoiceChatOutlinedIcon/>
-      </PrimaryLinkChat>&nbsp;
+      </PrimaryLinkChat>
+      </Tooltip>&nbsp;
       <PrimaryLink style={{ borderRadius: "50px" }}  onClick={handleLogout}>
         Se Déconnecter
       </PrimaryLink>
+      <Tooltip title ='Profil'>
+      <PrimaryLinkProfile
+      href ="/components/Profile"
+        style={{ borderRadius: "50px" }}
+      >
+      <AccountCircleOutlinedIcon />
+      </PrimaryLinkProfile>
+      </Tooltip>
     </NavLinks>,
   ];
 

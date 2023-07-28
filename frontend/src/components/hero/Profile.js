@@ -10,7 +10,7 @@ import StatsProfil from "./StatsProfil.js";
 import ReactModalAdapter from "../../helpers/ReactModalAdapter.js";
 import { SectionHeading as HeadingTitle } from "../misc/Headings.js";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
-
+import UpdateProfile from "./UpdateProfile.js";
 const Container1 = tw.div`relative`;
 const SingleColumn = tw.div`max-w-screen-xl mx-auto`;
 
@@ -42,12 +42,12 @@ const EditProfileButton = tw.button`font-bold px-8 lg:px-10 py-3 rounded bg-blue
 const StyledModal = styled(ReactModalAdapter)`
   &.mainHeroModal__overlay {
     ${tw`fixed inset-0 z-50 bg-transparent backdrop-blur-md`}
-    backdrop-filter: blur(8px); /* Standard syntax */
-    --webkit-backdrop-filter: blur(8px); /* Vendor-specific syntax */
+    backdrop-filter: blur(8px);
+    --webkit-backdrop-filter: blur(8px);
   }
   &.mainHeroModal__content {
     ${tw`xl:mx-auto m-4 sm:m-16 max-w-screen-xl absolute inset-0 flex justify-center items-center rounded-lg outline-none`}
-    background-color: rgba(255, 255, 255, 0.8); /* Add transparency to the background */
+    background-color: rgba(255, 255, 255, 0.8); 
   }
   .content {
     ${tw`w-full lg:p-16 overflow-y-auto max-h-[80vh]`}
@@ -154,6 +154,7 @@ const clients = user.length > 0
                           Vous pouvez mettre à jour vos informations et coordonnées du profil ici :
                         </HeadingDescription>
                       </HeadingInfoContainer>
+                      <UpdateProfile/>
                     </SingleColumn>
                   </Container1>
                 </div>

@@ -4,8 +4,6 @@ import tw from "twin.macro";
 import Select from "react-select";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
-import logo from "images/logo.png";
-import { ReactComponent as SignUpIcon } from "feather-icons/dist/icons/user-plus.svg";
 import axios from "axios";
 import {
     Button,
@@ -17,20 +15,15 @@ import {
   } from "@material-ui/core";
   import useMediaQuery from "@mui/material/useMediaQuery";
   import { useTheme } from "@mui/material/styles";
+  import SystemUpdateAltOutlinedIcon from '@mui/icons-material/SystemUpdateAltOutlined';
 
 const Container = tw(
   ContainerBase
-)`min-h-screen bg-gradient-to-t from-transparent via-transparent to-blue-300 text-white font-medium flex justify-center -m-8`;
-const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
+)`min-h-screen bg-transparent text-white font-medium flex justify-center -m-8`;
+const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-transparent text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
 const MainContainer = tw.div`lg:w-1/2 xl:w-5/12 p-6 sm:p-12`;
-const LogoLink = tw.a``;
-const LogoImage = tw.img`h-12 mx-auto`;
 const MainContent = tw.div`mt-12 flex flex-col items-center`;
-const Heading = tw.h1`text-2xl xl:text-3xl font-extrabold text-center`;
-const FormContainer = tw.div`w-full flex-1 mt-8`;
-
-const DividerTextContainer = tw.div`my-12 border-b text-center relative`;
-const DividerText = tw.div`leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform -translate-y-1/2 absolute inset-x-0 top-1/2 bg-transparent`;
+const FormContainer = tw.div`w-full flex-1`;
 
 const Form = tw.form`mx-auto max-w-xs`;
 const Input = tw.input`w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-blue-200 placeholder-gray-500 text-sm focus:outline-none focus:border-blue-400 focus:bg-white mb-5 first:mt-0`;
@@ -38,7 +31,7 @@ const SelectWrapper = styled(Select)`
   ${tw`w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-blue-200 placeholder-gray-500 text-sm focus:outline-none focus:border-blue-400 focus:bg-white mb-5 first:mt-0`}
 `;
 const SubmitButton = styled.button`
-  ${tw`mt-5 tracking-wide font-semibold bg-blue-500 text-gray-100 w-full py-4 rounded-lg hover:bg-blue-900 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none`}
+  ${tw`mt-5 tracking-wide font-semibold bg-green-500 text-gray-100 w-full py-4 rounded-lg hover:bg-green-900 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none`}
   .icon {
     ${tw`w-6 h-6 -ml-2`}
   }
@@ -48,11 +41,8 @@ const SubmitButton = styled.button`
 `;
 const PlaceholderLabel = tw.label`text-sm font-medium text-gray-600 mt-3`;
 function UpdateProfile({
-  logoLinkUrl = "#",
-  headingText = "Bienvenue à votre espace de gestion des ressources",
-  submitButtonText = "Envoyer Demande",
-  SubmitButtonIcon = SignUpIcon,
-  signInUrl = "/components/LoginPage",
+  submitButtonText = "Mettre à jour",
+  SubmitButtonIcon = SystemUpdateAltOutlinedIcon,
 }) {
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
@@ -220,15 +210,8 @@ function UpdateProfile({
     <Container>
       <Content>
         <MainContainer>
-          <LogoLink href={logoLinkUrl}>
-            <LogoImage src={logo} />
-          </LogoLink>
           <MainContent>
-            <Heading>{headingText}</Heading>
             <FormContainer>
-              <DividerTextContainer>
-                <DividerText>Créer votre demande d'un compte maintenant</DividerText>
-              </DividerTextContainer>
               <Form onSubmit={(e) => onsubmit(e)}>
                 <PlaceholderLabel htmlFor="no">No° :</PlaceholderLabel>
                 <Input
@@ -413,16 +396,6 @@ function UpdateProfile({
                   <SubmitButtonIcon className="icon" />
                   <span className="text">{submitButtonText}</span>
                 </SubmitButton>
-
-                <p tw="mt-8 text-sm text-gray-600 text-center">
-                  Vous disposez d'un compte validé ?<br/>
-                  <a
-                    href={signInUrl}
-                    tw="border-b border-gray-500 border-dotted"
-                  >
-                    Connecter-vous
-                  </a>
-                </p>
               </Form>
             </FormContainer>
           </MainContent>
@@ -445,14 +418,14 @@ function UpdateProfile({
               padding: "1rem",
             }}
           >
-            {"Demande enregistrée avec succés"}
+            {"Informations modifiées avec succés"}
           </DialogTitle>
           <DialogContent style={{ borderRadius: "20px" }}>
             <DialogContentText
               id="alert-dialog-description"
               style={{ color: "#4F4F4F" }}
             >
-              Votre demande de création de compte a été bien enregistrée, vous recevez un mail de confirmation une fois votre demande a été validé par l'administrateur.
+              Vos informations du profil ont été bien modifiées.
             </DialogContentText>
           </DialogContent>
           <DialogActions style={{ justifyContent: "center" }}>
