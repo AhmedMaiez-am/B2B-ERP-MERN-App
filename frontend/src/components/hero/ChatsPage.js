@@ -5,7 +5,7 @@ const ChatsPage = () => {
   const user = JSON.parse(sessionStorage.getItem('user'));
   const username = user.name;
   const secret = user.tel;
-  const projectId = '090a48b1-ff5f-424e-ac5f-1dbb5654b0d3';
+  const projectId = '2dc34b1c-1e65-45c0-ac58-455c905d49a8';
   const chatProps = useMultiChatLogic(projectId, username, secret);
 
   const chatWindowStyles = {

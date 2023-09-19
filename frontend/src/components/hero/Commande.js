@@ -512,7 +512,7 @@ const handleDeleteCart = async () => {
           </Button>
           <Button
             onClick={() => handleDeleteCart()}
-            href="/components/blocks/Hero/Panier"
+            href="/components/Panier"
             variant="contained"
             color="secondary"
             style={{
