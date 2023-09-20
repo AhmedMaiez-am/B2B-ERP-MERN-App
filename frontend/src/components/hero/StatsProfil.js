@@ -139,7 +139,7 @@ export default ({
   }, []);
 
   const data = [
-    { id: 0, value: commande !== null ? commande : 0, label: "Commandes" },
+    { id: 0, value: commande !== null ? commande : 0, label: "Achats" },
     { id: 1, value: facture !== null ? facture : 0, label: "Factures" },
     { id: 2, value: avoir !== null ? avoir : 0, label: "Avoirs" },
   ];

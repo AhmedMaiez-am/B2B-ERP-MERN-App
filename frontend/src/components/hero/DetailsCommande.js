@@ -116,8 +116,8 @@ export default ({
         const responseLigne = await axios.get("/commande/getLignes", {
           params: { cmdNo: No },
         });
-        setCommandeData1(response.data); // Store the commande response data
-        setLigneCommandeData1(responseLigne.data); // Store the lignes response data
+        setCommandeData1(response.data);
+        setLigneCommandeData1(responseLigne.data);
       } catch (error) {
         console.error("Error:", error);
       }

@@ -166,8 +166,8 @@ export default () => {
         const responseLigne = await axios.get("/facture/getLignes", {
           params: { facNo: No },
         });
-        setFactureData1(response.data); // Store the commande response data
-        setLigneFactureData1(responseLigne.data); // Store the lignes response data
+        setFactureData1(response.data);
+        setLigneFactureData1(responseLigne.data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -182,7 +182,7 @@ export default () => {
   };
 
 
-  //expoert excel file
+  //export excel file
   const exportToExcel = () => {
     const table = document.querySelector(".fl-table");
     const ws = XLSX.utils.table_to_sheet(table);
@@ -199,31 +199,42 @@ const handleExportExcel = () => {
   exportToExcel();
 };
   
-
-//donwload as PDF
+//pdf generation
 const exportToPDF = () => {
+  // Parse user data from session storage
+  const userJson = sessionStorage.getItem("user");
+  const user = JSON.parse(userJson);
+
+  // Get the table element
   const table = document.querySelector(".fl-table");
 
   // Create a new jsPDF instance
   const doc = new jsPDF();
 
-  // Set the table header style
-  doc.setTextColor("#FFFFFF");
-  doc.setFillColor("#32a8a0");
-  doc.setFont("bold");
+  // Set font styles
+  doc.setFont("Helvetica");
+  doc.setFontSize(12);
+  doc.setTextColor("#000000");
 
-  // Get the table dimensions
-  const tableWidth = table.offsetWidth;
+  // Get the current date
+  const currentDate = new Date().toLocaleDateString();
 
-  // Set the initial position for rendering the table
-  let x = 10;
-  let y = 10;
+  // Render the invoice header
+  doc.text("Facture", 10, 10);
+  doc.text(`Date: ${currentDate}`, 10, 20);
 
-  // Render the table header
-  doc.rect(x, y, tableWidth, 10, "F");
+  // Render user data
+  doc.text(`Destinataire : ${user.name}`, 10, 40);
+  doc.text(`Email : ${user.email}`, 10, 50);
+
+
+  // Calculate the position for rendering the table
+  const tableStartY = 70;
+
+  // Render the table
   doc.autoTable({
     html: table,
-    startY: y + 2,
+    startY: tableStartY + 12, // Adjust the table position
     theme: "grid",
     styles: {
       halign: "center",
@@ -234,14 +245,17 @@ const exportToPDF = () => {
     headerStyles: {
       fillColor: "#32a8a0",
       fontStyle: "bold",
+      textColor: "#FFFFFF",
     },
   });
 
   // Save the PDF file
-  const currentDate = new Date().toISOString().slice(0, 10);
-  const fileName = `Facture ${currentDate}.pdf`;
+  const fileName = `Facture_${currentDate}.pdf`;
   doc.save(fileName);
 };
+
+
+
 
 
   return (

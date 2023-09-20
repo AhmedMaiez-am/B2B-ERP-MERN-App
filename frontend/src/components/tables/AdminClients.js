@@ -59,7 +59,7 @@ export default () => {
     const fetchClientsData = async () => {
       try {
         const response = await axios.get("/clients/getAll");
-        setClientData(response.data); // Store the avoirs response data
+        setClientData(response.data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -95,9 +95,7 @@ export default () => {
 
   const history = useHistory();
   const handleDetailsClick = (No) => {
-    // Store No in sessionStorage
     sessionStorage.setItem("NoClient", No);
-    // Navigate to the second component
     history.push("/components/DetailsClient");
   };
 

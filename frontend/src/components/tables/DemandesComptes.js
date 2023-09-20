@@ -57,7 +57,7 @@ export default () => {
     const fetchClientsData = async () => {
       try {
         const response = await axios.get("/userReq/userRequests");
-        setClientData(response.data); // Store the avoirs response data
+        setClientData(response.data);
       } catch (error) {
         console.error("Error:", error);
       }

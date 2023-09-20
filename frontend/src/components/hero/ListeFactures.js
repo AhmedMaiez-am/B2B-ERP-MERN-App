@@ -123,7 +123,7 @@ export default ({
         const response = await axios.get("/facture/getAll", {
           params: { userNo: user.tel },
         });
-        setFactureData(response.data); // Store the latest commande response data
+        setFactureData(response.data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -134,10 +134,8 @@ export default ({
 
   const history = useHistory();
   const handleDetailsClick = (No) => {
-    // Store No in sessionStorage
     sessionStorage.setItem('NoFacture', No);
 
-    // Navigate to the second component
     history.push('/components/DetailsFacture');
   };
   return (

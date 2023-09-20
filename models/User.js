@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
   codeLivraison: String,
   codeTVA: String,
   paymentTerm: String,
-  paymentCode: String
+  paymentCode: String,
+  isAdmin: {
+    type: Boolean,
+    default: false
+  }
 });
 module.exports = User = mongoose.model("user", UserSchema);

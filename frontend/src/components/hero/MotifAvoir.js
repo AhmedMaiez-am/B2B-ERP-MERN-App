@@ -168,7 +168,7 @@ export default ({
       // Check if an option is selected
   if (formData.Reason_Code === "") {
     handleConfirmMotifSelectionDialog(); // Display alert
-    return; // Stop the process
+    return;
   }
 
     const updatedRetourArticles = RetourArticle.map((retourArticle) => ({

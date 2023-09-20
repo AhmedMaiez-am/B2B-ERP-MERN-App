@@ -106,7 +106,7 @@ const PostList = ({
         const response = await axios.get("/avoir/getAll", {
           params: { userNo: user.tel },
         });
-        setSavedAvoirs(response.data); // Store the avoirs response data
+        setSavedAvoirs(response.data);
       } catch (error) {
         console.error("Error:", error);
       }

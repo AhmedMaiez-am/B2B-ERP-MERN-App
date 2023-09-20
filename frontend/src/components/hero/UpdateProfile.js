@@ -61,7 +61,6 @@ function UpdateProfile({
     paymentTerm: "",
     paymentCode: "",
   });
-    // Function to retrieve user data from sessionStorage
     const getUserFromSessionStorage = () => {
         const user = JSON.parse(sessionStorage.getItem("user"));
         if (user) {

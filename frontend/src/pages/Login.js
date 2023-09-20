@@ -95,24 +95,27 @@ function Login ({
       const result = await axios.post("/users", { email, password });
       console.log(result);
   
-      // Retrieve existing connected users from local storage or initialize an empty array
-      const connectedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
+      // Check if the user is an admin
+      if (result.data.user.isAdmin) {
+        // If isAdmin is true, redirect to the admin route
+        history.push("/components/AdminClients");
+      } else {
+        // If isAdmin is false, proceed with regular user login
+        const connectedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
   
-      // Add the current user to the array of connected users
-      connectedUsers.push(result.data.user);
+        connectedUsers.push(result.data.user);
   
-      // Update the array of connected users in local storage
-      localStorage.setItem("connectedUsers", JSON.stringify(connectedUsers));
+        localStorage.setItem("connectedUsers", JSON.stringify(connectedUsers));
+        sessionStorage.setItem("user", JSON.stringify(result.data.user));
+        sessionStorage.setItem("token", result.data.token);
   
-      // Store the user object in the session storage
-      sessionStorage.setItem("user", JSON.stringify(result.data.user));
-      sessionStorage.setItem("token", result.data.token);
-  
-      history.push("/components/ListeArticles");
+        history.push("/components/ListeArticles");
+      }
     } catch (error) {
       setErrors(error.response.data.errors);
     }
   };
+  
   
 
 

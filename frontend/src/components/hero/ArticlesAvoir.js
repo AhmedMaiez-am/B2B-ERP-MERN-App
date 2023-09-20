@@ -104,7 +104,7 @@ const PostList = ({
         const responseLigne = await axios.get("/facture/getLignes", {
           params: { facNo: NoAvoir },
         });
-        setLigneArticleAvoir(responseLigne.data); // Store the lignes response data
+        setLigneArticleAvoir(responseLigne.data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -115,10 +115,8 @@ const PostList = ({
 
   const history = useHistory();
   const handleReturnArticle = (ligne) => {
-    // Store No in sessionStorage
     sessionStorage.setItem("RetourArticle", JSON.stringify([ligne]));
 
-    // Navigate to the second component
     history.push("/components/ComfirmAvoir");
   };
 

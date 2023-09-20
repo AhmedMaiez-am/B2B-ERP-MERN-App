@@ -352,6 +352,7 @@ router.post("/addUser", async (req, res, next) => {
       codeTVA: req.body.codeTVA,
       paymentTerm: req.body.paymentTerm,
       paymentCode: req.body.paymentCode,
+      isAdmin: false
     });
     // Hash password
     const hashedpassword = bcrypt.hashSync(newUser.password, salt);
@@ -368,7 +369,7 @@ router.post("/addUser", async (req, res, next) => {
       method: "post",
       url: "https://api.chatengine.io/users/",
       headers: {
-        "PRIVATE-KEY": "dd5c075f-9b51-49fc-9be5-f0418aca3de2", // Replace with your ChatEngine private key
+        "PRIVATE-KEY": "42181f39-0349-4f75-961a-e57d3be22dc7", // Replace with your ChatEngine private key
       },
       data: chatEngineUser,
     };

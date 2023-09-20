@@ -101,7 +101,7 @@ export default ({
   const toggleModal = () => setModalIsOpen(!modalIsOpen);
   const [data, setData] = React.useState([]);
 
-  //Retrieve cart from local Storage
+  //Retrieve cart
   React.useEffect(() => {
     const panier = JSON.parse(sessionStorage.getItem("panier"));
     setData(panier || []);

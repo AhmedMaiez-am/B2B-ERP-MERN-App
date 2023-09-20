@@ -39,7 +39,7 @@ export default ({textOnLeft = false}) => {
             const response = await axios.get("/clients/details", {
               params: { No },
             });
-            setclientData(response.data); // Store the client response data
+            setclientData(response.data);
           } catch (error) {
             console.error("Error:", error);
           }

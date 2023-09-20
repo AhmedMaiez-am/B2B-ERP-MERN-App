@@ -151,7 +151,7 @@ export default ({
         const response = await axios.get("/commande/getAll", {
           params: { userNo: user.no },
         });
-        setCommandeData(response.data); // Store the latest commande response data
+        setCommandeData(response.data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -162,10 +162,8 @@ export default ({
 
   const history = useHistory();
   const handleDetailsClick = (No) => {
-    // Store No in sessionStorage
     sessionStorage.setItem("No", No);
 
-    // Navigate to the second component
     history.push("/components/DetailsCommande");
   };
 
@@ -178,7 +176,7 @@ export default ({
         });
 
         // Reload the page
-        // window.location.reload();
+       window.location.reload();
       } catch (error) {
         console.error("Error:", error);
       }

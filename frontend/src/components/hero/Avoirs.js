@@ -85,7 +85,7 @@ const PostList = ({
         const response = await axios.get("/facture/getAll", {
           params: { userNo: user.tel },
         });
-        setFactureData(response.data); // Store the latest commande response data
+        setFactureData(response.data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -96,15 +96,12 @@ const PostList = ({
 
   const history = useHistory();
   const handleDetailsClick1 = (No) => {
-    // Store No in sessionStorage
     sessionStorage.setItem("NoAvoir", No);
 
-    // Navigate to the second component
     history.push("/components/ArticlesAvoir");
   };
 
   const handleSavedAvoirsRedirect = () => {
-    // Navigate to the saved avoirs component
     history.push("/components/SavedAvoirs");
   };
 

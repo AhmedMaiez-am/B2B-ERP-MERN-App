@@ -118,8 +118,8 @@ export default ({
           params: { cmdNo: response.data.No },
         });
 
-        setCommandeData(response.data); // Store the latest commande response data
-        setLigneCommandeData(responseLigne.data); // Store the lignes response data
+        setCommandeData(response.data);
+        setLigneCommandeData(responseLigne.data);
       } catch (error) {
         console.error("Error:", error);
       }

@@ -120,7 +120,7 @@ export default () => {
     sessionStorage.removeItem("panier");
     window.location.reload();
   };
-  //populate faqs with data from local storage to pass it into return
+  //populate faqs 
   const faqs = data.map((panier) => {
     return {
       id: panier.id,
@@ -154,7 +154,7 @@ export default () => {
     setOpen(false);
 
     if (confirmDelete) {
-      // Delete the object from local storage and refresh the page
+      // Delete from local storage and refresh
       const panier = JSON.parse(sessionStorage.getItem("panier")) || [];
       panier.splice(deleteIndex, 1);
       sessionStorage.setItem("panier", JSON.stringify(panier));
@@ -247,7 +247,7 @@ export default () => {
   // Function to handle the button click event
   const handleButtonClickAddCommande = async () => {
     try {
-      // Retrieve cart items from sessionStorage
+      // Retrieve cart items
       const articles = JSON.parse(sessionStorage.getItem("panier"));
       const user = getCurrentUser();
 
@@ -264,16 +264,15 @@ export default () => {
 
         return updatedArticle;
       });
-      // Make a POST request to your server's "/add" endpoint using Axios
+      // Make a POST request
       const response = await axios.post("/enteteVentes/add", {
         articles: updatedArticles,
         user,
       });
-      console.log(response.data); // Display the response from the server
+      console.log(response.data);
       // Delete "panier" from sessionStorage
       sessionStorage.removeItem("panier");
 
-      // Programmatically redirect to another component
       history.push("/components/Commande");
     } catch (error) {
       console.error("Error:", error);
@@ -307,13 +306,12 @@ export default () => {
           const [text, number] = maxQtePerLocationString.split(" - ");
           handleOpenMaxQtePerLocation(text, number);
         } else {
-          // Handle any other response options here if needed
+          // Handle any other response options
           console.log("Unknown stock check response:", response.data);
         }
       })
       .catch((error) => {
         console.error("Stock check error:", error);
-        // Handle the error case
       });
   };
 
