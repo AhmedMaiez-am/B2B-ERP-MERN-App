@@ -94,15 +94,20 @@ function Login ({
     try {
       const result = await axios.post("/users", { email, password });
       console.log(result);
+      const connectedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
   
       // Check if the user is an admin
       if (result.data.user.isAdmin) {
         // If isAdmin is true, redirect to the admin route
+        connectedUsers.push(result.data.user);
+  
+        localStorage.setItem("connectedUsers", JSON.stringify(connectedUsers));
+        sessionStorage.setItem("user", JSON.stringify(result.data.user));
+        sessionStorage.setItem("token", result.data.token);
         history.push("/components/AdminClients");
       } else {
         // If isAdmin is false, proceed with regular user login
-        const connectedUsers = JSON.parse(localStorage.getItem("connectedUsers")) || [];
-  
+        
         connectedUsers.push(result.data.user);
   
         localStorage.setItem("connectedUsers", JSON.stringify(connectedUsers));

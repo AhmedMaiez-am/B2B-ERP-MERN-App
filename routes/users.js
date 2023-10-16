@@ -361,15 +361,15 @@ router.post("/addUser", async (req, res, next) => {
 
     // Create a new user in ChatEngine using the username and password from the newly created user
     const chatEngineUser = {
-      username: req.body.name, // Use the 'no' field as the username for ChatEngine
-      secret: req.body.tel, // Use the 'password' field as the secret for ChatEngine
+      username: req.body.name,
+      secret: req.body.tel,
     };
 
     const chatEngineConfig = {
       method: "post",
       url: "https://api.chatengine.io/users/",
       headers: {
-        "PRIVATE-KEY": "42181f39-0349-4f75-961a-e57d3be22dc7", // Replace with your ChatEngine private key
+        "PRIVATE-KEY": "6cdf2466-4a8f-450f-9a10-aa733fc3bcb8",
       },
       data: chatEngineUser,
     };
